@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import type { MetaArgs } from "react-router";
-import { Play, Pause, RotateCcw, Volume2, VolumeX, Music } from "lucide-react";
+import { Play, Pause, RotateCcw, Volume2, VolumeX, Music, CloudRain, Wind, Flame, Waves } from "lucide-react";
 
 export function meta({}: MetaArgs) {
   return [
@@ -9,16 +9,32 @@ export function meta({}: MetaArgs) {
   ];
 }
 
-// Sound assets
-const SOUNDS = {
-  rain: "https://assets.mixkit.co/sfx/preview/mixkit-light-rain-loop-2393.mp3",
-  wind: "https://assets.mixkit.co/sfx/preview/mixkit-wind-blowing-sfx-12-1262.mp3",
-  fire: "https://assets.mixkit.co/sfx/preview/mixkit-campfire-crackles-1330.mp3",
-  water: "https://assets.mixkit.co/sfx/preview/mixkit-river-stream-loop-1215.mp3",
+// Sound assets configuration
+const SOUND_CONFIG = {
+  rain: {
+    label: "Rain",
+    icon: CloudRain,
+    url: "https://actions.google.com/sounds/v1/weather/rain_heavy_loud.ogg"
+  },
+  wind: {
+    label: "Wind",
+    icon: Wind,
+    url: "https://actions.google.com/sounds/v1/weather/wind.ogg"
+  },
+  fire: {
+    label: "Fire",
+    icon: Flame,
+    url: "https://actions.google.com/sounds/v1/ambiences/fire.ogg"
+  },
+  water: {
+    label: "Water",
+    icon: Waves,
+    url: "https://actions.google.com/sounds/v1/water/water_leak.ogg"
+  },
 };
 
 type TimerMode = "pomodoro" | "shortBreak" | "longBreak";
-type SoundType = keyof typeof SOUNDS;
+type SoundType = keyof typeof SOUND_CONFIG;
 
 const MODES: Record<TimerMode, { label: string; minutes: number }> = {
   pomodoro: { label: "Pomodoro", minutes: 25 },
@@ -41,8 +57,9 @@ export default function Pomodoro() {
 
   // Initialize audio ref
   useEffect(() => {
-    audioRef.current = new Audio(SOUNDS[selectedSound]);
+    audioRef.current = new Audio(SOUND_CONFIG[selectedSound].url);
     audioRef.current.loop = true;
+    audioRef.current.volume = volume;
     
     return () => {
       if (audioRef.current) {
@@ -50,30 +67,34 @@ export default function Pomodoro() {
         audioRef.current = null;
       }
     };
-  }, []); // Run once on mount
+  }, []);
 
   // Handle sound changes
   useEffect(() => {
-    if (audioRef.current) {
-        audioRef.current.pause();
-        
-        // Update src
-        audioRef.current.src = SOUNDS[selectedSound];
-        audioRef.current.volume = volume;
-        
-        // Resume if it was playing or if isPlayingSound is true
-        if (isPlayingSound) {
-            audioRef.current.play().catch(e => console.error("Audio play failed", e));
-        }
-    }
-  }, [selectedSound, isPlayingSound]);
+    const audio = audioRef.current;
+    if (!audio) return;
 
-  // Handle volume changes
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume;
+    // Update volume
+    audio.volume = volume;
+
+    const currentUrl = SOUND_CONFIG[selectedSound].url;
+    
+    // Check if source changed
+    if (audio.src !== currentUrl) {
+      const wasPlaying = !audio.paused;
+      audio.src = currentUrl;
+      if (wasPlaying || isPlayingSound) {
+        audio.play().catch(e => console.error("Audio play failed", e));
+      }
     }
-  }, [volume]);
+
+    // Handle play/pause state
+    if (isPlayingSound && audio.paused) {
+      audio.play().catch(e => console.error("Audio play failed", e));
+    } else if (!isPlayingSound && !audio.paused) {
+      audio.pause();
+    }
+  }, [selectedSound, isPlayingSound, volume]);
 
   // Timer Logic
   useEffect(() => {
@@ -198,19 +219,23 @@ export default function Pomodoro() {
           {isPlayingSound && (
             <div className="space-y-4 pt-2 border-t border-gray-100 dark:border-gray-800 animate-in fade-in slide-in-from-top-2 duration-200">
               <div className="grid grid-cols-2 gap-2">
-                {(Object.keys(SOUNDS) as SoundType[]).map((sound) => (
-                  <button
-                    key={sound}
-                    onClick={() => setSelectedSound(sound)}
-                    className={`px-3 py-2 text-sm rounded-lg border transition-all ${
-                      selectedSound === sound
-                        ? "bg-indigo-50 border-indigo-200 text-indigo-700 dark:bg-indigo-900/20 dark:border-indigo-800 dark:text-indigo-300"
-                        : "bg-transparent border-transparent hover:bg-gray-50 dark:hover:bg-gray-800 text-slate-600 dark:text-gray-400"
-                    }`}
-                  >
-                    {sound.charAt(0).toUpperCase() + sound.slice(1)}
-                  </button>
-                ))}
+                {(Object.entries(SOUND_CONFIG) as [SoundType, typeof SOUND_CONFIG[SoundType]][]).map(([key, config]) => {
+                  const Icon = config.icon;
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => setSelectedSound(key)}
+                      className={`px-3 py-2 text-sm rounded-lg border transition-all flex items-center justify-center gap-2 ${
+                        selectedSound === key
+                          ? "bg-indigo-50 border-indigo-200 text-indigo-700 dark:bg-indigo-900/20 dark:border-indigo-800 dark:text-indigo-300"
+                          : "bg-transparent border-transparent hover:bg-gray-50 dark:hover:bg-gray-800 text-slate-600 dark:text-gray-400"
+                      }`}
+                    >
+                      <Icon className="w-4 h-4" />
+                      {config.label}
+                    </button>
+                  );
+                })}
               </div>
               
               <div className="flex items-center gap-3">
