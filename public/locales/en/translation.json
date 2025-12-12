@@ -23,5 +23,44 @@
       "clear_success": "Content cleared!",
       "clear_history_success": "History cleared!"
     }
+  },
+  "features": {
+    "title": "Key Features",
+    "description": "Explore our powerful text conversion tools.",
+    "list": {
+      "sentence_case": {
+        "title": "Sentence case",
+        "desc": "Capitalize the first letter of each sentence and leave the rest as lower case."
+      },
+      "lower_case": {
+        "title": "lower case",
+        "desc": "Convert all characters to lower case."
+      },
+      "upper_case": {
+        "title": "UPPER CASE",
+        "desc": "Convert all characters to upper case."
+      },
+      "capitalized_case": {
+        "title": "Capitalized Case",
+        "desc": "Capitalize the first letter of every word."
+      },
+      "alternating_case": {
+        "title": "aLtErNaTiNg cAsE",
+        "desc": "Alternate between lower case and upper case characters."
+      },
+      "title_case": {
+        "title": "Title Case",
+        "desc": "Capitalize major words while keeping minor words lowercase."
+      },
+      "inverse_case": {
+        "title": "InVeRsE CaSe",
+        "desc": "Switch every upper case letter to lower case and vice versa."
+      }
+    }
+  },
+  "about": {
+    "title": "About Us",
+    "description": "Learn more about this text conversion tool.",
+    "content": "Case Converter is a simple, free online tool that helps you convert text between different formats. Whether you accidentally left Caps Lock on or want to style text for social media, we've got you covered. All processing happens right in your browser, ensuring maximum privacy and speed."
   }
 }

@@ -23,5 +23,44 @@
       "clear_success": "Đã xóa nội dung!",
       "clear_history_success": "Đã xóa lịch sử!"
     }
+  },
+  "features": {
+    "title": "Tính Năng Nổi Bật",
+    "description": "Khám phá các công cụ chuyển đổi văn bản mạnh mẽ của chúng tôi.",
+    "list": {
+      "sentence_case": {
+        "title": "Viết hoa đầu câu",
+        "desc": "Chuyển đổi chữ cái đầu tiên của mỗi câu thành chữ hoa, các chữ còn lại thành chữ thường."
+      },
+      "lower_case": {
+        "title": "Chữ thường",
+        "desc": "Chuyển đổi tất cả các ký tự thành chữ thường."
+      },
+      "upper_case": {
+        "title": "CHỮ HOA",
+        "desc": "Chuyển đổi tất cả các ký tự thành chữ hoa."
+      },
+      "capitalized_case": {
+        "title": "Viết Hoa Các Từ",
+        "desc": "Viết hoa chữ cái đầu tiên của mỗi từ."
+      },
+      "alternating_case": {
+        "title": "cHữ xEn kẼ",
+        "desc": "Chuyển đổi luân phiên giữa chữ thường và chữ hoa."
+      },
+      "title_case": {
+        "title": "Dạng Tiêu Đề",
+        "desc": "Viết hoa chữ cái đầu của các từ chính, giữ nguyên các từ phụ."
+      },
+      "inverse_case": {
+        "title": "ĐảO NgƯợC ChỮ",
+        "desc": "Chuyển chữ hoa thành chữ thường và ngược lại."
+      }
+    }
+  },
+  "about": {
+    "title": "Giới Thiệu",
+    "description": "Tìm hiểu thêm về công cụ chuyển đổi văn bản này.",
+    "content": "Case Converter là một công cụ trực tuyến miễn phí và đơn giản giúp bạn chuyển đổi văn bản giữa các định dạng khác nhau. Cho dù bạn vô tình để Caps Lock hay muốn tạo kiểu chữ độc đáo cho mạng xã hội, chúng tôi đều có thể hỗ trợ bạn. Mọi quá trình xử lý đều diễn ra ngay trên trình duyệt của bạn, đảm bảo tính riêng tư và tốc độ tối đa."
   }
 }

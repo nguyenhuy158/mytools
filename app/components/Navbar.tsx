@@ -1,11 +1,40 @@
 import { Link } from "react-router";
-import { Menu, X, Home, Settings, Info, Globe } from "lucide-react";
-import { useState } from "react";
+import { Menu, X, Home, Settings, Info, Sun, Moon } from "lucide-react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { t, i18n } = useTranslation();
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    // Check initial theme from localStorage or system preference
+    const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+    const currentTheme = savedTheme || systemTheme;
+    setTheme(currentTheme);
+    
+    // Apply theme class
+    if (currentTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+    if (newTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  };
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -18,12 +47,12 @@ export function Navbar() {
   ];
 
   return (
-    <nav className="bg-white border-b border-gray-200">
+    <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <Link to="/" className="text-xl font-bold text-gray-900">
+              <Link to="/" className="text-xl font-bold text-gray-900 dark:text-white">
                 {t("app_name")}
               </Link>
             </div>
@@ -32,34 +61,59 @@ export function Navbar() {
                 <Link
                   key={item.href}
                   to={item.href}
-                  className="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  className="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-700"
                 >
                   {item.name}
                 </Link>
               ))}
             </div>
           </div>
-          <div className="hidden sm:ml-6 sm:flex sm:items-center">
-             <div className="flex items-center space-x-2">
-                <button 
-                  onClick={() => changeLanguage("vi")} 
-                  className={`p-1 rounded ${i18n.language === 'vi' ? 'bg-gray-200' : ''}`}
-                >
-                  VI
-                </button>
-                <span className="text-gray-300">|</span>
-                <button 
-                  onClick={() => changeLanguage("en")}
-                  className={`p-1 rounded ${i18n.language === 'en' ? 'bg-gray-200' : ''}`}
-                >
-                  EN
-                </button>
-             </div>
+          <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
+            {/* Language Switcher */}
+            <div className="bg-gray-100 dark:bg-gray-800 p-1 rounded-lg flex items-center relative h-9 w-24">
+              <div 
+                className={`absolute w-[calc(50%-4px)] h-[calc(100%-8px)] top-1 bg-white dark:bg-gray-600 rounded-md shadow-sm transition-transform duration-200 ease-in-out ${
+                  i18n.language === 'en' ? 'translate-x-[calc(100%+4px)]' : 'translate-x-1'
+                }`}
+              />
+              <button
+                onClick={() => changeLanguage("vi")}
+                className={`relative z-10 w-1/2 text-xs font-semibold text-center transition-colors duration-200 ${
+                  i18n.language === 'vi' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                }`}
+              >
+                VI
+              </button>
+              <button
+                onClick={() => changeLanguage("en")}
+                className={`relative z-10 w-1/2 text-xs font-semibold text-center transition-colors duration-200 ${
+                  i18n.language === 'en' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                }`}
+              >
+                EN
+              </button>
+            </div>
+
+            {/* Dark Mode Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 focus:outline-none rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              aria-label="Toggle Dark Mode"
+            >
+              {theme === "dark" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+            </button>
           </div>
-          <div className="-mr-2 flex items-center sm:hidden">
+          
+          <div className="-mr-2 flex items-center sm:hidden gap-2">
+            <button
+              onClick={toggleTheme}
+              className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 focus:outline-none"
+            >
+              {theme === "dark" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+            </button>
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
             >
               <span className="sr-only">Open main menu</span>
               {isOpen ? (
@@ -73,13 +127,13 @@ export function Navbar() {
       </div>
 
       {isOpen && (
-        <div className="sm:hidden">
+        <div className="sm:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
           <div className="pt-2 pb-3 space-y-1">
             {navigation.map((item) => (
               <Link
                 key={item.href}
                 to={item.href}
-                className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700"
+                className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600 hover:text-gray-700 dark:hover:text-gray-200"
                 onClick={() => setIsOpen(false)}
               >
                 <div className="flex items-center">
@@ -88,10 +142,16 @@ export function Navbar() {
                 </div>
               </Link>
             ))}
-             <div className="pl-3 pr-4 py-2 border-l-4 border-transparent">
-               <div className="flex items-center space-x-4">
-                  <button onClick={() => changeLanguage("vi")} className={i18n.language === 'vi' ? 'font-bold' : ''}>Tiếng Việt</button>
-                  <button onClick={() => changeLanguage("en")} className={i18n.language === 'en' ? 'font-bold' : ''}>English</button>
+             <div className="pl-3 pr-4 py-2 border-l-4 border-transparent flex items-center justify-between">
+               <span className="text-gray-500 dark:text-gray-400 text-base font-medium">Language</span>
+               <div className="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-lg w-24 relative">
+                  <div 
+                    className={`absolute w-[calc(50%-4px)] h-[calc(100%-8px)] top-1 bg-white dark:bg-gray-600 rounded-md shadow-sm transition-transform duration-200 ease-in-out ${
+                      i18n.language === 'en' ? 'translate-x-[calc(100%+4px)]' : 'translate-x-1'
+                    }`}
+                  />
+                  <button onClick={() => changeLanguage("vi")} className={`relative z-10 w-1/2 text-xs font-semibold py-1 ${i18n.language === 'vi' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>VI</button>
+                  <button onClick={() => changeLanguage("en")} className={`relative z-10 w-1/2 text-xs font-semibold py-1 ${i18n.language === 'en' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>EN</button>
                </div>
              </div>
           </div>
