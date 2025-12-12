@@ -1,0 +1,27 @@
+{
+  "app_name": "MyApp",
+  "nav": {
+    "home": "Home",
+    "features": "Features",
+    "about": "About"
+  },
+  "home": {
+    "title": "Case Converter",
+    "description": "Accidentally left the caps lock on? Simply enter your text and choose the case you want to convert it to.",
+    "placeholder": "Type or paste your content here...",
+    "stats": {
+      "characters": "Characters",
+      "words": "Words",
+      "sentences": "Sentences",
+      "lines": "Lines"
+    },
+    "history": "History",
+    "clear_all": "Clear All",
+    "toast": {
+      "copy_success": "Text copied to clipboard!",
+      "download_success": "Download started!",
+      "clear_success": "Content cleared!",
+      "clear_history_success": "History cleared!"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "app_name": "Ứng dụng của tôi",
+  "nav": {
+    "home": "Trang chủ",
+    "features": "Tính năng",
+    "about": "Giới thiệu"
+  },
+  "home": {
+    "title": "Chuyển Đổi Ký Tự",
+    "description": "Bạn lỡ bật Caps Lock? Chỉ cần nhập văn bản và chọn kiểu chữ bạn muốn chuyển đổi.",
+    "placeholder": "Nhập hoặc dán nội dung của bạn vào đây...",
+    "stats": {
+      "characters": "Ký tự",
+      "words": "Từ",
+      "sentences": "Câu",
+      "lines": "Dòng"
+    },
+    "history": "Lịch sử",
+    "clear_all": "Xóa tất cả",
+    "toast": {
+      "copy_success": "Đã sao chép văn bản vào clipboard!",
+      "download_success": "Đã bắt đầu tải xuống!",
+      "clear_success": "Đã xóa nội dung!",
+      "clear_history_success": "Đã xóa lịch sử!"
+    }
+  }
+}

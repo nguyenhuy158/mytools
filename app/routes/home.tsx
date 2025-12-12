@@ -1,5 +1,7 @@
 import { Download, Copy, Trash2, History, RotateCcw } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import type { Route } from "./+types/home";
 
 export function meta({}: Route.MetaArgs) {
@@ -14,6 +16,7 @@ export function loader({ context }: Route.LoaderArgs) {
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation();
   const [text, setText] = useState("");
   const [history, setHistory] = useState<string[]>([]);
 
@@ -109,18 +112,24 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       document.body.appendChild(element);
       element.click();
       document.body.removeChild(element);
+      toast.success(t("home.toast.download_success"));
   };
 
   const handleCopy = () => {
       if (!text) return;
       navigator.clipboard.writeText(text);
+      toast.success(t("home.toast.copy_success"));
   };
 
-  const handleClear = () => setText("");
+  const handleClear = () => {
+    setText("");
+    toast.info(t("home.toast.clear_success"));
+  };
 
   const clearHistory = () => {
     setHistory([]);
     localStorage.removeItem("case-converter-history");
+    toast.info(t("home.toast.clear_history_success"));
   };
 
   // Counts
@@ -139,17 +148,17 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         <div className="flex-1 w-full space-y-6">
           <header className="space-y-2 text-center md:text-left">
               <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-                Case Converter
+                {t("home.title")}
               </h1>
               <p className="text-slate-500 dark:text-gray-400 text-lg">
-                  Accidentally left the caps lock on? Simply enter your text and choose the case you want to convert it to.
+                  {t("home.description")}
               </p>
           </header>
 
           <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-6 space-y-6">
             <textarea
                 className="w-full h-80 p-4 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-950 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none resize-y text-lg text-slate-700 dark:text-gray-300 placeholder-gray-400 transition-all"
-                placeholder="Type or paste your content here..."
+                placeholder={t("home.placeholder")}
                 value={text}
                 onChange={(e) => setText(e.target.value)}
             />
@@ -189,13 +198,13 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           </div>
 
           <div className="text-sm text-slate-500 dark:text-gray-500 flex justify-center gap-6 bg-white dark:bg-gray-900 py-3 px-6 rounded-full shadow-sm border border-gray-100 dark:border-gray-800 w-fit mx-auto">
-              <span><strong className="text-slate-900 dark:text-gray-200">{charCount}</strong> Characters</span>
+              <span><strong className="text-slate-900 dark:text-gray-200">{charCount}</strong> {t("home.stats.characters")}</span>
               <span className="text-gray-300 dark:text-gray-700">|</span>
-              <span><strong className="text-slate-900 dark:text-gray-200">{wordCount}</strong> Words</span>
+              <span><strong className="text-slate-900 dark:text-gray-200">{wordCount}</strong> {t("home.stats.words")}</span>
               <span className="text-gray-300 dark:text-gray-700">|</span>
-              <span><strong className="text-slate-900 dark:text-gray-200">{sentenceCount}</strong> Sentences</span>
+              <span><strong className="text-slate-900 dark:text-gray-200">{sentenceCount}</strong> {t("home.stats.sentences")}</span>
               <span className="text-gray-300 dark:text-gray-700">|</span>
-              <span><strong className="text-slate-900 dark:text-gray-200">{lineCount}</strong> Lines</span>
+              <span><strong className="text-slate-900 dark:text-gray-200">{lineCount}</strong> {t("home.stats.lines")}</span>
           </div>
         </div>
 
@@ -205,13 +214,13 @@ export default function Home({ loaderData }: Route.ComponentProps) {
              <div className="flex items-center justify-between">
                 <h3 className="text-lg font-bold flex items-center gap-2 text-slate-900 dark:text-white">
                   <History className="w-5 h-5" />
-                  History
+                  {t("home.history")}
                 </h3>
                 <button 
                   onClick={clearHistory}
                   className="text-xs text-slate-500 hover:text-red-600 transition-colors"
                 >
-                  Clear All
+                  {t("home.clear_all")}
                 </button>
              </div>
              

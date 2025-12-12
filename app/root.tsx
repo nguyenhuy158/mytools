@@ -6,8 +6,11 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
+import { Suspense } from "react";
 
 import type { Route } from "./+types/root";
+import { Toaster } from "sonner";
+import { Navbar } from "./components/Navbar";
 import "./app.css";
 
 export const links: Route.LinksFunction = () => [
@@ -34,7 +37,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
+        <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200" />}>
+          <Navbar />
+        </Suspense>
         {children}
+        <Toaster position="bottom-right" richColors />
         <ScrollRestoration />
         <Scripts />
       </body>
