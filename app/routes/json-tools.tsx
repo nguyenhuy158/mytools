@@ -1,4 +1,4 @@
-import { Download, Upload, Copy, Trash2, FileJson, Check, XCircle, Minimize, Maximize, Wrench, ClipboardPaste, History, RotateCcw, Sparkles, X, ChevronDown } from "lucide-react";
+import { Download, Upload, Copy, Trash2, FileJson, Check, XCircle, Minimize, Maximize, Wrench, ClipboardPaste, History, RotateCcw, Sparkles, X, ChevronDown, ArrowLeft } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -193,6 +193,13 @@ export default function JsonTools() {
     }
   };
 
+  const handleMoveToInput = () => {
+    if (!output.trim()) return;
+    setInput(output);
+    validate(output, false);
+    toast.success(t("json_tools.toast.valid"));
+  };
+
   const handleDownload = () => {
     const content = output || input;
     if (!content) return;
@@ -245,7 +252,22 @@ export default function JsonTools() {
                   </Button>
               </div>
               
-              <div className="flex flex-wrap gap-2 border-l pl-0 md:pl-4 border-gray-200 dark:border-gray-700">
+              <div className="flex flex-wrap gap-2 border-l pl-0 md:pl-4 border-gray-200 dark:border-gray-700 items-center">
+                  <div className="flex items-center gap-2 mr-2">
+                    <span className="text-xs font-medium text-gray-500">{t("json_tools.actions.tab_size")}</span>
+                    <div className="relative">
+                      <select 
+                        value={tabSize} 
+                        onChange={handleTabSizeChange}
+                        className="appearance-none bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-slate-700 dark:text-gray-200 text-xs rounded-md py-1.5 pl-2 pr-6 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                      >
+                        <option value={2}>2</option>
+                        <option value={4}>4</option>
+                        <option value={8}>8</option>
+                      </select>
+                      <ChevronDown className="w-3 h-3 absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500" />
+                    </div>
+                  </div>
                   <input
                       type="file"
                       ref={fileInputRef}
@@ -308,9 +330,14 @@ export default function JsonTools() {
               <div className="flex flex-col gap-2 h-full">
                   <div className="flex justify-between items-center px-1">
                       <span className="font-semibold text-sm text-gray-500">Output</span>
-                      <button onClick={() => handleCopy(output)} className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium transition-colors">
-                          <Copy className="w-3 h-3" /> {t("json_tools.actions.copy")}
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button onClick={handleMoveToInput} className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium transition-colors">
+                            <ArrowLeft className="w-3 h-3" /> {t("json_tools.actions.use_as_input")}
+                        </button>
+                        <button onClick={() => handleCopy(output)} className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium transition-colors">
+                            <Copy className="w-3 h-3" /> {t("json_tools.actions.copy")}
+                        </button>
+                      </div>
                   </div>
                   <textarea
                       className="w-full flex-1 p-4 border border-gray-200 dark:border-gray-800 rounded-xl bg-gray-50 dark:bg-gray-950 font-mono text-sm resize-none focus:outline-none cursor-text"

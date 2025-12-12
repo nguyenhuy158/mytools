@@ -80,7 +80,8 @@
       "copy": "Sao chép",
       "paste": "Dán",
       "example": "Mẫu",
-      "tab_size": "Tab"
+      "tab_size": "Tab",
+      "use_as_input": "Dùng làm Input"
     },
     "toast": {
       "valid": "JSON hợp lệ",

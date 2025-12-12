@@ -80,7 +80,8 @@
       "copy": "Copy",
       "paste": "Paste",
       "example": "Example",
-      "tab_size": "Tab Size"
+      "tab_size": "Tab Size",
+      "use_as_input": "Use as Input"
     },
     "toast": {
       "valid": "Valid JSON",
