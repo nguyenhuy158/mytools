@@ -21,7 +21,8 @@
       "copy_success": "Text copied to clipboard!",
       "download_success": "Download started!",
       "clear_success": "Content cleared!",
-      "clear_history_success": "History cleared!"
+      "clear_history_success": "History cleared!",
+      "history_restored": "Restored from history!"
     }
   },
   "features": {

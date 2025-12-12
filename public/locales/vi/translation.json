@@ -21,7 +21,8 @@
       "copy_success": "Đã sao chép văn bản vào clipboard!",
       "download_success": "Đã bắt đầu tải xuống!",
       "clear_success": "Đã xóa nội dung!",
-      "clear_history_success": "Đã xóa lịch sử!"
+      "clear_history_success": "Đã xóa lịch sử!",
+      "history_restored": "Đã khôi phục từ lịch sử!"
     }
   },
   "features": {

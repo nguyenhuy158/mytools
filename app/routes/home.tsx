@@ -228,7 +228,10 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                 {history.map((item, idx) => (
                   <div 
                     key={idx}
-                    onClick={() => setText(item)}
+                    onClick={() => {
+                      setText(item);
+                      toast.success(t("home.toast.history_restored"));
+                    }}
                     className="group relative bg-white dark:bg-gray-900 p-3 rounded-lg border border-gray-200 dark:border-gray-800 hover:border-blue-400 dark:hover:border-blue-500 cursor-pointer shadow-sm transition-all hover:shadow-md"
                   >
                     <p className="text-sm text-slate-600 dark:text-gray-300 line-clamp-3 font-mono break-words">

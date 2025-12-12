@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Menu, X, Home, Settings, Info, Sun, Moon } from "lucide-react";
+import { Menu, X, Home, Settings, Info, Sun, Moon, CaseUpper } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -52,8 +52,8 @@ export function Navbar() {
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <Link to="/" className="text-xl font-bold text-gray-900 dark:text-white">
-                {t("app_name")}
+              <Link to="/" className="flex items-center gap-2 text-xl font-bold text-gray-900 dark:text-white hover:opacity-80 transition-opacity" aria-label="Home">
+                <img src="/favicon.png" alt="Logo" className="w-8 h-8 object-contain" />
               </Link>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
@@ -78,7 +78,7 @@ export function Navbar() {
               />
               <button
                 onClick={() => changeLanguage("vi")}
-                className={`relative z-10 w-1/2 text-xs font-semibold text-center transition-colors duration-200 ${
+                className={`cursor-pointer relative z-10 w-1/2 text-xs font-semibold text-center transition-colors duration-200 ${
                   i18n.language === 'vi' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                 }`}
               >
@@ -86,7 +86,7 @@ export function Navbar() {
               </button>
               <button
                 onClick={() => changeLanguage("en")}
-                className={`relative z-10 w-1/2 text-xs font-semibold text-center transition-colors duration-200 ${
+                className={`cursor-pointer relative z-10 w-1/2 text-xs font-semibold text-center transition-colors duration-200 ${
                   i18n.language === 'en' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                 }`}
               >
@@ -97,7 +97,7 @@ export function Navbar() {
             {/* Dark Mode Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 focus:outline-none rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="cursor-pointer p-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 focus:outline-none rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               aria-label="Toggle Dark Mode"
             >
               {theme === "dark" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
@@ -107,13 +107,13 @@ export function Navbar() {
           <div className="-mr-2 flex items-center sm:hidden gap-2">
             <button
               onClick={toggleTheme}
-              className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 focus:outline-none"
+              className="cursor-pointer p-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 focus:outline-none"
             >
               {theme === "dark" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
             </button>
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+              className="cursor-pointer inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
             >
               <span className="sr-only">Open main menu</span>
               {isOpen ? (
@@ -150,8 +150,8 @@ export function Navbar() {
                       i18n.language === 'en' ? 'translate-x-[calc(100%+4px)]' : 'translate-x-1'
                     }`}
                   />
-                  <button onClick={() => changeLanguage("vi")} className={`relative z-10 w-1/2 text-xs font-semibold py-1 ${i18n.language === 'vi' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>VI</button>
-                  <button onClick={() => changeLanguage("en")} className={`relative z-10 w-1/2 text-xs font-semibold py-1 ${i18n.language === 'en' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>EN</button>
+                  <button onClick={() => changeLanguage("vi")} className={`cursor-pointer relative z-10 w-1/2 text-xs font-semibold py-1 ${i18n.language === 'vi' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>VI</button>
+                  <button onClick={() => changeLanguage("en")} className={`cursor-pointer relative z-10 w-1/2 text-xs font-semibold py-1 ${i18n.language === 'en' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>EN</button>
                </div>
              </div>
           </div>
