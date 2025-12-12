@@ -2,6 +2,8 @@ import { Link } from "react-router";
 import { Menu, X, Home, Settings, Info, Sun, Moon, CaseUpper, FileJson, Calendar } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { TetCountdown } from "./TetCountdown";
+import { OnlineUsers } from "./OnlineUsers";
 
 import { toast } from "sonner";
 
@@ -81,6 +83,10 @@ export function Navbar() {
             </div>
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
+            <div className="hidden xl:block">
+              <TetCountdown />
+            </div>
+
             {/* Language Switcher */}
             <div 
               onClick={toggleLanguage}
@@ -115,6 +121,8 @@ export function Navbar() {
             >
               {theme === "dark" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
             </button>
+
+            <OnlineUsers />
           </div>
           
           <div className="-mr-2 flex items-center sm:hidden gap-2">

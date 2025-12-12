@@ -161,6 +161,12 @@
       "sun": "Sun"
     }
   },
+  "countdown": {
+    "day": "Day",
+    "hour": "Hour",
+    "minute": "Min",
+    "second": "Sec"
+  },
   "about": {
     "title": "About Us",
     "description": "Learn more about this text conversion tool.",

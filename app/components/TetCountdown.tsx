@@ -1,0 +1,72 @@
+import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { intervalToDuration } from "date-fns";
+import type { Duration } from "date-fns";
+import { getNextTetDate } from "~/utils/tet";
+
+export function TetCountdown() {
+    const { t } = useTranslation();
+    const [timeLeft, setTimeLeft] = useState<Duration>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+    const [targetDate, setTargetDate] = useState<Date | null>(null);
+
+    useEffect(() => {
+        // Initialize target date on client side
+        setTargetDate(getNextTetDate());
+    }, []);
+
+    useEffect(() => {
+        if (!targetDate) return;
+
+        const updateTimer = () => {
+            const now = new Date();
+            // If target passed, recalculate
+            if (now.getTime() > targetDate.getTime()) {
+                setTargetDate(getNextTetDate());
+                return;
+            }
+
+            const duration = intervalToDuration({
+                start: now,
+                end: targetDate
+            });
+            setTimeLeft(duration);
+        };
+
+        updateTimer();
+        const timer = setInterval(updateTimer, 1000);
+
+        return () => clearInterval(timer);
+    }, [targetDate]);
+
+    if (!targetDate) return null; // Avoid hydration mismatch
+
+    return (
+        <div className="flex items-center gap-2 sm:gap-4">
+             {/* Logo / Text */}
+             <div className="hidden lg:flex items-center justify-center">
+                 <span className="text-red-600 font-bold text-3xl font-serif">Tết</span>
+             </div>
+             
+             {/* Countdown */}
+             <div className="flex gap-1 sm:gap-2">
+                 <TimeBox value={timeLeft.days ?? 0} label={t("countdown.day")} />
+                 <TimeBox value={timeLeft.hours ?? 0} label={t("countdown.hour")} />
+                 <TimeBox value={timeLeft.minutes ?? 0} label={t("countdown.minute")} />
+                 <TimeBox value={timeLeft.seconds ?? 0} label={t("countdown.second")} />
+             </div>
+        </div>
+    );
+}
+
+function TimeBox({ value, label }: { value: number, label: string }) {
+    return (
+        <div className="flex flex-col items-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md p-1 min-w-[45px] sm:min-w-[50px]">
+            <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100 leading-none">
+                {String(value).padStart(2, '0')}
+            </span>
+            <span className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 mt-1">
+                {label}
+            </span>
+        </div>
+    )
+}

@@ -161,6 +161,12 @@
       "sun": "CN"
     }
   },
+  "countdown": {
+    "day": "Ngày",
+    "hour": "Giờ",
+    "minute": "Phút",
+    "second": "Giây"
+  },
   "about": {
     "title": "Giới Thiệu",
     "description": "Tìm hiểu thêm về công cụ chuyển đổi văn bản này.",
