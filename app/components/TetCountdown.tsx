@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import type { Duration } from "date-fns";
 import { getNextTetDate } from "~/utils/tet";
 
-export function TetCountdown() {
+export function TetCountdown({ variant = "default" }: { variant?: "default" | "compact" }) {
     const { t } = useTranslation();
     const [timeLeft, setTimeLeft] = useState<Duration>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
     const [targetDate, setTargetDate] = useState<Date | null>(null);
@@ -41,6 +41,18 @@ export function TetCountdown() {
     }, [targetDate]);
 
     if (!targetDate) return null; // Avoid hydration mismatch
+
+    if (variant === "compact") {
+        return (
+            <div className="flex items-center gap-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-800/50 px-3 py-1.5 rounded-full border border-gray-100 dark:border-gray-700">
+                <span className="text-red-500 font-bold mr-1">Tết</span>
+                <span className="tabular-nums">{String(timeLeft.days ?? 0).padStart(2, '0')}d</span>
+                <span className="tabular-nums">{String(timeLeft.hours ?? 0).padStart(2, '0')}h</span>
+                <span className="tabular-nums">{String(timeLeft.minutes ?? 0).padStart(2, '0')}m</span>
+                <span className="tabular-nums w-5">{String(timeLeft.seconds ?? 0).padStart(2, '0')}s</span>
+            </div>
+        );
+    }
 
     return (
         <div className="flex items-center gap-2 sm:gap-4">
