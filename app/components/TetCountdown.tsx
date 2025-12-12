@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { intervalToDuration } from "date-fns";
 import type { Duration } from "date-fns";
 import { getNextTetDate } from "~/utils/tet";
 
@@ -19,17 +18,20 @@ export function TetCountdown() {
 
         const updateTimer = () => {
             const now = new Date();
+            const diff = targetDate.getTime() - now.getTime();
+
             // If target passed, recalculate
-            if (now.getTime() > targetDate.getTime()) {
+            if (diff <= 0) {
                 setTargetDate(getNextTetDate());
                 return;
             }
 
-            const duration = intervalToDuration({
-                start: now,
-                end: targetDate
-            });
-            setTimeLeft(duration);
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            setTimeLeft({ days, hours, minutes, seconds });
         };
 
         updateTimer();
