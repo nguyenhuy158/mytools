@@ -72,6 +72,7 @@
     "actions": {
       "format": "Format / Beautify",
       "minify": "Minify / Compact",
+      "fix": "Fix / Repair",
       "validate": "Validate",
       "upload": "Upload",
       "download": "Download",
@@ -81,6 +82,7 @@
       "valid": "Valid JSON",
       "invalid": "Invalid JSON",
       "formatted": "JSON Formatted",
+      "fixed": "JSON Fixed",
       "minified": "JSON Minified",
       "copied": "Copied to clipboard"
     }
