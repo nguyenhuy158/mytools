@@ -3,6 +3,8 @@ import { Menu, X, Home, Settings, Info, Sun, Moon, CaseUpper } from "lucide-reac
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
+import { toast } from "sonner";
+
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { t, i18n } = useTranslation();
@@ -31,13 +33,16 @@ export function Navbar() {
     localStorage.setItem("theme", newTheme);
     if (newTheme === "dark") {
       document.documentElement.classList.add("dark");
+      toast.success(t("nav.toast.dark_mode"));
     } else {
       document.documentElement.classList.remove("dark");
+      toast.success(t("nav.toast.light_mode"));
     }
   };
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
+    toast.success(t("nav.toast.language_changed"));
   };
 
   const navigation = [

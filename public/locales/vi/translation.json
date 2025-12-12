@@ -3,7 +3,12 @@
   "nav": {
     "home": "Trang chủ",
     "features": "Tính năng",
-    "about": "Giới thiệu"
+    "about": "Giới thiệu",
+    "toast": {
+      "language_changed": "Đã chuyển sang Tiếng Việt",
+      "dark_mode": "Đã chuyển sang chế độ Tối",
+      "light_mode": "Đã chuyển sang chế độ Sáng"
+    }
   },
   "home": {
     "title": "Chuyển Đổi Ký Tự",

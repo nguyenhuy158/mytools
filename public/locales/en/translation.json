@@ -3,7 +3,12 @@
   "nav": {
     "home": "Home",
     "features": "Features",
-    "about": "About"
+    "about": "About",
+    "toast": {
+      "language_changed": "Language changed to English",
+      "dark_mode": "Switched to Dark Mode",
+      "light_mode": "Switched to Light Mode"
+    }
   },
   "home": {
     "title": "Case Converter",
