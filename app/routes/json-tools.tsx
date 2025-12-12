@@ -1,4 +1,4 @@
-import { Download, Upload, Copy, Trash2, FileJson, Check, XCircle, Minimize, Maximize, Wrench } from "lucide-react";
+import { Download, Upload, Copy, Trash2, FileJson, Check, XCircle, Minimize, Maximize, Wrench, ClipboardPaste } from "lucide-react";
 import { useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -84,6 +84,18 @@ export default function JsonTools() {
     if (!text) return;
     navigator.clipboard.writeText(text);
     toast.success(t("json_tools.toast.copied"));
+  };
+
+  const handlePaste = async () => {
+    try {
+      const text = await navigator.clipboard.readText();
+      if (text) {
+        setInput(text);
+        validate(text, false);
+      }
+    } catch (e) {
+      console.error("Failed to read clipboard", e);
+    }
   };
 
   const handleClear = () => {
@@ -183,9 +195,14 @@ export default function JsonTools() {
             <div className="flex flex-col gap-2 h-full">
                 <div className="flex justify-between items-center px-1">
                     <span className="font-semibold text-sm text-gray-500">Input</span>
-                    <button onClick={() => handleCopy(input)} className="text-xs text-blue-600 hover:underline flex items-center gap-1">
-                        <Copy className="w-3 h-3" /> Copy
-                    </button>
+                    <div className="flex items-center gap-2">
+                        <button onClick={handlePaste} className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium transition-colors">
+                            <ClipboardPaste className="w-3 h-3" /> {t("json_tools.actions.paste")}
+                        </button>
+                        <button onClick={() => handleCopy(input)} className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium transition-colors">
+                            <Copy className="w-3 h-3" /> {t("json_tools.actions.copy")}
+                        </button>
+                    </div>
                 </div>
                 <textarea
                     className={`w-full flex-1 p-4 border rounded-xl bg-white dark:bg-gray-900 font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:outline-none ${
@@ -208,8 +225,8 @@ export default function JsonTools() {
             <div className="flex flex-col gap-2 h-full">
                 <div className="flex justify-between items-center px-1">
                     <span className="font-semibold text-sm text-gray-500">Output</span>
-                    <button onClick={() => handleCopy(output)} className="text-xs text-blue-600 hover:underline flex items-center gap-1">
-                        <Copy className="w-3 h-3" /> Copy
+                    <button onClick={() => handleCopy(output)} className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium transition-colors">
+                        <Copy className="w-3 h-3" /> {t("json_tools.actions.copy")}
                     </button>
                 </div>
                 <textarea

@@ -76,7 +76,9 @@
       "validate": "Validate",
       "upload": "Upload",
       "download": "Download",
-      "clear": "Clear"
+      "clear": "Clear",
+      "copy": "Copy",
+      "paste": "Paste"
     },
     "toast": {
       "valid": "Valid JSON",
@@ -84,8 +86,11 @@
       "formatted": "JSON Formatted",
       "fixed": "JSON Fixed",
       "minified": "JSON Minified",
-      "copied": "Copied to clipboard"
-    }
+      "copied": "Copied to clipboard",
+      "history_restored": "Restored from history!"
+    },
+    "history": "History",
+    "clear_all": "Clear All"
   },
   "about": {
     "title": "About Us",

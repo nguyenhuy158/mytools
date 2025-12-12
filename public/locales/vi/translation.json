@@ -76,7 +76,9 @@
       "validate": "Kiểm tra",
       "upload": "Tải lên",
       "download": "Tải xuống",
-      "clear": "Xóa"
+      "clear": "Xóa",
+      "copy": "Sao chép",
+      "paste": "Dán"
     },
     "toast": {
       "valid": "JSON hợp lệ",
@@ -84,8 +86,11 @@
       "formatted": "Đã định dạng JSON",
       "fixed": "Đã sửa lỗi JSON",
       "minified": "Đã tối thiểu hóa JSON",
-      "copied": "Đã sao chép vào clipboard"
-    }
+      "copied": "Đã sao chép vào clipboard",
+      "history_restored": "Đã khôi phục từ lịch sử!"
+    },
+    "history": "Lịch sử",
+    "clear_all": "Xóa tất cả"
   },
   "about": {
     "title": "Giới Thiệu",
