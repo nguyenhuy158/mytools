@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Check, Type,  ArrowRightLeft, CaseSensitive, FileType, AlignLeft } from "lucide-react";
+import { Check, Type,  ArrowRightLeft, CaseSensitive, FileType, AlignLeft, Code, Braces, Copy, ClipboardPaste, Download, Upload, History, Trash2, Settings, MoveRight } from "lucide-react";
 import type { Route } from "./+types/features";
 
 export function meta({}: Route.MetaArgs) {
@@ -20,6 +20,18 @@ export default function Features() {
     { key: "alternating_case", icon: ArrowRightLeft },
     { key: "title_case", icon: Check },
     { key: "inverse_case", icon: ArrowRightLeft },
+    { key: "json_format", icon: Code },
+    { key: "json_minify", icon: Braces },
+    { key: "json_fix", icon: Code },
+    { key: "json_validate", icon: Check },
+    { key: "json_history", icon: History },
+    { key: "json_clipboard_copy", icon: Copy },
+    { key: "json_clipboard_paste", icon: ClipboardPaste },
+    { key: "json_file_upload", icon: Upload },
+    { key: "json_file_download", icon: Download },
+    { key: "json_tab_size", icon: Settings },
+    { key: "json_move_output_to_input", icon: MoveRight },
+    { key: "json_history_remove", icon: Trash2 },
   ];
 
   return (

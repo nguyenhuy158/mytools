@@ -217,7 +217,7 @@ export default function JsonTools() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-slate-900 dark:text-gray-100 p-4 md:p-8 font-sans">
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-6 items-start justify-center h-full">
+      <div className="max-w-7xl mx-auto flex flex-col gap-6 items-start justify-center h-full">
         
         {/* Main Content */}
         <div className="flex-1 w-full space-y-6">
@@ -351,7 +351,7 @@ export default function JsonTools() {
 
         {/* History Sidebar */}
         {history.length > 0 && (
-          <div className="w-full lg:w-80 shrink-0 space-y-4">
+          <div className="w-full space-y-4 pt-6 border-t border-gray-200 dark:border-gray-800">
              <div className="flex items-center justify-between">
                 <h3 className="text-lg font-bold flex items-center gap-2 text-slate-900 dark:text-white">
                   <History className="w-5 h-5" />
@@ -365,7 +365,7 @@ export default function JsonTools() {
                 </button>
              </div>
              
-             <div className="space-y-3">
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                 {history.map((item, idx) => (
                   <div 
                     key={idx}

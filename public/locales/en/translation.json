@@ -4,6 +4,7 @@
     "home": "Home",
     "features": "Features",
     "json_tools": "JSON Tools",
+    "calendar": "Calendar",
     "about": "About",
     "toast": {
       "language_changed": "Language changed to English",
@@ -62,6 +63,54 @@
       "inverse_case": {
         "title": "InVeRsE CaSe",
         "desc": "Switch every upper case letter to lower case and vice versa."
+      },
+      "json_format": {
+        "title": "JSON Format",
+        "desc": "Beautify and indent your JSON data for better readability."
+      },
+      "json_minify": {
+        "title": "JSON Minify",
+        "desc": "Compact your JSON data into a single line to reduce file size."
+      },
+      "json_fix": {
+        "title": "JSON Fix",
+        "desc": "Repair malformed JSON and convert loose formats into valid JSON."
+      },
+      "json_validate": {
+        "title": "JSON Validate",
+        "desc": "Check your JSON data for syntax errors and ensure its validity."
+      },
+      "json_history": {
+        "title": "JSON History",
+        "desc": "Automatically save and restore your JSON operations for quick access."
+      },
+      "json_clipboard_copy": {
+        "title": "Copy to Clipboard",
+        "desc": "Easily copy JSON content from input or output editors to your clipboard."
+      },
+      "json_clipboard_paste": {
+        "title": "Paste from Clipboard",
+        "desc": "Quickly paste JSON content from your clipboard into the input editor."
+      },
+      "json_file_upload": {
+        "title": "Upload JSON File",
+        "desc": "Upload JSON files from your local system for processing."
+      },
+      "json_file_download": {
+        "title": "Download JSON File",
+        "desc": "Download processed JSON content as a file to your local system."
+      },
+      "json_tab_size": {
+        "title": "Tab Size Configuration",
+        "desc": "Customize the indentation level for formatted JSON output."
+      },
+      "json_move_output_to_input": {
+        "title": "Use Output as Input",
+        "desc": "Move the content from the output editor to the input editor for further manipulation."
+      },
+      "json_history_remove": {
+        "title": "Remove History Item",
+        "desc": "Delete individual items from your JSON operation history."
       }
     }
   },
@@ -94,6 +143,23 @@
     },
     "history": "History",
     "clear_all": "Clear All"
+  },
+  "calendar": {
+    "title": "Solar & Lunar Calendar",
+    "today": "Today",
+    "month": "Month",
+    "year": "Year",
+    "solar": "Solar",
+    "lunar": "Lunar",
+    "weekdays": {
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat",
+      "sun": "Sun"
+    }
   },
   "about": {
     "title": "About Us",

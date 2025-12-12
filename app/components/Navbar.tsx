@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Menu, X, Home, Settings, Info, Sun, Moon, CaseUpper, FileJson } from "lucide-react";
+import { Menu, X, Home, Settings, Info, Sun, Moon, CaseUpper, FileJson, Calendar } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -54,6 +54,7 @@ export function Navbar() {
     { name: t("nav.home"), href: "/", icon: Home },
     { name: t("nav.features"), href: "/features", icon: Settings },
     { name: t("nav.json_tools"), href: "/json-tools", icon: FileJson },
+    { name: t("nav.calendar"), href: "/calendar", icon: Calendar },
     { name: t("nav.about"), href: "/about", icon: Info },
   ];
 

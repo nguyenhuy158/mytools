@@ -4,6 +4,7 @@
     "home": "Trang chủ",
     "features": "Tính năng",
     "json_tools": "Công cụ JSON",
+    "calendar": "Lịch",
     "about": "Giới thiệu",
     "toast": {
       "language_changed": "Đã chuyển sang Tiếng Việt",
@@ -62,6 +63,54 @@
       "inverse_case": {
         "title": "ĐảO NgƯợC ChỮ",
         "desc": "Chuyển chữ hoa thành chữ thường và ngược lại."
+      },
+      "json_format": {
+        "title": "Định dạng JSON",
+        "desc": "Làm đẹp và thụt lề dữ liệu JSON để dễ đọc hơn."
+      },
+      "json_minify": {
+        "title": "Tối thiểu hóa JSON",
+        "desc": "Nén dữ liệu JSON của bạn thành một dòng duy nhất để giảm kích thước tệp."
+      },
+      "json_fix": {
+        "title": "Sửa lỗi JSON",
+        "desc": "Sửa chữa JSON bị lỗi và chuyển đổi các định dạng lỏng lẻo thành JSON hợp lệ."
+      },
+      "json_validate": {
+        "title": "Kiểm tra JSON",
+        "desc": "Kiểm tra dữ liệu JSON của bạn để tìm lỗi cú pháp và đảm bảo tính hợp lệ của nó."
+      },
+      "json_history": {
+        "title": "Lịch sử JSON",
+        "desc": "Tự động lưu và khôi phục các thao tác JSON của bạn để truy cập nhanh."
+      },
+      "json_clipboard_copy": {
+        "title": "Sao chép vào Clipboard",
+        "desc": "Dễ dàng sao chép nội dung JSON từ trình chỉnh sửa đầu vào hoặc đầu ra vào clipboard của bạn."
+      },
+      "json_clipboard_paste": {
+        "title": "Dán từ Clipboard",
+        "desc": "Nhanh chóng dán nội dung JSON từ clipboard của bạn vào trình chỉnh sửa đầu vào."
+      },
+      "json_file_upload": {
+        "title": "Tải lên tệp JSON",
+        "desc": "Tải lên các tệp JSON từ hệ thống cục bộ của bạn để xử lý."
+      },
+      "json_file_download": {
+        "title": "Tải xuống tệp JSON",
+        "desc": "Tải xuống nội dung JSON đã xử lý dưới dạng tệp vào hệ thống cục bộ của bạn."
+      },
+      "json_tab_size": {
+        "title": "Cấu hình kích thước Tab",
+        "desc": "Tùy chỉnh mức thụt lề cho đầu ra JSON đã định dạng."
+      },
+      "json_move_output_to_input": {
+        "title": "Sử dụng đầu ra làm đầu vào",
+        "desc": "Di chuyển nội dung từ trình chỉnh sửa đầu ra sang trình chỉnh sửa đầu vào để thao tác thêm."
+      },
+      "json_history_remove": {
+        "title": "Xóa mục lịch sử",
+        "desc": "Xóa các mục riêng lẻ khỏi lịch sử thao tác JSON của bạn."
       }
     }
   },
@@ -94,6 +143,23 @@
     },
     "history": "Lịch sử",
     "clear_all": "Xóa tất cả"
+  },
+  "calendar": {
+    "title": "Lịch Âm Dương",
+    "today": "Hôm nay",
+    "month": "Tháng",
+    "year": "Năm",
+    "solar": "Dương lịch",
+    "lunar": "Âm lịch",
+    "weekdays": {
+      "mon": "T2",
+      "tue": "T3",
+      "wed": "T4",
+      "thu": "T5",
+      "fri": "T6",
+      "sat": "T7",
+      "sun": "CN"
+    }
   },
   "about": {
     "title": "Giới Thiệu",
