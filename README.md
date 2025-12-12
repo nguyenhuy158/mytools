@@ -1,6 +1,6 @@
-# Welcome to React Router!
+# MyTools
 
-A modern, production-ready template for building full-stack React applications using React Router.
+A collection of useful online tools built with React Router.
 
 ## Features
 
@@ -10,6 +10,9 @@ A modern, production-ready template for building full-stack React applications u
 - 🔄 Data loading and mutations
 - 🔒 TypeScript by default
 - 🎉 TailwindCSS for styling
+- 📝 Text Case Converter
+- 🛠️ JSON Tools (Format, Validate, Minify, Fix, History, Clipboard, File Operations, Tab Size)
+- 🗓️ Solar & Lunar Calendar
 - 📖 [React Router docs](https://reactrouter.com/)
 
 ## Getting Started
