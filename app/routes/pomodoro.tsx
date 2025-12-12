@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import type { MetaArgs } from "react-router";
-import { Play, Pause, RotateCcw, Volume2, VolumeX, Music, CloudRain, Wind, Flame, Waves } from "lucide-react";
+import { Play, Pause, RotateCcw, Volume2, VolumeX, Music, CloudRain, Wind, Flame, Waves, Settings } from "lucide-react";
 
 export function meta({}: MetaArgs) {
   return [
@@ -33,18 +33,20 @@ const SOUND_CONFIG = {
   },
 };
 
-type TimerMode = "pomodoro" | "shortBreak" | "longBreak";
+type TimerMode = "pomodoro" | "shortBreak" | "longBreak" | "custom";
 type SoundType = keyof typeof SOUND_CONFIG;
 
 const MODES: Record<TimerMode, { label: string; minutes: number }> = {
   pomodoro: { label: "Pomodoro", minutes: 25 },
   shortBreak: { label: "Short Break", minutes: 5 },
   longBreak: { label: "Long Break", minutes: 15 },
+  custom: { label: "Custom", minutes: 30 }, // Default custom time
 };
 
 export default function Pomodoro() {
   // Timer State
   const [mode, setMode] = useState<TimerMode>("pomodoro");
+  const [customMinutes, setCustomMinutes] = useState(30);
   const [timeLeft, setTimeLeft] = useState(MODES.pomodoro.minutes * 60);
   const [isRunning, setIsRunning] = useState(false);
   
@@ -116,13 +118,31 @@ export default function Pomodoro() {
   
   const resetTimer = () => {
     setIsRunning(false);
-    setTimeLeft(MODES[mode].minutes * 60);
+    if (mode === 'custom') {
+      setTimeLeft(customMinutes * 60);
+    } else {
+      setTimeLeft(MODES[mode].minutes * 60);
+    }
   };
 
   const changeMode = (newMode: TimerMode) => {
     setMode(newMode);
     setIsRunning(false);
-    setTimeLeft(MODES[newMode].minutes * 60);
+    if (newMode === 'custom') {
+      setTimeLeft(customMinutes * 60);
+    } else {
+      setTimeLeft(MODES[newMode].minutes * 60);
+    }
+  };
+
+  const handleCustomTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = parseInt(e.target.value);
+    if (!isNaN(val) && val > 0 && val <= 180) { // Limit to 3 hours
+      setCustomMinutes(val);
+      if (mode === 'custom' && !isRunning) {
+        setTimeLeft(val * 60);
+      }
+    }
   };
 
   const formatTime = (seconds: number) => {
@@ -146,7 +166,7 @@ export default function Pomodoro() {
         <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 p-8 space-y-8 text-center">
           
           {/* Mode Selector */}
-          <div className="flex justify-center gap-2">
+          <div className="flex flex-wrap justify-center gap-2">
             {(Object.keys(MODES) as TimerMode[]).map((m) => (
               <button
                 key={m}
@@ -161,6 +181,21 @@ export default function Pomodoro() {
               </button>
             ))}
           </div>
+
+          {/* Custom Time Input (Only visible when Custom mode is selected) */}
+          {mode === 'custom' && (
+            <div className="flex items-center justify-center gap-2 animate-in fade-in slide-in-from-top-1">
+              <span className="text-sm text-slate-500 dark:text-gray-400">Minutes:</span>
+              <input
+                type="number"
+                min="1"
+                max="180"
+                value={customMinutes}
+                onChange={handleCustomTimeChange}
+                className="w-20 px-3 py-1 text-center rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          )}
 
           {/* Timer Display */}
           <div className="text-8xl font-bold font-mono tracking-wider text-slate-800 dark:text-white">
