@@ -4,6 +4,7 @@
     "home": "Home",
     "features": "Features",
     "json_tools": "JSON Tools",
+    "text_diff": "Text Diff",
     "calendar": "Calendar",
     "about": "About",
     "toast": {
@@ -166,6 +167,15 @@
     "hour": "Hour",
     "minute": "Min",
     "second": "Sec"
+  },
+  "text_diff": {
+    "title": "Text Diff",
+    "description": "Compare two texts and see the differences between them.",
+    "original": "Original Text",
+    "original_placeholder": "Paste original text here...",
+    "modified": "Modified Text",
+    "modified_placeholder": "Paste modified text here...",
+    "clear": "Clear All"
   },
   "about": {
     "title": "About Us",

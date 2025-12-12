@@ -12,7 +12,9 @@
 		"typecheck": "npm run cf-typegen && react-router typegen && tsc -b"
 	},
 	"dependencies": {
+		"@types/diff": "^7.0.2",
 		"date-fns": "^4.1.0",
+		"diff": "^8.0.2",
 		"i18next": "^25.7.2",
 		"i18next-browser-languagedetector": "^8.2.0",
 		"i18next-http-backend": "^3.0.2",

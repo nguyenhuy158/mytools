@@ -4,6 +4,7 @@
     "home": "Trang chủ",
     "features": "Tính năng",
     "json_tools": "Công cụ JSON",
+    "text_diff": "So sánh văn bản",
     "calendar": "Lịch",
     "about": "Giới thiệu",
     "toast": {
@@ -166,6 +167,15 @@
     "hour": "Giờ",
     "minute": "Phút",
     "second": "Giây"
+  },
+  "text_diff": {
+    "title": "So sánh văn bản",
+    "description": "So sánh hai văn bản và xem sự khác biệt giữa chúng.",
+    "original": "Văn bản gốc",
+    "original_placeholder": "Dán văn bản gốc vào đây...",
+    "modified": "Văn bản đã sửa đổi",
+    "modified_placeholder": "Dán văn bản đã sửa đổi vào đây...",
+    "clear": "Xóa tất cả"
   },
   "about": {
     "title": "Giới Thiệu",

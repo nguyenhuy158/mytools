@@ -5,5 +5,6 @@ export default [
   route("features", "routes/features.tsx"),
   route("json-tools", "routes/json-tools.tsx"),
   route("calendar", "routes/calendar.tsx"),
+  route("text-diff", "routes/text-diff.tsx"),
   route("about", "routes/about.tsx"),
 ] satisfies RouteConfig;
