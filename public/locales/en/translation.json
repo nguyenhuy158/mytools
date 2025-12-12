@@ -78,7 +78,8 @@
       "download": "Download",
       "clear": "Clear",
       "copy": "Copy",
-      "paste": "Paste"
+      "paste": "Paste",
+      "example": "Example"
     },
     "toast": {
       "valid": "Valid JSON",

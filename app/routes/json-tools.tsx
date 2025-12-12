@@ -1,5 +1,5 @@
-import { Download, Upload, Copy, Trash2, FileJson, Check, XCircle, Minimize, Maximize, Wrench, ClipboardPaste } from "lucide-react";
-import { useState, useRef } from "react";
+import { Download, Upload, Copy, Trash2, FileJson, Check, XCircle, Minimize, Maximize, Wrench, ClipboardPaste, History, RotateCcw, Sparkles } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import JSON5 from "json5";
@@ -16,7 +16,39 @@ export default function JsonTools() {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [history, setHistory] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Load history from local storage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem("json-tools-history");
+    if (saved) {
+      try {
+        setHistory(JSON.parse(saved));
+      } catch (e) {
+        console.error("Failed to parse history", e);
+      }
+    }
+  }, []);
+
+  const addToHistory = (newText: string) => {
+    if (!newText.trim()) return;
+    
+    setHistory((prev) => {
+      // Avoid duplicates at the top of the list
+      if (prev.length > 0 && prev[0] === newText) return prev;
+      
+      const updated = [newText, ...prev].slice(0, 20); // Keep last 20 items
+      localStorage.setItem("json-tools-history", JSON.stringify(updated));
+      return updated;
+    });
+  };
+
+  const clearHistory = () => {
+    setHistory([]);
+    localStorage.removeItem("json-tools-history");
+    toast.info(t("json_tools.toast.clear_history_success"));
+  };
 
   const validate = (json: string, showToast = true) => {
     try {
@@ -37,6 +69,7 @@ export default function JsonTools() {
     if (parsed) {
       const formatted = JSON.stringify(parsed, null, 2);
       setOutput(formatted);
+      addToHistory(input);
       toast.success(t("json_tools.toast.formatted"));
     }
   };
@@ -47,6 +80,7 @@ export default function JsonTools() {
     if (parsed) {
       const minified = JSON.stringify(parsed);
       setOutput(minified);
+      addToHistory(input);
       toast.success(t("json_tools.toast.minified"));
     }
   };
@@ -68,6 +102,7 @@ export default function JsonTools() {
       
       setOutput(formatted);
       setError(null);
+      addToHistory(input); // Store original loose JSON or result? Storing input allows retry.
       toast.success(t("json_tools.toast.fixed"));
     } catch (e) {
       setError((e as Error).message);
@@ -78,6 +113,7 @@ export default function JsonTools() {
   const handleValidate = () => {
     if (!input.trim()) return;
     validate(input);
+    addToHistory(input);
   };
 
   const handleCopy = (text: string) => {
@@ -117,6 +153,19 @@ export default function JsonTools() {
     }
   };
 
+  const handleExample = async () => {
+    try {
+      const response = await fetch('https://jsonplaceholder.typicode.com/todos/1');
+      const json = await response.json();
+      const text = JSON.stringify(json, null, 2);
+      setInput(text);
+      validate(text, false);
+      toast.success(t("json_tools.toast.valid"));
+    } catch (e) {
+      toast.error(t("json_tools.toast.invalid"));
+    }
+  };
+
   const handleDownload = () => {
     const content = output || input;
     if (!content) return;
@@ -134,109 +183,156 @@ export default function JsonTools() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-slate-900 dark:text-gray-100 p-4 md:p-8 font-sans">
-      <div className="max-w-7xl mx-auto space-y-6">
-        <header className="space-y-2 text-center md:text-left">
-          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-3">
-            <FileJson className="w-8 h-8 md:w-10 md:h-10 text-blue-600" />
-            {t("json_tools.title")}
-          </h1>
-          <p className="text-slate-500 dark:text-gray-400 text-lg">
-            {t("json_tools.description")}
-          </p>
-        </header>
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-6 items-start justify-center h-full">
+        
+        {/* Main Content */}
+        <div className="flex-1 w-full space-y-6">
+          <header className="space-y-2 text-center md:text-left">
+            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-3">
+              <FileJson className="w-8 h-8 md:w-10 md:h-10 text-blue-600" />
+              {t("json_tools.title")}
+            </h1>
+            <p className="text-slate-500 dark:text-gray-400 text-lg">
+              {t("json_tools.description")}
+            </p>
+          </header>
 
-        {/* Toolbar */}
-        <div className="bg-white dark:bg-gray-900 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 flex flex-wrap gap-3 items-center justify-between">
-            <div className="flex flex-wrap gap-2">
-                <Button onClick={handleFormat} variant="primary">
-                    <Maximize className="w-4 h-4 mr-2" />
-                    {t("json_tools.actions.format")}
-                </Button>
-                <Button onClick={handleFix} variant="outline">
-                    <Wrench className="w-4 h-4 mr-2" />
-                    {t("json_tools.actions.fix")}
-                </Button>
-                <Button onClick={handleMinify} variant="outline">
-                    <Minimize className="w-4 h-4 mr-2" />
-                    {t("json_tools.actions.minify")}
-                </Button>
-                <Button onClick={handleValidate} variant="outline">
-                    <Check className="w-4 h-4 mr-2" />
-                    {t("json_tools.actions.validate")}
-                </Button>
-            </div>
-            
-            <div className="flex flex-wrap gap-2 border-l pl-0 md:pl-4 border-gray-200 dark:border-gray-700">
-                <input
-                    type="file"
-                    ref={fileInputRef}
-                    className="hidden"
-                    accept=".json"
-                    onChange={handleUpload}
-                />
-                <Button onClick={() => fileInputRef.current?.click()} variant="ghost">
-                    <Upload className="w-4 h-4 mr-2" />
-                    {t("json_tools.actions.upload")}
-                </Button>
-                <Button onClick={handleDownload} variant="ghost">
-                    <Download className="w-4 h-4 mr-2" />
-                    {t("json_tools.actions.download")}
-                </Button>
-                <Button onClick={handleClear} variant="danger">
-                    <Trash2 className="w-4 h-4 mr-2" />
-                    {t("json_tools.actions.clear")}
-                </Button>
-            </div>
+          {/* Toolbar */}
+          <div className="bg-white dark:bg-gray-900 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 flex flex-wrap gap-3 items-center justify-between">
+              <div className="flex flex-wrap gap-2">
+                  <Button onClick={handleFormat} variant="primary">
+                      <Maximize className="w-4 h-4 mr-2" />
+                      {t("json_tools.actions.format")}
+                  </Button>
+                  <Button onClick={handleFix} variant="outline">
+                      <Wrench className="w-4 h-4 mr-2" />
+                      {t("json_tools.actions.fix")}
+                  </Button>
+                  <Button onClick={handleMinify} variant="outline">
+                      <Minimize className="w-4 h-4 mr-2" />
+                      {t("json_tools.actions.minify")}
+                  </Button>
+                  <Button onClick={handleValidate} variant="outline">
+                      <Check className="w-4 h-4 mr-2" />
+                      {t("json_tools.actions.validate")}
+                  </Button>
+              </div>
+              
+              <div className="flex flex-wrap gap-2 border-l pl-0 md:pl-4 border-gray-200 dark:border-gray-700">
+                  <input
+                      type="file"
+                      ref={fileInputRef}
+                      className="hidden"
+                      accept=".json"
+                      onChange={handleUpload}
+                  />
+                  <Button onClick={handleExample} variant="ghost">
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      {t("json_tools.actions.example")}
+                  </Button>
+                  <Button onClick={() => fileInputRef.current?.click()} variant="ghost">
+                      <Upload className="w-4 h-4 mr-2" />
+                      {t("json_tools.actions.upload")}
+                  </Button>
+                  <Button onClick={handleDownload} variant="ghost">
+                      <Download className="w-4 h-4 mr-2" />
+                      {t("json_tools.actions.download")}
+                  </Button>
+                  <Button onClick={handleClear} variant="danger">
+                      <Trash2 className="w-4 h-4 mr-2" />
+                      {t("json_tools.actions.clear")}
+                  </Button>
+              </div>
+          </div>
+
+          {/* Editors */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-[600px]">
+              {/* Input */}
+              <div className="flex flex-col gap-2 h-full">
+                  <div className="flex justify-between items-center px-1">
+                      <span className="font-semibold text-sm text-gray-500">Input</span>
+                      <div className="flex items-center gap-2">
+                          <button onClick={handlePaste} className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium transition-colors">
+                              <ClipboardPaste className="w-3 h-3" /> {t("json_tools.actions.paste")}
+                          </button>
+                          <button onClick={() => handleCopy(input)} className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium transition-colors">
+                              <Copy className="w-3 h-3" /> {t("json_tools.actions.copy")}
+                          </button>
+                      </div>
+                  </div>
+                  <textarea
+                      className={`w-full flex-1 p-4 border rounded-xl bg-white dark:bg-gray-900 font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+                          error ? 'border-red-500 focus:ring-red-500' : 'border-gray-200 dark:border-gray-800'
+                      }`}
+                      placeholder={t("json_tools.input_placeholder")}
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      spellCheck={false}
+                  />
+                  {error && (
+                      <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg text-sm flex items-start gap-2">
+                          <XCircle className="w-4 h-4 mt-0.5 shrink-0" />
+                          <span className="font-mono break-all">{error}</span>
+                      </div>
+                  )}
+              </div>
+
+              {/* Output */}
+              <div className="flex flex-col gap-2 h-full">
+                  <div className="flex justify-between items-center px-1">
+                      <span className="font-semibold text-sm text-gray-500">Output</span>
+                      <button onClick={() => handleCopy(output)} className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium transition-colors">
+                          <Copy className="w-3 h-3" /> {t("json_tools.actions.copy")}
+                      </button>
+                  </div>
+                  <textarea
+                      className="w-full flex-1 p-4 border border-gray-200 dark:border-gray-800 rounded-xl bg-gray-50 dark:bg-gray-950 font-mono text-sm resize-none focus:outline-none cursor-text"
+                      readOnly
+                      value={output}
+                      placeholder="Output will appear here..."
+                  />
+              </div>
+          </div>
         </div>
 
-        {/* Editors */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-[600px]">
-            {/* Input */}
-            <div className="flex flex-col gap-2 h-full">
-                <div className="flex justify-between items-center px-1">
-                    <span className="font-semibold text-sm text-gray-500">Input</span>
-                    <div className="flex items-center gap-2">
-                        <button onClick={handlePaste} className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium transition-colors">
-                            <ClipboardPaste className="w-3 h-3" /> {t("json_tools.actions.paste")}
-                        </button>
-                        <button onClick={() => handleCopy(input)} className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium transition-colors">
-                            <Copy className="w-3 h-3" /> {t("json_tools.actions.copy")}
-                        </button>
+        {/* History Sidebar */}
+        {history.length > 0 && (
+          <div className="w-full lg:w-80 shrink-0 space-y-4">
+             <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold flex items-center gap-2 text-slate-900 dark:text-white">
+                  <History className="w-5 h-5" />
+                  {t("history")}
+                </h3>
+                <button 
+                  onClick={clearHistory}
+                  className="text-xs text-slate-500 hover:text-red-600 transition-colors"
+                >
+                  {t("clear_all")}
+                </button>
+             </div>
+             
+             <div className="space-y-3">
+                {history.map((item, idx) => (
+                  <div 
+                    key={idx}
+                    onClick={() => {
+                      setInput(item);
+                      validate(item, false); // Auto validate when restoring
+                      toast.success(t("json_tools.toast.history_restored"));
+                    }}
+                    className="group relative bg-white dark:bg-gray-900 p-3 rounded-lg border border-gray-200 dark:border-gray-800 hover:border-blue-400 dark:hover:border-blue-500 cursor-pointer shadow-sm transition-all hover:shadow-md"
+                  >
+                    <p className="text-xs text-slate-600 dark:text-gray-300 line-clamp-3 font-mono break-all">
+                      {item.length > 150 ? item.substring(0, 150) + "..." : item}
+                    </p>
+                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-gray-800 p-1 rounded-md shadow-sm">
+                       <RotateCcw className="w-3 h-3 text-blue-600" />
                     </div>
-                </div>
-                <textarea
-                    className={`w-full flex-1 p-4 border rounded-xl bg-white dark:bg-gray-900 font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:outline-none ${
-                        error ? 'border-red-500 focus:ring-red-500' : 'border-gray-200 dark:border-gray-800'
-                    }`}
-                    placeholder={t("json_tools.input_placeholder")}
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    spellCheck={false}
-                />
-                {error && (
-                    <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg text-sm flex items-start gap-2">
-                        <XCircle className="w-4 h-4 mt-0.5 shrink-0" />
-                        <span className="font-mono break-all">{error}</span>
-                    </div>
-                )}
-            </div>
-
-            {/* Output */}
-            <div className="flex flex-col gap-2 h-full">
-                <div className="flex justify-between items-center px-1">
-                    <span className="font-semibold text-sm text-gray-500">Output</span>
-                    <button onClick={() => handleCopy(output)} className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium transition-colors">
-                        <Copy className="w-3 h-3" /> {t("json_tools.actions.copy")}
-                    </button>
-                </div>
-                <textarea
-                    className="w-full flex-1 p-4 border border-gray-200 dark:border-gray-800 rounded-xl bg-gray-50 dark:bg-gray-950 font-mono text-sm resize-none focus:outline-none cursor-text"
-                    readOnly
-                    value={output}
-                    placeholder="Output will appear here..."
-                />
-            </div>
-        </div>
+                  </div>
+                ))}
+             </div>
+          </div>
+        )}
       </div>
     </div>
   );
