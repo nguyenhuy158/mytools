@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { diffChars, Change } from "diff";
+import { diffChars } from "diff";
+import type { Change } from "diff";
 import { Trash2 } from "lucide-react";
 import type { Route } from "./+types/text-diff";
 
