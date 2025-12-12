@@ -77,7 +77,7 @@ export function Navbar() {
                 <Link
                   key={item.href}
                   to={item.href}
-                  className="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-700"
+                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
                 >
                   {item.name}
                 </Link>
@@ -86,7 +86,7 @@ export function Navbar() {
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
             <div className="hidden xl:block">
-              <TetCountdown />
+              <TetCountdown variant="compact" />
             </div>
 
             {/* Language Switcher */}

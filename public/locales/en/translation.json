@@ -3,8 +3,8 @@
   "nav": {
     "home": "Home",
     "features": "Features",
-    "json_tools": "JSON Tools",
-    "text_diff": "Text Diff",
+    "json_tools": "JSON",
+    "text_diff": "Text",
     "pomodoro": "Pomodoro",
     "calendar": "Calendar",
     "about": "About",
