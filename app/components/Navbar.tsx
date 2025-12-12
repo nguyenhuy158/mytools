@@ -80,28 +80,29 @@ export function Navbar() {
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
             {/* Language Switcher */}
-            <div className="bg-gray-100 dark:bg-gray-800 p-1 rounded-lg flex items-center relative h-9 w-24">
+            <div 
+              onClick={toggleLanguage}
+              className="bg-gray-100 dark:bg-gray-800 p-1 rounded-lg flex items-center relative h-9 w-24 cursor-pointer"
+            >
               <div 
                 className={`absolute w-[calc(50%-4px)] h-[calc(100%-8px)] top-1 bg-white dark:bg-gray-600 rounded-md shadow-sm transition-transform duration-200 ease-in-out ${
                   i18n.language === 'en' ? 'translate-x-[calc(100%+4px)]' : 'translate-x-1'
                 }`}
               />
-              <button
-                onClick={() => changeLanguage("vi")}
-                className={`cursor-pointer relative z-10 w-1/2 text-xs font-semibold text-center transition-colors duration-200 ${
-                  i18n.language === 'vi' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+              <div
+                className={`relative z-10 w-1/2 text-xs font-semibold text-center transition-colors duration-200 pointer-events-none ${
+                  i18n.language === 'vi' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'
                 }`}
               >
                 VI
-              </button>
-              <button
-                onClick={() => changeLanguage("en")}
-                className={`cursor-pointer relative z-10 w-1/2 text-xs font-semibold text-center transition-colors duration-200 ${
-                  i18n.language === 'en' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+              </div>
+              <div
+                className={`relative z-10 w-1/2 text-xs font-semibold text-center transition-colors duration-200 pointer-events-none ${
+                  i18n.language === 'en' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'
                 }`}
               >
                 EN
-              </button>
+              </div>
             </div>
 
             {/* Dark Mode Toggle */}
@@ -154,14 +155,17 @@ export function Navbar() {
             ))}
              <div className="pl-3 pr-4 py-2 border-l-4 border-transparent flex items-center justify-between">
                <span className="text-gray-500 dark:text-gray-400 text-base font-medium">Language</span>
-               <div className="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-lg w-24 relative">
+               <div 
+                 onClick={toggleLanguage}
+                 className="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-lg w-24 relative cursor-pointer"
+               >
                   <div 
                     className={`absolute w-[calc(50%-4px)] h-[calc(100%-8px)] top-1 bg-white dark:bg-gray-600 rounded-md shadow-sm transition-transform duration-200 ease-in-out ${
                       i18n.language === 'en' ? 'translate-x-[calc(100%+4px)]' : 'translate-x-1'
                     }`}
                   />
-                  <button onClick={() => changeLanguage("vi")} className={`cursor-pointer relative z-10 w-1/2 text-xs font-semibold py-1 ${i18n.language === 'vi' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>VI</button>
-                  <button onClick={() => changeLanguage("en")} className={`cursor-pointer relative z-10 w-1/2 text-xs font-semibold py-1 ${i18n.language === 'en' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>EN</button>
+                  <div className={`relative z-10 w-1/2 text-xs font-semibold py-1 text-center pointer-events-none ${i18n.language === 'vi' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>VI</div>
+                  <div className={`relative z-10 w-1/2 text-xs font-semibold py-1 text-center pointer-events-none ${i18n.language === 'en' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>EN</div>
                </div>
              </div>
           </div>
