@@ -54,11 +54,11 @@ export function Navbar() {
 
   const navigation = [
     { name: t("nav.home"), href: "/", icon: Home },
-    { name: t("nav.features"), href: "/features", icon: Settings },
     { name: t("nav.json_tools"), href: "/json-tools", icon: FileJson },
     { name: t("nav.text_diff"), href: "/text-diff", icon: FileDiff },
     { name: t("nav.pomodoro"), href: "/pomodoro", icon: Timer },
     { name: t("nav.calendar"), href: "/calendar", icon: Calendar },
+    { name: t("nav.features"), href: "/features", icon: Settings },
     { name: t("nav.about"), href: "/about", icon: Info },
   ];
 

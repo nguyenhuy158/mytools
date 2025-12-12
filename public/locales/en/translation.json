@@ -113,6 +113,10 @@
       "json_history_remove": {
         "title": "Remove History Item",
         "desc": "Delete individual items from your JSON operation history."
+      },
+      "text_diff": {
+        "title": "Text Diff",
+        "desc": "Compare two texts and see the differences between them."
       }
     }
   },

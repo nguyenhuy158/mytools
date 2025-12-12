@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Check, Type,  ArrowRightLeft, CaseSensitive, FileType, AlignLeft, Code, Braces, Copy, ClipboardPaste, Download, Upload, History, Trash2, Settings, MoveRight } from "lucide-react";
+import { Check, Type,  ArrowRightLeft, CaseSensitive, FileType, AlignLeft, Code, Braces, Copy, ClipboardPaste, Download, Upload, History, Trash2, Settings, MoveRight, FileDiff } from "lucide-react";
 import type { Route } from "./+types/features";
 
 export function meta({}: Route.MetaArgs) {
@@ -32,6 +32,7 @@ export default function Features() {
     { key: "json_tab_size", icon: Settings },
     { key: "json_move_output_to_input", icon: MoveRight },
     { key: "json_history_remove", icon: Trash2 },
+    { key: "text_diff", icon: FileDiff },
   ];
 
   return (

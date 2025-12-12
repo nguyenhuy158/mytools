@@ -113,6 +113,10 @@
       "json_history_remove": {
         "title": "Xóa mục lịch sử",
         "desc": "Xóa các mục riêng lẻ khỏi lịch sử thao tác JSON của bạn."
+      },
+      "text_diff": {
+        "title": "So sánh văn bản",
+        "desc": "So sánh hai văn bản và xem sự khác biệt giữa chúng."
       }
     }
   },
