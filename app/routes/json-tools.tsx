@@ -103,10 +103,16 @@ export default function JsonTools() {
         .replace(/\bTrue\b/g, "true")
         .replace(/\bFalse\b/g, "false");
       
-      // 2. Parse using JSON5 (handles single quotes, trailing commas, etc.)
+      // 2. Decode unicode escapes (e.g. \\u00e0 -> à)
+      // This handles double-escaped sequences common in logs/repr()
+      fixedInput = fixedInput.replace(/\\u([0-9a-fA-F]{4})/g, (_, hex) => 
+        String.fromCharCode(parseInt(hex, 16))
+      );
+      
+      // 3. Parse using JSON5 (handles single quotes, trailing commas, etc.)
       const parsed = JSON5.parse(fixedInput);
       
-      // 3. Convert back to standard JSON
+      // 4. Convert back to standard JSON
       const formatted = JSON.stringify(parsed, null, 2);
       
       setOutput(formatted);
