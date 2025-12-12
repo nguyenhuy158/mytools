@@ -79,7 +79,8 @@
       "clear": "Xóa",
       "copy": "Sao chép",
       "paste": "Dán",
-      "example": "Mẫu"
+      "example": "Mẫu",
+      "tab_size": "Tab"
     },
     "toast": {
       "valid": "JSON hợp lệ",

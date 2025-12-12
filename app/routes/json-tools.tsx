@@ -1,4 +1,4 @@
-import { Download, Upload, Copy, Trash2, FileJson, Check, XCircle, Minimize, Maximize, Wrench, ClipboardPaste, History, RotateCcw, Sparkles, X } from "lucide-react";
+import { Download, Upload, Copy, Trash2, FileJson, Check, XCircle, Minimize, Maximize, Wrench, ClipboardPaste, History, RotateCcw, Sparkles, X, ChevronDown } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -17,19 +17,31 @@ export default function JsonTools() {
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [history, setHistory] = useState<string[]>([]);
+  const [tabSize, setTabSize] = useState(4);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Load history from local storage on mount
+  // Load history and tab size from local storage on mount
   useEffect(() => {
-    const saved = localStorage.getItem("json-tools-history");
-    if (saved) {
+    const savedHistory = localStorage.getItem("json-tools-history");
+    if (savedHistory) {
       try {
-        setHistory(JSON.parse(saved));
+        setHistory(JSON.parse(savedHistory));
       } catch (e) {
         console.error("Failed to parse history", e);
       }
     }
+
+    const savedTabSize = localStorage.getItem("json-tools-tab-size");
+    if (savedTabSize) {
+      setTabSize(parseInt(savedTabSize, 10));
+    }
   }, []);
+
+  const handleTabSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newSize = parseInt(e.target.value, 10);
+    setTabSize(newSize);
+    localStorage.setItem("json-tools-tab-size", newSize.toString());
+  };
 
   const addToHistory = (newText: string) => {
     if (!newText.trim()) return;
@@ -76,7 +88,7 @@ export default function JsonTools() {
     if (!input.trim()) return;
     const parsed = validate(input, false);
     if (parsed) {
-      const formatted = JSON.stringify(parsed, null, 2);
+      const formatted = JSON.stringify(parsed, null, tabSize);
       setOutput(formatted);
       addToHistory(input);
       toast.success(t("json_tools.toast.formatted"));
@@ -113,7 +125,7 @@ export default function JsonTools() {
       const parsed = JSON5.parse(fixedInput);
       
       // 4. Convert back to standard JSON
-      const formatted = JSON.stringify(parsed, null, 2);
+      const formatted = JSON.stringify(parsed, null, tabSize);
       
       setOutput(formatted);
       setError(null);
@@ -172,7 +184,7 @@ export default function JsonTools() {
     try {
       const response = await fetch('https://jsonplaceholder.typicode.com/todos/1');
       const json = await response.json();
-      const text = JSON.stringify(json, null, 2);
+      const text = JSON.stringify(json, null, tabSize);
       setInput(text);
       validate(text, false);
       toast.success(t("json_tools.toast.valid"));

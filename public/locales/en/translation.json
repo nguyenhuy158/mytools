@@ -79,7 +79,8 @@
       "clear": "Clear",
       "copy": "Copy",
       "paste": "Paste",
-      "example": "Example"
+      "example": "Example",
+      "tab_size": "Tab Size"
     },
     "toast": {
       "valid": "Valid JSON",
