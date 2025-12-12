@@ -1,4 +1,4 @@
-import { Download, Copy, Trash2, History, RotateCcw } from "lucide-react";
+import { Download, Copy, Trash2, History, RotateCcw, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -40,6 +40,15 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       if (prev.length > 0 && prev[0] === newText) return prev;
       
       const updated = [newText, ...prev].slice(0, 20); // Keep last 20 items
+      localStorage.setItem("case-converter-history", JSON.stringify(updated));
+      return updated;
+    });
+  };
+
+  const removeFromHistory = (e: React.MouseEvent, indexToRemove: number) => {
+    e.stopPropagation();
+    setHistory((prev) => {
+      const updated = prev.filter((_, index) => index !== indexToRemove);
       localStorage.setItem("case-converter-history", JSON.stringify(updated));
       return updated;
     });
@@ -234,11 +243,21 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                     }}
                     className="group relative bg-white dark:bg-gray-900 p-3 rounded-lg border border-gray-200 dark:border-gray-800 hover:border-blue-400 dark:hover:border-blue-500 cursor-pointer shadow-sm transition-all hover:shadow-md"
                   >
-                    <p className="text-sm text-slate-600 dark:text-gray-300 line-clamp-3 font-mono break-words">
+                    <p className="text-sm text-slate-600 dark:text-gray-300 line-clamp-3 font-mono break-words pr-6">
                       {item}
                     </p>
-                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-gray-800 p-1 rounded-md shadow-sm">
-                       <RotateCcw className="w-3 h-3 text-blue-600" />
+                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1 bg-white dark:bg-gray-800 p-1 rounded-md shadow-sm">
+                       <button 
+                         onClick={(e) => removeFromHistory(e, idx)}
+                         className="p-1 hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-400 hover:text-red-500 rounded transition-colors"
+                         title={t("home.clear_all")} // Reuse clear text or add specific remove text
+                       >
+                         <X className="w-3 h-3" />
+                       </button>
+                       <div className="w-px h-3 bg-gray-200 dark:bg-gray-700 my-auto"></div>
+                       <button className="p-1 hover:bg-blue-50 dark:hover:bg-blue-900/20 text-slate-400 hover:text-blue-600 rounded transition-colors">
+                          <RotateCcw className="w-3 h-3" />
+                       </button>
                     </div>
                   </div>
                 ))}
