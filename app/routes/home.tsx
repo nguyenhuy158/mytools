@@ -1,3 +1,4 @@
+import { Icon } from "@iconify/react";
 import { useState } from "react";
 import type { Route } from "./+types/home";
 
@@ -110,9 +111,24 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             <Button onClick={toAlternatingCase}>aLtErNaTiNg cAsE</Button>
             <Button onClick={toTitleCase}>Title Case</Button>
             <Button onClick={toInverseCase}>InVeRsE CaSe</Button>
-            <Button onClick={handleDownload} variant="secondary">Download Text</Button>
-            <Button onClick={handleCopy} variant="secondary">Copy to Clipboard</Button>
-            <Button onClick={handleClear} variant="secondary">Clear</Button>
+            <Button onClick={handleDownload} variant="secondary">
+              <span className="flex items-center gap-2">
+                <Icon icon="mdi:download" className="w-4 h-4" />
+                Download Text
+              </span>
+            </Button>
+            <Button onClick={handleCopy} variant="secondary">
+              <span className="flex items-center gap-2">
+                <Icon icon="mdi:content-copy" className="w-4 h-4" />
+                Copy to Clipboard
+              </span>
+            </Button>
+            <Button onClick={handleClear} variant="secondary">
+              <span className="flex items-center gap-2">
+                <Icon icon="mdi:delete-outline" className="w-4 h-4" />
+                Clear
+              </span>
+            </Button>
         </div>
 
         <div className="text-sm text-gray-600 dark:text-gray-400 pt-4">
