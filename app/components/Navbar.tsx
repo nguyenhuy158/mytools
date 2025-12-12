@@ -45,6 +45,11 @@ export function Navbar() {
     toast.success(t("nav.toast.language_changed"));
   };
 
+  const toggleLanguage = () => {
+    const newLang = i18n.language === 'vi' ? 'en' : 'vi';
+    changeLanguage(newLang);
+  };
+
   const navigation = [
     { name: t("nav.home"), href: "/", icon: Home },
     { name: t("nav.features"), href: "/features", icon: Settings },
