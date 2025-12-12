@@ -82,7 +82,7 @@ export function Navbar() {
             {/* Language Switcher */}
             <div 
               onClick={toggleLanguage}
-              className="bg-gray-100 dark:bg-gray-800 p-1 rounded-lg flex items-center relative h-9 w-24 cursor-pointer"
+              className="bg-gray-100 dark:bg-gray-800 p-1 rounded-lg flex items-center relative h-9 w-28 cursor-pointer"
             >
               <div 
                 className={`absolute w-[calc(50%-4px)] h-[calc(100%-8px)] top-1 bg-white dark:bg-gray-600 rounded-md shadow-sm transition-transform duration-200 ease-in-out ${
@@ -90,18 +90,18 @@ export function Navbar() {
                 }`}
               />
               <div
-                className={`relative z-10 w-1/2 text-xs font-semibold text-center transition-colors duration-200 pointer-events-none ${
+                className={`relative z-10 w-1/2 text-xs font-semibold text-center transition-colors duration-200 pointer-events-none flex items-center justify-center gap-1 ${
                   i18n.language === 'vi' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'
                 }`}
               >
-                VI
+                <span>🇻🇳</span> VI
               </div>
               <div
-                className={`relative z-10 w-1/2 text-xs font-semibold text-center transition-colors duration-200 pointer-events-none ${
+                className={`relative z-10 w-1/2 text-xs font-semibold text-center transition-colors duration-200 pointer-events-none flex items-center justify-center gap-1 ${
                   i18n.language === 'en' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'
                 }`}
               >
-                EN
+                <span>🇺🇸</span> EN
               </div>
             </div>
 
@@ -157,15 +157,19 @@ export function Navbar() {
                <span className="text-gray-500 dark:text-gray-400 text-base font-medium">Language</span>
                <div 
                  onClick={toggleLanguage}
-                 className="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-lg w-24 relative cursor-pointer"
+                 className="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-lg w-28 relative cursor-pointer"
                >
                   <div 
                     className={`absolute w-[calc(50%-4px)] h-[calc(100%-8px)] top-1 bg-white dark:bg-gray-600 rounded-md shadow-sm transition-transform duration-200 ease-in-out ${
                       i18n.language === 'en' ? 'translate-x-[calc(100%+4px)]' : 'translate-x-1'
                     }`}
                   />
-                  <div className={`relative z-10 w-1/2 text-xs font-semibold py-1 text-center pointer-events-none ${i18n.language === 'vi' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>VI</div>
-                  <div className={`relative z-10 w-1/2 text-xs font-semibold py-1 text-center pointer-events-none ${i18n.language === 'en' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>EN</div>
+                  <div className={`relative z-10 w-1/2 text-xs font-semibold py-1 text-center pointer-events-none flex items-center justify-center gap-1 ${i18n.language === 'vi' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>
+                    <span>🇻🇳</span> VI
+                  </div>
+                  <div className={`relative z-10 w-1/2 text-xs font-semibold py-1 text-center pointer-events-none flex items-center justify-center gap-1 ${i18n.language === 'en' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>
+                    <span>🇺🇸</span> EN
+                  </div>
                </div>
              </div>
           </div>
