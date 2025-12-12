@@ -152,11 +152,7 @@ export default function Calendar() {
                     <div className={`text-xs ${
                         lunar.day === 1 || lunar.day === 15 ? "text-indigo-600 dark:text-indigo-400 font-bold" : "text-gray-500 dark:text-gray-400"
                       }`}>
-                      {lunar.day === 1 ? (
-                        <span>{lunar.day}/{lunar.month}</span>
-                      ) : (
-                        <span>{lunar.day}</span>
-                      )}
+                      <span>{lunar.day}/{lunar.month}</span>
                     </div>
                   </div>
                 </div>
