@@ -1,4 +1,4 @@
-import { Icon } from "@iconify/react";
+import { Download, Copy, Trash2 } from "lucide-react";
 import { useState } from "react";
 import type { Route } from "./+types/home";
 
@@ -87,78 +87,86 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   const lineCount = text === "" ? 0 : text.split(/\n/).length;
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 p-4 md:p-8 flex flex-col items-center justify-center font-sans">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-slate-900 dark:text-gray-100 p-4 md:p-8 flex flex-col items-center justify-center font-sans">
       <div className="max-w-5xl w-full space-y-6">
-        <header className="space-y-2">
-            <h1 className="text-2xl md:text-3xl font-bold">Accidentally left the caps lock on and typed something, but can't be bothered to start again and retype it all?</h1>
-            <p className="text-gray-600 dark:text-gray-400">
-                Simply enter your text and choose the case you want to convert it to.
+        <header className="space-y-2 text-center md:text-left">
+            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+              Case Converter
+            </h1>
+            <p className="text-slate-500 dark:text-gray-400 text-lg">
+                Accidentally left the caps lock on? Simply enter your text and choose the case you want to convert it to.
             </p>
         </header>
 
-        <textarea
-            className="w-full h-80 p-4 border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-gray-900 focus:ring-2 focus:ring-blue-500 focus:outline-none resize-y text-lg"
-            placeholder="Type or paste your content here"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-        />
+        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-6 space-y-6">
+          <textarea
+              className="w-full h-80 p-4 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-950 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none resize-y text-lg text-slate-700 dark:text-gray-300 placeholder-gray-400 transition-all"
+              placeholder="Type or paste your content here..."
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+          />
 
-        <div className="flex flex-wrap gap-2">
-            <Button onClick={toSentenceCase}>Sentence case</Button>
-            <Button onClick={toLowerCase}>lower case</Button>
-            <Button onClick={toUpperCase}>UPPER CASE</Button>
-            <Button onClick={toCapitalizedCase}>Capitalized Case</Button>
-            <Button onClick={toAlternatingCase}>aLtErNaTiNg cAsE</Button>
-            <Button onClick={toTitleCase}>Title Case</Button>
-            <Button onClick={toInverseCase}>InVeRsE CaSe</Button>
-            <Button onClick={handleDownload} variant="secondary">
-              <span className="flex items-center gap-2">
-                <Icon icon="mdi:download" className="w-4 h-4" />
-                Download Text
-              </span>
-            </Button>
-            <Button onClick={handleCopy} variant="secondary">
-              <span className="flex items-center gap-2">
-                <Icon icon="mdi:content-copy" className="w-4 h-4" />
-                Copy to Clipboard
-              </span>
-            </Button>
-            <Button onClick={handleClear} variant="secondary">
-              <span className="flex items-center gap-2">
-                <Icon icon="mdi:delete-outline" className="w-4 h-4" />
-                Clear
-              </span>
-            </Button>
+          <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
+            <div className="flex flex-wrap gap-2 flex-1">
+                <Button onClick={toSentenceCase} variant="outline">Sentence case</Button>
+                <Button onClick={toLowerCase} variant="outline">lower case</Button>
+                <Button onClick={toUpperCase} variant="outline">UPPER CASE</Button>
+                <Button onClick={toCapitalizedCase} variant="outline">Capitalized Case</Button>
+                <Button onClick={toAlternatingCase} variant="outline">aLtErNaTiNg cAsE</Button>
+                <Button onClick={toTitleCase} variant="outline">Title Case</Button>
+                <Button onClick={toInverseCase} variant="outline">InVeRsE CaSe</Button>
+            </div>
+            
+            <div className="flex flex-wrap gap-2 shrink-0 border-t md:border-t-0 md:border-l border-gray-100 dark:border-gray-800 pt-4 md:pt-0 md:pl-4">
+                <Button onClick={handleCopy} variant="primary">
+                  <span className="flex items-center gap-2">
+                    <Copy className="w-4 h-4" />
+                    Copy
+                  </span>
+                </Button>
+                <Button onClick={handleDownload} variant="ghost">
+                  <span className="flex items-center gap-2">
+                    <Download className="w-4 h-4" />
+                    Download
+                  </span>
+                </Button>
+                <Button onClick={handleClear} variant="danger">
+                  <span className="flex items-center gap-2">
+                    <Trash2 className="w-4 h-4" />
+                    Clear
+                  </span>
+                </Button>
+            </div>
+          </div>
         </div>
 
-        <div className="text-sm text-gray-600 dark:text-gray-400 pt-4">
-            <span>Character Count: {charCount}</span>
-            <span className="mx-2">|</span>
-            <span>Word Count: {wordCount}</span>
-            <span className="mx-2">|</span>
-            <span>Sentence Count: {sentenceCount}</span>
-            <span className="mx-2">|</span>
-            <span>Line Count: {lineCount}</span>
+        <div className="text-sm text-slate-500 dark:text-gray-500 flex justify-center gap-6 bg-white dark:bg-gray-900 py-3 px-6 rounded-full shadow-sm border border-gray-100 dark:border-gray-800 w-fit mx-auto">
+            <span><strong className="text-slate-900 dark:text-gray-200">{charCount}</strong> Characters</span>
+            <span className="text-gray-300 dark:text-gray-700">|</span>
+            <span><strong className="text-slate-900 dark:text-gray-200">{wordCount}</strong> Words</span>
+            <span className="text-gray-300 dark:text-gray-700">|</span>
+            <span><strong className="text-slate-900 dark:text-gray-200">{sentenceCount}</strong> Sentences</span>
+            <span className="text-gray-300 dark:text-gray-700">|</span>
+            <span><strong className="text-slate-900 dark:text-gray-200">{lineCount}</strong> Lines</span>
         </div>
       </div>
     </div>
   );
 }
 
-function Button({ children, onClick, variant = 'primary' }: { children: React.ReactNode, onClick: () => void, variant?: 'primary' | 'secondary' }) {
-    // Styling buttons to look like the screenshot (rectangular, gray)
-    let baseClass = "px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-950 cursor-pointer select-none";
-    let variantClass = "";
-
-    if (variant === 'primary') {
-        variantClass = "bg-gray-200 hover:bg-gray-300 text-gray-900 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-100";
-    } else if (variant === 'secondary') {
-        // Screenshot shows secondary buttons looking similar or same
-        variantClass = "bg-gray-300 hover:bg-gray-400 text-gray-900 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-100";
-    }
+function Button({ children, onClick, variant = 'outline' }: { children: React.ReactNode, onClick: () => void, variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' }) {
+    const baseClass = "px-4 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 dark:focus:ring-offset-gray-900 cursor-pointer select-none flex items-center justify-center";
+    
+    const variants = {
+        primary: "bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 focus:ring-blue-500",
+        secondary: "bg-gray-100 hover:bg-gray-200 text-slate-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-200",
+        outline: "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-slate-600 dark:text-gray-300 hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 hover:shadow-sm",
+        ghost: "bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-slate-600 dark:text-gray-400",
+        danger: "bg-red-50 hover:bg-red-100 text-red-600 dark:bg-red-900/20 dark:hover:bg-red-900/30 dark:text-red-400"
+    };
 
     return (
-        <button onClick={onClick} className={`${baseClass} ${variantClass}`}>
+        <button onClick={onClick} className={`${baseClass} ${variants[variant]}`}>
             {children}
         </button>
     )

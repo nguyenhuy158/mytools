@@ -12,8 +12,8 @@
 		"typecheck": "npm run cf-typegen && react-router typegen && tsc -b"
 	},
 	"dependencies": {
-		"@iconify/react": "^6.0.2",
 		"isbot": "^5.1.31",
+		"lucide-react": "^0.560.0",
 		"react": "^19.1.1",
 		"react-dom": "^19.1.1",
 		"react-router": "^7.10.0"
