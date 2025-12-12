@@ -175,7 +175,14 @@
     "original_placeholder": "Paste original text here...",
     "modified": "Modified Text",
     "modified_placeholder": "Paste modified text here...",
-    "clear": "Clear All"
+    "clear": "Clear All",
+    "save": "Save",
+    "history": "History",
+    "toast": {
+        "saved": "Comparison saved to history",
+        "restored": "Comparison restored from history",
+        "cleared": "History cleared"
+    }
   },
   "about": {
     "title": "About Us",
