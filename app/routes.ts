@@ -7,5 +7,6 @@ export default [
   route("calendar", "routes/calendar.tsx"),
   route("text-diff", "routes/text-diff.tsx"),
   route("pomodoro", "routes/pomodoro.tsx"),
+  route("roadmap", "routes/roadmap.tsx"),
   route("about", "routes/about.tsx"),
 ] satisfies RouteConfig;
