@@ -3,6 +3,7 @@
   "nav": {
     "home": "Trang chủ",
     "features": "Tính năng",
+    "json_tools": "Công cụ JSON",
     "about": "Giới thiệu",
     "toast": {
       "language_changed": "Đã chuyển sang Tiếng Việt",
@@ -62,6 +63,26 @@
         "title": "ĐảO NgƯợC ChỮ",
         "desc": "Chuyển chữ hoa thành chữ thường và ngược lại."
       }
+    }
+  },
+  "json_tools": {
+    "title": "Công cụ JSON",
+    "description": "Định dạng, kiểm tra và tối ưu hóa dữ liệu JSON của bạn.",
+    "input_placeholder": "Dán JSON vào đây...",
+    "actions": {
+      "format": "Định dạng / Làm đẹp",
+      "minify": "Tối thiểu hóa / Gọn nhẹ",
+      "validate": "Kiểm tra",
+      "upload": "Tải lên",
+      "download": "Tải xuống",
+      "clear": "Xóa"
+    },
+    "toast": {
+      "valid": "JSON hợp lệ",
+      "invalid": "JSON không hợp lệ",
+      "formatted": "Đã định dạng JSON",
+      "minified": "Đã tối thiểu hóa JSON",
+      "copied": "Đã sao chép vào clipboard"
     }
   },
   "about": {

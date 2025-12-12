@@ -3,6 +3,7 @@
   "nav": {
     "home": "Home",
     "features": "Features",
+    "json_tools": "JSON Tools",
     "about": "About",
     "toast": {
       "language_changed": "Language changed to English",
@@ -62,6 +63,26 @@
         "title": "InVeRsE CaSe",
         "desc": "Switch every upper case letter to lower case and vice versa."
       }
+    }
+  },
+  "json_tools": {
+    "title": "JSON Tools",
+    "description": "Format, validate, and minify your JSON data.",
+    "input_placeholder": "Paste your JSON here...",
+    "actions": {
+      "format": "Format / Beautify",
+      "minify": "Minify / Compact",
+      "validate": "Validate",
+      "upload": "Upload",
+      "download": "Download",
+      "clear": "Clear"
+    },
+    "toast": {
+      "valid": "Valid JSON",
+      "invalid": "Invalid JSON",
+      "formatted": "JSON Formatted",
+      "minified": "JSON Minified",
+      "copied": "Copied to clipboard"
     }
   },
   "about": {
