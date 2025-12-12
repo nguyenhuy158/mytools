@@ -72,6 +72,7 @@
     "actions": {
       "format": "Định dạng / Làm đẹp",
       "minify": "Tối thiểu hóa / Gọn nhẹ",
+      "fix": "Sửa lỗi / Chuẩn hóa",
       "validate": "Kiểm tra",
       "upload": "Tải lên",
       "download": "Tải xuống",
@@ -81,6 +82,7 @@
       "valid": "JSON hợp lệ",
       "invalid": "JSON không hợp lệ",
       "formatted": "Đã định dạng JSON",
+      "fixed": "Đã sửa lỗi JSON",
       "minified": "Đã tối thiểu hóa JSON",
       "copied": "Đã sao chép vào clipboard"
     }

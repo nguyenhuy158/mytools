@@ -1,7 +1,8 @@
-import { Download, Upload, Copy, Trash2, FileJson, Check, XCircle, Minimize, Maximize } from "lucide-react";
+import { Download, Upload, Copy, Trash2, FileJson, Check, XCircle, Minimize, Maximize, Wrench } from "lucide-react";
 import { useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
+import JSON5 from "json5";
 
 export function meta() {
   return [
@@ -47,6 +48,30 @@ export default function JsonTools() {
       const minified = JSON.stringify(parsed);
       setOutput(minified);
       toast.success(t("json_tools.toast.minified"));
+    }
+  };
+
+  const handleFix = () => {
+    if (!input.trim()) return;
+    try {
+      // 1. Handle Python literals
+      let fixedInput = input
+        .replace(/\bNone\b/g, "null")
+        .replace(/\bTrue\b/g, "true")
+        .replace(/\bFalse\b/g, "false");
+      
+      // 2. Parse using JSON5 (handles single quotes, trailing commas, etc.)
+      const parsed = JSON5.parse(fixedInput);
+      
+      // 3. Convert back to standard JSON
+      const formatted = JSON.stringify(parsed, null, 2);
+      
+      setOutput(formatted);
+      setError(null);
+      toast.success(t("json_tools.toast.fixed"));
+    } catch (e) {
+      setError((e as Error).message);
+      toast.error(t("json_tools.toast.invalid"));
     }
   };
 
@@ -114,6 +139,10 @@ export default function JsonTools() {
                 <Button onClick={handleFormat} variant="primary">
                     <Maximize className="w-4 h-4 mr-2" />
                     {t("json_tools.actions.format")}
+                </Button>
+                <Button onClick={handleFix} variant="outline">
+                    <Wrench className="w-4 h-4 mr-2" />
+                    {t("json_tools.actions.fix")}
                 </Button>
                 <Button onClick={handleMinify} variant="outline">
                     <Minimize className="w-4 h-4 mr-2" />
