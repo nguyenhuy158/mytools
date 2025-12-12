@@ -43,6 +43,9 @@ const MODES: Record<TimerMode, { label: string; minutes: number }> = {
   custom: { label: "Custom", minutes: 30 }, // Default custom time
 };
 
+// Alarm Sound
+const ALARM_URL = "https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg";
+
 export default function Pomodoro() {
   // Timer State
   const [mode, setMode] = useState<TimerMode>("pomodoro");
@@ -56,6 +59,31 @@ export default function Pomodoro() {
   const [volume, setVolume] = useState(0.5);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const alarmRef = useRef<HTMLAudioElement | null>(null);
+
+  // Initialize alarm
+  useEffect(() => {
+    alarmRef.current = new Audio(ALARM_URL);
+    return () => {
+        if (alarmRef.current) {
+            alarmRef.current.pause();
+            alarmRef.current = null;
+        }
+    }
+  }, []);
+
+  // Prevent tab close when running
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isRunning) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [isRunning]);
 
   // Initialize audio ref
   useEffect(() => {
@@ -108,7 +136,8 @@ export default function Pomodoro() {
       }, 1000);
     } else if (timeLeft === 0) {
       setIsRunning(false);
-      // Optional: Play alarm sound here
+      // Play alarm
+      alarmRef.current?.play().catch(e => console.error("Alarm play failed", e));
     }
 
     return () => clearInterval(interval);
