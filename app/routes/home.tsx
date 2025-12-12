@@ -1,5 +1,5 @@
-import { Download, Copy, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { Download, Copy, Trash2, History, RotateCcw } from "lucide-react";
+import { useState, useEffect } from "react";
 import type { Route } from "./+types/home";
 
 export function meta({}: Route.MetaArgs) {
@@ -15,18 +15,56 @@ export function loader({ context }: Route.LoaderArgs) {
 
 export default function Home({ loaderData }: Route.ComponentProps) {
   const [text, setText] = useState("");
+  const [history, setHistory] = useState<string[]>([]);
+
+  // Load history from local storage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem("case-converter-history");
+    if (saved) {
+      try {
+        setHistory(JSON.parse(saved));
+      } catch (e) {
+        console.error("Failed to parse history", e);
+      }
+    }
+  }, []);
+
+  const addToHistory = (newText: string) => {
+    if (!newText.trim()) return;
+    
+    setHistory((prev) => {
+      // Avoid duplicates at the top of the list
+      if (prev.length > 0 && prev[0] === newText) return prev;
+      
+      const updated = [newText, ...prev].slice(0, 20); // Keep last 20 items
+      localStorage.setItem("case-converter-history", JSON.stringify(updated));
+      return updated;
+    });
+  };
 
   const toSentenceCase = () => {
     const res = text.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g, (c) => c.toUpperCase());
     setText(res);
+    addToHistory(res);
   };
 
-  const toLowerCase = () => setText(text.toLowerCase());
-  const toUpperCase = () => setText(text.toUpperCase());
+  const toLowerCase = () => {
+    const res = text.toLowerCase();
+    setText(res);
+    addToHistory(res);
+  };
+
+  const toUpperCase = () => {
+    const res = text.toUpperCase();
+    setText(res);
+    addToHistory(res);
+  };
 
   const toCapitalizedCase = () => {
     // Capitalize first letter of each word
-    setText(text.toLowerCase().replace(/\b\w/g, (l) => l.toUpperCase()));
+    const res = text.toLowerCase().replace(/\b\w/g, (l) => l.toUpperCase());
+    setText(res);
+    addToHistory(res);
   };
 
   const toAlternatingCase = () => {
@@ -36,6 +74,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         res += i % 2 === 0 ? text[i].toLowerCase() : text[i].toUpperCase();
     }
     setText(res);
+    addToHistory(res);
   };
 
   const toTitleCase = () => {
@@ -48,6 +87,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           return word.charAt(0).toUpperCase() + word.slice(1);
       }).join(' ');
       setText(res);
+      addToHistory(res);
   };
 
   const toInverseCase = () => {
@@ -57,6 +97,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         res += c === c.toUpperCase() ? c.toLowerCase() : c.toUpperCase();
     }
     setText(res);
+    addToHistory(res);
   };
 
   const handleDownload = () => {
@@ -73,10 +114,14 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   const handleCopy = () => {
       if (!text) return;
       navigator.clipboard.writeText(text);
-      // Optional: show toast, but keeping it simple as per screenshot
   };
 
   const handleClear = () => setText("");
+
+  const clearHistory = () => {
+    setHistory([]);
+    localStorage.removeItem("case-converter-history");
+  };
 
   // Counts
   const charCount = text.length;
@@ -87,68 +132,108 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   const lineCount = text === "" ? 0 : text.split(/\n/).length;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-slate-900 dark:text-gray-100 p-4 md:p-8 flex flex-col items-center justify-center font-sans">
-      <div className="max-w-5xl w-full space-y-6">
-        <header className="space-y-2 text-center md:text-left">
-            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-              Case Converter
-            </h1>
-            <p className="text-slate-500 dark:text-gray-400 text-lg">
-                Accidentally left the caps lock on? Simply enter your text and choose the case you want to convert it to.
-            </p>
-        </header>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-slate-900 dark:text-gray-100 p-4 md:p-8 font-sans">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-6 items-start justify-center h-full">
+        
+        {/* Main Content */}
+        <div className="flex-1 w-full space-y-6">
+          <header className="space-y-2 text-center md:text-left">
+              <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                Case Converter
+              </h1>
+              <p className="text-slate-500 dark:text-gray-400 text-lg">
+                  Accidentally left the caps lock on? Simply enter your text and choose the case you want to convert it to.
+              </p>
+          </header>
 
-        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-6 space-y-6">
-          <textarea
-              className="w-full h-80 p-4 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-950 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none resize-y text-lg text-slate-700 dark:text-gray-300 placeholder-gray-400 transition-all"
-              placeholder="Type or paste your content here..."
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-          />
+          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-6 space-y-6">
+            <textarea
+                className="w-full h-80 p-4 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-950 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none resize-y text-lg text-slate-700 dark:text-gray-300 placeholder-gray-400 transition-all"
+                placeholder="Type or paste your content here..."
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+            />
 
-          <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
-            <div className="flex flex-wrap gap-2 flex-1">
-                <Button onClick={toSentenceCase} variant="outline">Sentence case</Button>
-                <Button onClick={toLowerCase} variant="outline">lower case</Button>
-                <Button onClick={toUpperCase} variant="outline">UPPER CASE</Button>
-                <Button onClick={toCapitalizedCase} variant="outline">Capitalized Case</Button>
-                <Button onClick={toAlternatingCase} variant="outline">aLtErNaTiNg cAsE</Button>
-                <Button onClick={toTitleCase} variant="outline">Title Case</Button>
-                <Button onClick={toInverseCase} variant="outline">InVeRsE CaSe</Button>
+            <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
+              <div className="flex flex-wrap gap-2 flex-1">
+                  <Button onClick={toSentenceCase} variant="outline">Sentence case</Button>
+                  <Button onClick={toLowerCase} variant="outline">lower case</Button>
+                  <Button onClick={toUpperCase} variant="outline">UPPER CASE</Button>
+                  <Button onClick={toCapitalizedCase} variant="outline">Capitalized Case</Button>
+                  <Button onClick={toAlternatingCase} variant="outline">aLtErNaTiNg cAsE</Button>
+                  <Button onClick={toTitleCase} variant="outline">Title Case</Button>
+                  <Button onClick={toInverseCase} variant="outline">InVeRsE CaSe</Button>
+              </div>
+              
+              <div className="flex flex-wrap gap-2 shrink-0 border-t md:border-t-0 md:border-l border-gray-100 dark:border-gray-800 pt-4 md:pt-0 md:pl-4">
+                  <Button onClick={handleCopy} variant="primary">
+                    <span className="flex items-center gap-2">
+                      <Copy className="w-4 h-4" />
+                      Copy
+                    </span>
+                  </Button>
+                  <Button onClick={handleDownload} variant="ghost">
+                    <span className="flex items-center gap-2">
+                      <Download className="w-4 h-4" />
+                      Download
+                    </span>
+                  </Button>
+                  <Button onClick={handleClear} variant="danger">
+                    <span className="flex items-center gap-2">
+                      <Trash2 className="w-4 h-4" />
+                      Clear
+                    </span>
+                  </Button>
+              </div>
             </div>
-            
-            <div className="flex flex-wrap gap-2 shrink-0 border-t md:border-t-0 md:border-l border-gray-100 dark:border-gray-800 pt-4 md:pt-0 md:pl-4">
-                <Button onClick={handleCopy} variant="primary">
-                  <span className="flex items-center gap-2">
-                    <Copy className="w-4 h-4" />
-                    Copy
-                  </span>
-                </Button>
-                <Button onClick={handleDownload} variant="ghost">
-                  <span className="flex items-center gap-2">
-                    <Download className="w-4 h-4" />
-                    Download
-                  </span>
-                </Button>
-                <Button onClick={handleClear} variant="danger">
-                  <span className="flex items-center gap-2">
-                    <Trash2 className="w-4 h-4" />
-                    Clear
-                  </span>
-                </Button>
-            </div>
+          </div>
+
+          <div className="text-sm text-slate-500 dark:text-gray-500 flex justify-center gap-6 bg-white dark:bg-gray-900 py-3 px-6 rounded-full shadow-sm border border-gray-100 dark:border-gray-800 w-fit mx-auto">
+              <span><strong className="text-slate-900 dark:text-gray-200">{charCount}</strong> Characters</span>
+              <span className="text-gray-300 dark:text-gray-700">|</span>
+              <span><strong className="text-slate-900 dark:text-gray-200">{wordCount}</strong> Words</span>
+              <span className="text-gray-300 dark:text-gray-700">|</span>
+              <span><strong className="text-slate-900 dark:text-gray-200">{sentenceCount}</strong> Sentences</span>
+              <span className="text-gray-300 dark:text-gray-700">|</span>
+              <span><strong className="text-slate-900 dark:text-gray-200">{lineCount}</strong> Lines</span>
           </div>
         </div>
 
-        <div className="text-sm text-slate-500 dark:text-gray-500 flex justify-center gap-6 bg-white dark:bg-gray-900 py-3 px-6 rounded-full shadow-sm border border-gray-100 dark:border-gray-800 w-fit mx-auto">
-            <span><strong className="text-slate-900 dark:text-gray-200">{charCount}</strong> Characters</span>
-            <span className="text-gray-300 dark:text-gray-700">|</span>
-            <span><strong className="text-slate-900 dark:text-gray-200">{wordCount}</strong> Words</span>
-            <span className="text-gray-300 dark:text-gray-700">|</span>
-            <span><strong className="text-slate-900 dark:text-gray-200">{sentenceCount}</strong> Sentences</span>
-            <span className="text-gray-300 dark:text-gray-700">|</span>
-            <span><strong className="text-slate-900 dark:text-gray-200">{lineCount}</strong> Lines</span>
-        </div>
+        {/* History Sidebar */}
+        {history.length > 0 && (
+          <div className="w-full lg:w-80 shrink-0 space-y-4">
+             <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold flex items-center gap-2 text-slate-900 dark:text-white">
+                  <History className="w-5 h-5" />
+                  History
+                </h3>
+                <button 
+                  onClick={clearHistory}
+                  className="text-xs text-slate-500 hover:text-red-600 transition-colors"
+                >
+                  Clear All
+                </button>
+             </div>
+             
+             <div className="space-y-3">
+                {history.map((item, idx) => (
+                  <div 
+                    key={idx}
+                    onClick={() => setText(item)}
+                    className="group relative bg-white dark:bg-gray-900 p-3 rounded-lg border border-gray-200 dark:border-gray-800 hover:border-blue-400 dark:hover:border-blue-500 cursor-pointer shadow-sm transition-all hover:shadow-md"
+                  >
+                    <p className="text-sm text-slate-600 dark:text-gray-300 line-clamp-3 font-mono break-words">
+                      {item}
+                    </p>
+                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-gray-800 p-1 rounded-md shadow-sm">
+                       <RotateCcw className="w-3 h-3 text-blue-600" />
+                    </div>
+                  </div>
+                ))}
+             </div>
+          </div>
+        )}
+
       </div>
     </div>
   );
