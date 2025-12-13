@@ -1,8 +1,9 @@
 import { Download, Copy, Trash2, History, RotateCcw, X } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import type { Route } from "./+types/home";
+import { useLocalStorageHistory } from "../utils/history";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -18,19 +19,7 @@ export function loader({ context }: Route.LoaderArgs) {
 export default function Home({ loaderData }: Route.ComponentProps) {
   const { t } = useTranslation();
   const [text, setText] = useState("");
-  const [history, setHistory] = useState<string[]>([]);
-
-  // Load history from local storage on mount
-  useEffect(() => {
-    const saved = localStorage.getItem("case-converter-history");
-    if (saved) {
-      try {
-        setHistory(JSON.parse(saved));
-      } catch (e) {
-        console.error("Failed to parse history", e);
-      }
-    }
-  }, []);
+  const { history, setHistory, clearHistory, removeFromHistory } = useLocalStorageHistory<string>("case-converter-history");
 
   const addToHistory = (newText: string) => {
     if (!newText.trim()) return;
@@ -39,19 +28,13 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       // Avoid duplicates at the top of the list
       if (prev.length > 0 && prev[0] === newText) return prev;
       
-      const updated = [newText, ...prev].slice(0, 20); // Keep last 20 items
-      localStorage.setItem("case-converter-history", JSON.stringify(updated));
-      return updated;
+      return [newText, ...prev].slice(0, 20); // Keep last 20 items
     });
   };
 
-  const removeFromHistory = (e: React.MouseEvent, indexToRemove: number) => {
+  const handleRemoveFromHistory = (e: React.MouseEvent, indexToRemove: number) => {
     e.stopPropagation();
-    setHistory((prev) => {
-      const updated = prev.filter((_, index) => index !== indexToRemove);
-      localStorage.setItem("case-converter-history", JSON.stringify(updated));
-      return updated;
-    });
+    removeFromHistory(indexToRemove);
   };
 
   const toSentenceCase = () => {
@@ -135,9 +118,8 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     toast.info(t("home.toast.clear_success"));
   };
 
-  const clearHistory = () => {
-    setHistory([]);
-    localStorage.removeItem("case-converter-history");
+  const handleClearHistory = () => {
+    clearHistory();
     toast.info(t("home.toast.clear_history_success"));
   };
 
@@ -226,7 +208,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                   {t("home.history")}
                 </h3>
                 <button 
-                  onClick={clearHistory}
+                  onClick={handleClearHistory}
                   className="text-xs text-slate-500 hover:text-red-600 transition-colors"
                 >
                   {t("home.clear_all")}
@@ -248,7 +230,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                     </p>
                     <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1 bg-white dark:bg-gray-800 p-1 rounded-md shadow-sm">
                        <button 
-                         onClick={(e) => removeFromHistory(e, idx)}
+                         onClick={(e) => handleRemoveFromHistory(e, idx)}
                          className="p-1 hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-400 hover:text-red-500 rounded transition-colors"
                          title={t("home.clear_all")} // Reuse clear text or add specific remove text
                        >

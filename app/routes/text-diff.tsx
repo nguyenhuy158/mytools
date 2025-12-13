@@ -9,6 +9,7 @@ import { PageHeader } from "../components/PageHeader";
 import { InputSection } from "../components/InputSection";
 import { ButtonGroup } from "../components/ButtonGroup";
 import { HistorySection } from "../components/HistorySection";
+import { useLocalStorageHistory } from "../utils/history";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -28,19 +29,7 @@ export default function TextDiff() {
   const [original, setOriginal] = useState("");
   const [modified, setModified] = useState("");
   const [diffs, setDiffs] = useState<Change[]>([]);
-  const [history, setHistory] = useState<HistoryItem[]>([]);
-
-  // Load history from local storage on mount
-  useEffect(() => {
-    const savedHistory = localStorage.getItem("text-diff-history");
-    if (savedHistory) {
-      try {
-        setHistory(JSON.parse(savedHistory));
-      } catch (e) {
-        console.error("Failed to parse history", e);
-      }
-    }
-  }, []);
+  const { history, setHistory, clearHistory, removeFromHistory } = useLocalStorageHistory<HistoryItem>("text-diff-history");
 
   const saveToHistory = () => {
     if (!original && !modified) return;
@@ -57,24 +46,13 @@ export default function TextDiff() {
             return prev;
         }
         
-        const updated = [newItem, ...prev].slice(0, 20); // Keep last 20
-        localStorage.setItem("text-diff-history", JSON.stringify(updated));
-        return updated;
+        return [newItem, ...prev].slice(0, 20); // Keep last 20
     });
     toast.success(t("text_diff.toast.saved", "Comparison saved to history"));
   };
 
-  const removeFromHistory = (indexToRemove: number) => {
-    setHistory((prev) => {
-      const updated = prev.filter((_, index) => index !== indexToRemove);
-      localStorage.setItem("text-diff-history", JSON.stringify(updated));
-      return updated;
-    });
-  };
-
-  const clearHistory = () => {
-    setHistory([]);
-    localStorage.removeItem("text-diff-history");
+  const handleClearHistory = () => {
+    clearHistory();
     toast.info(t("text_diff.toast.cleared", "History cleared"));
   };
 
@@ -175,7 +153,7 @@ export default function TextDiff() {
           history={history}
           onRestore={handleRestore}
           onRemove={removeFromHistory}
-          onClear={clearHistory}
+          onClear={handleClearHistory}
           title={t("text_diff.history", "History")}
           clearLabel={t("text_diff.clear", "Clear All")}
           renderItem={(item) => (

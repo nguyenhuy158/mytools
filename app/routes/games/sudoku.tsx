@@ -13,6 +13,8 @@ import {
   type Difficulty
 } from "../../utils/sudoku";
 
+import { safeJsonParse, safeJsonStringify } from "../../utils/storage";
+
 export function meta() {
   return [
     { title: "Sudoku - Play Online" },
@@ -104,10 +106,10 @@ export default function Sudoku() {
          if (isCorrect) {
            toast.success(`Puzzle Completed in ${formatTime(timer)}!`);
            const saved = localStorage.getItem("sudoku-highscore");
-           let highscores = saved ? JSON.parse(saved) : {};
+           let highscores = safeJsonParse<Record<string, number>>(saved, {});
            if (!highscores[difficulty] || timer < highscores[difficulty]) {
              highscores[difficulty] = timer;
-             localStorage.setItem("sudoku-highscore", JSON.stringify(highscores));
+             localStorage.setItem("sudoku-highscore", safeJsonStringify(highscores));
              toast.info("New High Score!");
            }
          }
@@ -306,7 +308,7 @@ export default function Sudoku() {
                  {(["easy", "medium", "hard"] as const).map(d => {
                     if (typeof window === 'undefined') return null;
                     const saved = localStorage.getItem("sudoku-highscore");
-                    const scores = saved ? JSON.parse(saved) : {};
+                    const scores = safeJsonParse<Record<string, number>>(saved, {});
                     const score = scores[d];
                     return (
                       <div key={d} className="flex justify-between text-gray-600 dark:text-gray-300 capitalize">

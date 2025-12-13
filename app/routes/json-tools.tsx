@@ -1,11 +1,12 @@
 import { Download, Upload, Copy, Trash2, FileJson, Check, Minimize, Maximize, Wrench, ClipboardPaste, Sparkles, ChevronDown, ArrowLeft } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import JSON5 from "json5";
 import { ButtonGroup } from "../components/ButtonGroup";
 import { InputSection } from "../components/InputSection";
 import { HistorySection } from "../components/HistorySection";
+import { useLocalStorageHistory } from "../utils/history";
 
 export function meta() {
   return [
@@ -19,26 +20,16 @@ export default function JsonTools() {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [history, setHistory] = useState<string[]>([]);
-  const [tabSize, setTabSize] = useState(4);
+  const { history, setHistory, clearHistory, removeFromHistory } = useLocalStorageHistory<string>("json-tools-history");
+  const [tabSize, setTabSize] = useState(() => {
+    // Lazy init for tab size
+    if (typeof localStorage !== 'undefined') {
+       const saved = localStorage.getItem("json-tools-tab-size");
+       return saved ? parseInt(saved, 10) : 4;
+    }
+    return 4;
+  });
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Load history and tab size from local storage on mount
-  useEffect(() => {
-    const savedHistory = localStorage.getItem("json-tools-history");
-    if (savedHistory) {
-      try {
-        setHistory(JSON.parse(savedHistory));
-      } catch (e) {
-        console.error("Failed to parse history", e);
-      }
-    }
-
-    const savedTabSize = localStorage.getItem("json-tools-tab-size");
-    if (savedTabSize) {
-      setTabSize(parseInt(savedTabSize, 10));
-    }
-  }, []);
 
   const handleTabSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newSize = parseInt(e.target.value, 10);
@@ -53,25 +44,10 @@ export default function JsonTools() {
       // Avoid duplicates at the top of the list
       if (prev.length > 0 && prev[0] === newText) return prev;
       
-      const updated = [newText, ...prev].slice(0, 20); // Keep last 20 items
-      localStorage.setItem("json-tools-history", JSON.stringify(updated));
-      return updated;
+      return [newText, ...prev].slice(0, 20); // Keep last 20 items
     });
   };
 
-  const removeFromHistory = (indexToRemove: number) => {
-    setHistory((prev) => {
-      const updated = prev.filter((_, index) => index !== indexToRemove);
-      localStorage.setItem("json-tools-history", JSON.stringify(updated));
-      return updated;
-    });
-  };
-
-  const clearHistory = () => {
-    setHistory([]);
-    localStorage.removeItem("json-tools-history");
-    toast.info(t("json_tools.toast.clear_history_success"));
-  };
 
   const validate = (json: string, showToast = true) => {
     try {
@@ -167,6 +143,11 @@ export default function JsonTools() {
     setInput("");
     setOutput("");
     setError(null);
+  };
+
+  const handleClearHistory = () => {
+    clearHistory();
+    toast.info(t("json_tools.toast.clear_history_success"));
   };
 
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -352,7 +333,7 @@ export default function JsonTools() {
           history={history}
           onRestore={handleRestoreHistory}
           onRemove={removeFromHistory}
-          onClear={clearHistory}
+          onClear={handleClearHistory}
           title={t("history")}
           clearLabel={t("clear_all")}
           renderItem={(item) => (

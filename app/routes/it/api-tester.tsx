@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Play, Check, AlertCircle, Copy, RotateCw } from "lucide-react";
 import { toast } from "sonner";
 import { PageHeader } from "../../components/PageHeader";
 import { HistorySection } from "../../components/HistorySection";
+import { useLocalStorageHistory } from "../../utils/history";
 
 export function meta() {
   return [
@@ -45,34 +46,19 @@ export default function ApiTester() {
   const [error, setError] = useState<string | null>(null);
 
   // History State
-  const [history, setHistory] = useState<RequestHistoryItem[]>([]);
-
-  // Load history on mount
-  useEffect(() => {
-    const saved = localStorage.getItem("api-tester-history");
-    if (saved) {
-      try {
-        setHistory(JSON.parse(saved));
-      } catch (e) {
-        console.error("Failed to parse history", e);
-      }
-    }
-  }, []);
+  const { history, setHistory, clearHistory, removeFromHistory } = useLocalStorageHistory<RequestHistoryItem>("api-tester-history");
 
   const saveToHistory = (newItem: RequestHistoryItem) => {
     setHistory(prev => {
       // Remove duplicates based on method and URL to keep list clean? 
       // Or keep full history? Let's keep unique ID but maybe dedup similar requests if recent.
       // For now, simple list.
-      const updated = [newItem, ...prev].slice(0, 20);
-      localStorage.setItem("api-tester-history", JSON.stringify(updated));
-      return updated;
+      return [newItem, ...prev].slice(0, 20);
     });
   };
 
-  const clearHistory = () => {
-    setHistory([]);
-    localStorage.removeItem("api-tester-history");
+  const handleClearHistory = () => {
+    clearHistory();
     toast.success(t("api_tester.toast.history_cleared"));
   };
 
@@ -287,14 +273,8 @@ export default function ApiTester() {
               history={history}
               gridClassName="grid grid-cols-1 lg:grid-cols-2 gap-3"
               onRestore={loadHistoryItem}
-              onRemove={(index) => {
-                setHistory(prev => {
-                  const updated = prev.filter((_, i) => i !== index);
-                  localStorage.setItem("api-tester-history", JSON.stringify(updated));
-                  return updated;
-                });
-              }}
-              onClear={clearHistory}
+              onRemove={removeFromHistory}
+              onClear={handleClearHistory}
               title={t("api_tester.history.title")}
               clearLabel={t("api_tester.actions.clear_all")}
               renderItem={(item) => (

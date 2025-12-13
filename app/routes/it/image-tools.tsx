@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { PageHeader } from "../../components/PageHeader";
 import { ButtonGroup } from "../../components/ButtonGroup";
 import { HistorySection } from "../../components/HistorySection";
+import { useLocalStorageHistory } from "../../utils/history";
 
 export function meta() {
   return [
@@ -21,7 +22,7 @@ export default function ImageTools() {
   const [mode, setMode] = useState<ToolMode>("view");
   const [pickedColor, setPickedColor] = useState<string | null>(null);
   const [hoverColor, setHoverColor] = useState<string | null>(null);
-  const [colorHistory, setColorHistory] = useState<string[]>([]);
+  const { history: colorHistory, setHistory: setColorHistory, clearHistory, removeFromHistory } = useLocalStorageHistory<string>("image-tools-color-history");
   const [cursorPos, setCursorPos] = useState<{ x: number; y: number } | null>(null);
   
   // Selection state
@@ -33,39 +34,16 @@ export default function ImageTools() {
   const containerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Load color history on mount
-  useEffect(() => {
-    const saved = localStorage.getItem("image-tools-color-history");
-    if (saved) {
-      try {
-        setColorHistory(JSON.parse(saved));
-      } catch (e) {
-        console.error("Failed to parse color history", e);
-      }
-    }
-  }, []);
-
   const addToHistory = (color: string) => {
     setColorHistory(prev => {
       // Remove if exists to move to top
       const filtered = prev.filter(c => c !== color);
-      const updated = [color, ...filtered].slice(0, 20); // Keep last 20
-      localStorage.setItem("image-tools-color-history", JSON.stringify(updated));
-      return updated;
+      return [color, ...filtered].slice(0, 20); // Keep last 20
     });
   };
 
-  const removeFromHistory = (index: number) => {
-    setColorHistory(prev => {
-      const updated = prev.filter((_, i) => i !== index);
-      localStorage.setItem("image-tools-color-history", JSON.stringify(updated));
-      return updated;
-    });
-  };
-
-  const clearHistory = () => {
-    setColorHistory([]);
-    localStorage.removeItem("image-tools-color-history");
+  const handleClearHistory = () => {
+    clearHistory();
     toast.success(t("image_tools.toast.history_cleared"));
   };
 
@@ -411,7 +389,7 @@ export default function ImageTools() {
                 toast.success(t("image_tools.toast.color_copied", { hex: color }));
             }}
             onRemove={removeFromHistory}
-            onClear={clearHistory}
+            onClear={handleClearHistory}
             title={t("image_tools.color_history", "Color History")}
             clearLabel={t("image_tools.actions.clear_all", "Clear All")}
             renderItem={(color) => (
