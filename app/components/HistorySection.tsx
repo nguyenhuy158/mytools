@@ -10,6 +10,7 @@ interface HistorySectionProps<T> {
   title?: string;
   clearLabel?: string;
   emptyMessage?: string;
+  gridClassName?: string;
 }
 
 export function HistorySection<T>({
@@ -20,6 +21,7 @@ export function HistorySection<T>({
   renderItem,
   title = "History",
   clearLabel = "Clear All",
+  gridClassName = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3",
 }: HistorySectionProps<T>) {
   if (history.length === 0) return null;
 
@@ -38,7 +40,7 @@ export function HistorySection<T>({
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div className={gridClassName}>
         {history.map((item, idx) => (
           <div
             key={idx}

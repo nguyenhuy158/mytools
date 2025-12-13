@@ -158,9 +158,9 @@ export default function ApiTester() {
           description={t("api_tester.description")}
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Main Request Area */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="space-y-6">
             
             {/* Request Control */}
             <div className="bg-white dark:bg-gray-900 p-4 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm space-y-4">
@@ -285,6 +285,7 @@ export default function ApiTester() {
           <div className="lg:col-span-1">
             <HistorySection
               history={history}
+              gridClassName="grid grid-cols-1 lg:grid-cols-2 gap-3"
               onRestore={loadHistoryItem}
               onRemove={(index) => {
                 setHistory(prev => {
@@ -311,7 +312,7 @@ export default function ApiTester() {
                       {new Date(item.timestamp).toLocaleTimeString()}
                     </span>
                   </div>
-                  <div className="text-sm font-mono truncate text-gray-700 dark:text-gray-300" title={item.url}>
+                  <div className="text-sm font-mono break-all text-gray-700 dark:text-gray-300" title={item.url}>
                     {item.url}
                   </div>
                 </div>
