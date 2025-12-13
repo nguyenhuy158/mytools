@@ -11,6 +11,7 @@ import { Suspense } from "react";
 import type { Route } from "./+types/root";
 import { Toaster } from "sonner";
 import { Navbar } from "./components/Navbar";
+import { Footer } from "./components/Footer";
 import "./app.css";
 
 export const links: Route.LinksFunction = () => [
@@ -54,11 +55,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
           }}
         />
       </head>
-      <body>
+      <body className="flex flex-col min-h-screen">
         <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200" />}>
           <Navbar />
         </Suspense>
-        {children}
+        <div className="flex-1">
+          {children}
+        </div>
+        <Footer />
         <Toaster position="bottom-right" richColors />
         <ScrollRestoration />
         <Scripts />

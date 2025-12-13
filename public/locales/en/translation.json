@@ -194,5 +194,14 @@
     "title": "About Us",
     "description": "Learn more about this text conversion tool.",
     "content": "Case Converter is a simple, free online tool that helps you convert text between different formats. Whether you accidentally left Caps Lock on or want to style text for social media, we've got you covered. All processing happens right in your browser, ensuring maximum privacy and speed."
+  },
+  "newsletter": {
+    "title": "Subscribe to our Newsletter",
+    "description": "Stay updated with the latest tools and features. No spam, unsubscribe anytime.",
+    "placeholder": "Enter your email",
+    "button": "Subscribe",
+    "button_success": "Subscribed!",
+    "success": "Thanks for subscribing!",
+    "error_invalid": "Please enter a valid email address."
   }
 }

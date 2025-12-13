@@ -194,5 +194,14 @@
     "title": "Giới Thiệu",
     "description": "Tìm hiểu thêm về công cụ chuyển đổi văn bản này.",
     "content": "Case Converter là một công cụ trực tuyến miễn phí và đơn giản giúp bạn chuyển đổi văn bản giữa các định dạng khác nhau. Cho dù bạn vô tình để Caps Lock hay muốn tạo kiểu chữ độc đáo cho mạng xã hội, chúng tôi đều có thể hỗ trợ bạn. Mọi quá trình xử lý đều diễn ra ngay trên trình duyệt của bạn, đảm bảo tính riêng tư và tốc độ tối đa."
+  },
+  "newsletter": {
+    "title": "Đăng ký nhận tin",
+    "description": "Cập nhật các công cụ và tính năng mới nhất. Không spam, hủy đăng ký bất cứ lúc nào.",
+    "placeholder": "Nhập email của bạn",
+    "button": "Đăng ký",
+    "button_success": "Đã đăng ký!",
+    "success": "Cảm ơn bạn đã đăng ký!",
+    "error_invalid": "Vui lòng nhập địa chỉ email hợp lệ."
   }
 }
