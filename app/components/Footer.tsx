@@ -44,9 +44,9 @@ export function Footer() {
              <h3 className="text-lg font-bold text-slate-900 dark:text-white">
                 {t("app_name")}
              </h3>
-             <p className="text-slate-500 dark:text-gray-400 max-w-sm">
-                {t("home.description")}
-             </p>
+              <p className="text-slate-500 dark:text-gray-400 max-w-sm">
+                {t("slogan")}
+              </p>
               <div className="text-sm text-slate-400 dark:text-gray-500">
                 © {new Date().getFullYear()} {t("app_name")}. {t("newsletter.all_rights_reserved")}
               </div>
