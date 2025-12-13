@@ -31,6 +31,39 @@
       "text_diff": {
         "name": "Text Diff",
         "description": "Compare text differences side by side."
+      },
+      "image_tools": {
+        "name": "Image Tools",
+        "description": "Upload, crop, pick colors, and manipulate images directly in your browser."
+      }
+    },
+    "image_tools": {
+      "title": "Image Tools",
+      "description": "Upload, crop, pick colors, and manipulate images directly in your browser.",
+      "actions": {
+        "upload": "Upload",
+        "paste": "Paste",
+        "view": "View",
+        "crop": "Crop",
+        "color_picker": "Color Picker",
+        "copy": "Copy",
+        "download": "Download",
+        "clear": "Clear",
+        "apply_crop": "Apply Crop",
+        "cancel": "Cancel"
+      },
+      "placeholders": {
+        "empty": "Upload an image or paste from clipboard to start"
+      },
+      "toast": {
+        "invalid_file": "Invalid file type. Please upload an image.",
+        "pasted": "Image pasted from clipboard",
+        "no_image_clipboard": "No image found in clipboard",
+        "clipboard_error": "Failed to read clipboard",
+        "copied": "Image copied to clipboard",
+        "copy_error": "Failed to copy to clipboard",
+        "cropped": "Image cropped",
+        "color_copied": "Color copied: {{hex}}"
       }
     },
     "games": {

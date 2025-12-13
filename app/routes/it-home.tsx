@@ -1,4 +1,4 @@
-import { FileJson, FileDiff } from "lucide-react";
+import { FileJson, FileDiff, Image } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PageHeader } from "../components/PageHeader";
 import { ToolGrid } from "../components/ToolGrid";
@@ -21,6 +21,13 @@ export default function ITToolsLanding() {
       href: "/it/text-diff",
       icon: FileDiff,
       color: "bg-green-600",
+    },
+    {
+      name: t("it_tools.image_tools.name"),
+      description: t("it_tools.image_tools.description"),
+      href: "/it/image-tools",
+      icon: Image,
+      color: "bg-purple-600",
     },
   ];
 

@@ -31,6 +31,39 @@
       "text_diff": {
         "name": "So sánh văn bản",
         "description": "So sánh sự khác biệt văn bản song song."
+      },
+      "image_tools": {
+        "name": "Công cụ hình ảnh",
+        "description": "Tải lên, cắt, lấy mã màu và chỉnh sửa hình ảnh trực tiếp trên trình duyệt."
+      }
+    },
+    "image_tools": {
+      "title": "Công cụ hình ảnh",
+      "description": "Tải lên, cắt, lấy mã màu và chỉnh sửa hình ảnh trực tiếp trên trình duyệt.",
+      "actions": {
+        "upload": "Tải lên",
+        "paste": "Dán",
+        "view": "Xem",
+        "crop": "Cắt",
+        "color_picker": "Lấy màu",
+        "copy": "Sao chép",
+        "download": "Tải xuống",
+        "clear": "Xóa",
+        "apply_crop": "Áp dụng",
+        "cancel": "Hủy"
+      },
+      "placeholders": {
+        "empty": "Tải lên hình ảnh hoặc dán từ clipboard để bắt đầu"
+      },
+      "toast": {
+        "invalid_file": "Loại tệp không hợp lệ. Vui lòng tải lên hình ảnh.",
+        "pasted": "Đã dán hình ảnh từ clipboard",
+        "no_image_clipboard": "Không tìm thấy hình ảnh trong clipboard",
+        "clipboard_error": "Không thể đọc clipboard",
+        "copied": "Đã sao chép hình ảnh vào clipboard",
+        "copy_error": "Không thể sao chép vào clipboard",
+        "cropped": "Đã cắt hình ảnh",
+        "color_copied": "Đã sao chép mã màu: {{hex}}"
       }
     },
     "games": {
