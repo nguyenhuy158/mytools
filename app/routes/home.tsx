@@ -173,36 +173,36 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             />
 
             <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
-              <div className="flex flex-wrap gap-2 flex-1">
-                  <Button onClick={toSentenceCase} variant="outline">Sentence case</Button>
-                  <Button onClick={toLowerCase} variant="outline">lower case</Button>
-                  <Button onClick={toUpperCase} variant="outline">UPPER CASE</Button>
-                  <Button onClick={toCapitalizedCase} variant="outline">Capitalized Case</Button>
-                  <Button onClick={toAlternatingCase} variant="outline">aLtErNaTiNg cAsE</Button>
-                  <Button onClick={toTitleCase} variant="outline">Title Case</Button>
-                  <Button onClick={toInverseCase} variant="outline">InVeRsE CaSe</Button>
-              </div>
+               <div className="flex flex-wrap gap-2 flex-1">
+                   <Button onClick={toSentenceCase} variant="outline">{t("home.buttons.sentence_case")}</Button>
+                   <Button onClick={toLowerCase} variant="outline">{t("home.buttons.lower_case")}</Button>
+                   <Button onClick={toUpperCase} variant="outline">{t("home.buttons.upper_case")}</Button>
+                   <Button onClick={toCapitalizedCase} variant="outline">{t("home.buttons.capitalized_case")}</Button>
+                   <Button onClick={toAlternatingCase} variant="outline">{t("home.buttons.alternating_case")}</Button>
+                   <Button onClick={toTitleCase} variant="outline">{t("home.buttons.title_case")}</Button>
+                   <Button onClick={toInverseCase} variant="outline">{t("home.buttons.inverse_case")}</Button>
+               </div>
               
-              <div className="flex flex-wrap gap-2 shrink-0 border-t md:border-t-0 md:border-l border-gray-100 dark:border-gray-800 pt-4 md:pt-0 md:pl-4">
-                  <Button onClick={handleCopy} variant="primary">
-                    <span className="flex items-center gap-2">
-                      <Copy className="w-4 h-4" />
-                      Copy
-                    </span>
-                  </Button>
-                  <Button onClick={handleDownload} variant="ghost">
-                    <span className="flex items-center gap-2">
-                      <Download className="w-4 h-4" />
-                      Download
-                    </span>
-                  </Button>
-                  <Button onClick={handleClear} variant="danger">
-                    <span className="flex items-center gap-2">
-                      <Trash2 className="w-4 h-4" />
-                      Clear
-                    </span>
-                  </Button>
-              </div>
+               <div className="flex flex-wrap gap-2 shrink-0 border-t md:border-t-0 md:border-l border-gray-100 dark:border-gray-800 pt-4 md:pt-0 md:pl-4">
+                   <Button onClick={handleCopy} variant="primary">
+                     <span className="flex items-center gap-2">
+                       <Copy className="w-4 h-4" />
+                       {t("home.buttons.copy")}
+                     </span>
+                   </Button>
+                   <Button onClick={handleDownload} variant="ghost">
+                     <span className="flex items-center gap-2">
+                       <Download className="w-4 h-4" />
+                       {t("home.buttons.download")}
+                     </span>
+                   </Button>
+                   <Button onClick={handleClear} variant="danger">
+                     <span className="flex items-center gap-2">
+                       <Trash2 className="w-4 h-4" />
+                       {t("home.buttons.clear")}
+                     </span>
+                   </Button>
+               </div>
             </div>
           </div>
 

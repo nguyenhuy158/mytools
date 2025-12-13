@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Menu, X, Home, Settings, Info, Sun, Moon, CaseUpper, FileJson, Calendar, FileDiff, Timer, Map } from "lucide-react";
+import { Menu, X, Home, Settings, Info, Sun, Moon, CaseUpper, FileJson, Calendar, FileDiff, Timer, Map, Code } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { TetCountdown } from "./TetCountdown";
@@ -54,8 +54,15 @@ export function Navbar() {
 
   const navigation = [
     { name: t("nav.home"), href: "/", icon: Home },
-    { name: t("nav.json_tools"), href: "/json-tools", icon: FileJson },
-    { name: t("nav.text_diff"), href: "/text-diff", icon: FileDiff },
+     { 
+       name: t("nav.it_tools"), 
+       href: "/it", 
+       icon: Code,
+       children: [
+         { name: t("nav.json_tools"), href: "/it/json-tools", icon: FileJson },
+         { name: t("nav.text_diff"), href: "/it/text-diff", icon: FileDiff },
+       ]
+     },
     { name: t("nav.pomodoro"), href: "/pomodoro", icon: Timer },
     { name: t("nav.calendar"), href: "/calendar", icon: Calendar },
     { name: t("nav.about"), href: "/about", icon: Info },
@@ -73,13 +80,40 @@ export function Navbar() {
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               {navigation.map((item) => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
-                >
-                  {item.name}
-                </Link>
+                item.children ? (
+                  <div key={item.href} className="relative group flex items-center">
+                    <Link
+                      to={item.href}
+                      className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
+                    >
+                      {item.name}
+                    </Link>
+                    <div className="absolute left-0 top-full pt-2 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                      <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden border border-gray-100 dark:border-gray-800">
+                        {item.children.map((child) => (
+                          <Link
+                            key={child.href}
+                            to={child.href}
+                            className="block px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white"
+                          >
+                            <div className="flex items-center">
+                              <child.icon className="h-4 w-4 mr-2" />
+                              {child.name}
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <Link
+                    key={item.href}
+                    to={item.href}
+                    className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
+                  >
+                    {item.name}
+                  </Link>
+                )
               ))}
             </div>
           </div>
@@ -152,20 +186,48 @@ export function Navbar() {
         <div className="sm:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
           <div className="pt-2 pb-3 space-y-1">
             {navigation.map((item) => (
-              <Link
-                key={item.href}
-                to={item.href}
-                className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600 hover:text-gray-700 dark:hover:text-gray-200"
-                onClick={() => setIsOpen(false)}
-              >
-                <div className="flex items-center">
-                  <item.icon className="h-5 w-5 mr-2" />
-                  {item.name}
+              item.children ? (
+                <div key={item.href} className="space-y-1">
+                  <Link
+                    to={item.href}
+                    className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600 hover:text-gray-700 dark:hover:text-gray-200"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <div className="flex items-center">
+                      <item.icon className="h-5 w-5 mr-2" />
+                      {item.name}
+                    </div>
+                  </Link>
+                  {item.children.map((child) => (
+                    <Link
+                      key={child.href}
+                      to={child.href}
+                      className="block pl-10 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600 hover:text-gray-700 dark:hover:text-gray-200"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <div className="flex items-center">
+                        <child.icon className="h-4 w-4 mr-2" />
+                        {child.name}
+                      </div>
+                    </Link>
+                  ))}
                 </div>
-              </Link>
+              ) : (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600 hover:text-gray-700 dark:hover:text-gray-200"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <div className="flex items-center">
+                    <item.icon className="h-5 w-5 mr-2" />
+                    {item.name}
+                  </div>
+                </Link>
+              )
             ))}
-             <div className="pl-3 pr-4 py-2 border-l-4 border-transparent flex items-center justify-between">
-               <span className="text-gray-500 dark:text-gray-400 text-base font-medium">Language</span>
+              <div className="pl-3 pr-4 py-2 border-l-4 border-transparent flex items-center justify-between">
+                <span className="text-gray-500 dark:text-gray-400 text-base font-medium">{t("nav.language")}</span>
                <div 
                  onClick={toggleLanguage}
                  className="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-lg w-28 relative cursor-pointer"

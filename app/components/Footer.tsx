@@ -47,9 +47,9 @@ export function Footer() {
              <p className="text-slate-500 dark:text-gray-400 max-w-sm">
                 {t("home.description")}
              </p>
-             <div className="text-sm text-slate-400 dark:text-gray-500">
-               © {new Date().getFullYear()} {t("app_name")}. All rights reserved.
-             </div>
+              <div className="text-sm text-slate-400 dark:text-gray-500">
+                © {new Date().getFullYear()} {t("app_name")}. {t("newsletter.all_rights_reserved")}
+              </div>
           </div>
 
           <div className="space-y-4">
@@ -97,9 +97,9 @@ export function Footer() {
                         <Check className="w-4 h-4" />
                         {t("newsletter.button_success")}
                       </>
-                   ) : (
-                      t("newsletter.button")
-                   )}
+  ) : (
+    <>{t("newsletter.button")}</>
+  )}
                 </button>
              </form>
              {status === 'error' && <p className="text-red-500 text-sm">{message}</p>}

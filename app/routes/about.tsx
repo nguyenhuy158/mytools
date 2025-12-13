@@ -39,14 +39,23 @@ export default function About() {
     { key: "text_diff", icon: FileDiff },
   ];
 
-  const roadmapItems = [
+  const roadmapItems: Array<{
+    status: string;
+    phase: string;
+    title: string;
+    items: Array<{
+      name: string;
+      desc: string;
+      link?: string;
+    }>;
+  }> = [
     {
       status: "done",
       phase: "Phase 1",
       title: "Core Tools",
       items: [
-        { name: "JSON Formatter/Minifier", desc: "Format and validate JSON data", link: "/json-tools" },
-        { name: "Text Diff Checker", desc: "Compare text differences", link: "/text-diff" },
+        { name: "JSON Formatter/Minifier", desc: "Format and validate JSON data", link: "/it/json-tools" },
+        { name: "Text Diff Checker", desc: "Compare text differences", link: "/it/text-diff" },
         { name: "Pomodoro Timer", desc: "Productivity timer with custom settings", link: "/pomodoro" },
         { name: "Calendar & Events", desc: "Lunar calendar and event tracking", link: "/calendar" },
         { name: "Tet Countdown", desc: "Countdown to Vietnamese New Year", link: "/" },
@@ -120,24 +129,24 @@ export default function About() {
                 <div className="w-12 h-12 mx-auto bg-green-50 dark:bg-green-900/20 rounded-full flex items-center justify-center text-green-600 dark:text-green-400">
                   <Shield className="w-6 h-6" />
                 </div>
-                <h3 className="font-semibold text-slate-900 dark:text-white">Privacy First</h3>
-                <p className="text-sm text-slate-500 dark:text-gray-400">Client-side processing only</p>
+                 <h3 className="font-semibold text-slate-900 dark:text-white">{t("about.privacy_first")}</h3>
+                 <p className="text-sm text-slate-500 dark:text-gray-400">{t("about.client_side_processing")}</p>
               </div>
               
               <div className="text-center space-y-3">
                 <div className="w-12 h-12 mx-auto bg-purple-50 dark:bg-purple-900/20 rounded-full flex items-center justify-center text-purple-600 dark:text-purple-400">
                   <Zap className="w-6 h-6" />
                 </div>
-                <h3 className="font-semibold text-slate-900 dark:text-white">Lightning Fast</h3>
-                <p className="text-sm text-slate-500 dark:text-gray-400">Instant conversion</p>
+                 <h3 className="font-semibold text-slate-900 dark:text-white">{t("about.lightning_fast")}</h3>
+                 <p className="text-sm text-slate-500 dark:text-gray-400">{t("about.instant_conversion")}</p>
               </div>
 
               <div className="text-center space-y-3">
                 <div className="w-12 h-12 mx-auto bg-orange-50 dark:bg-orange-900/20 rounded-full flex items-center justify-center text-orange-600 dark:text-orange-400">
                   <Globe className="w-6 h-6" />
                 </div>
-                <h3 className="font-semibold text-slate-900 dark:text-white">Accessible</h3>
-                <p className="text-sm text-slate-500 dark:text-gray-400">Works everywhere</p>
+                 <h3 className="font-semibold text-slate-900 dark:text-white">{t("about.accessible")}</h3>
+                 <p className="text-sm text-slate-500 dark:text-gray-400">{t("about.works_everywhere")}</p>
               </div>
             </div>
           </div>
@@ -177,12 +186,12 @@ export default function About() {
         {/* Section 3: Roadmap (Vertical Timeline) */}
         <section className="space-y-16">
           <div className="text-center max-w-2xl mx-auto">
-            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">
-              Roadmap
-            </h2>
-            <p className="text-xl text-slate-500 dark:text-gray-400">
-              Hành trình phát triển và các tính năng sắp tới
-            </p>
+             <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">
+               {t("about.roadmap")}
+             </h2>
+             <p className="text-xl text-slate-500 dark:text-gray-400">
+               {t("about.roadmap_description")}
+             </p>
           </div>
 
           <div className="relative max-w-4xl mx-auto">
@@ -220,14 +229,14 @@ export default function About() {
                                     'bg-yellow-500'
                                   }`} />
                                   <div className={`flex-1 ${isEven ? 'text-right' : 'text-left'}`}>
-                                    <span className="font-medium text-slate-900 dark:text-white block">
-                                      {item.name}
-                                       {category.status === 'done' && item.link && (
-                                        <a href={item.link} className="inline-block ml-1 text-xs font-normal text-blue-600 hover:text-blue-500 hover:underline">
-                                          (Open)
-                                        </a>
-                                      )}
-                                    </span>
+                                     <span className="font-medium text-slate-900 dark:text-white block">
+                                       {item.name}
+                                        {item.link && (
+                                         <a href={item.link} className="inline-block ml-1 text-xs font-normal text-blue-600 hover:text-blue-500 hover:underline">
+                                           {t("about.open_link")}
+                                         </a>
+                                       )}
+                                     </span>
                                     <span className="text-sm text-slate-500 dark:text-gray-400 block">{item.desc}</span>
                                   </div>
                                 </li>
@@ -256,10 +265,10 @@ export default function About() {
 
           <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm p-8 border border-gray-200 dark:border-gray-800 text-center max-w-3xl mx-auto mt-16 relative z-10">
             <Construction className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white">Bạn có ý tưởng mới?</h3>
-            <p className="mt-2 text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
-              Chúng tôi luôn lắng nghe ý kiến đóng góp để phát triển bộ công cụ hữu ích hơn.
-            </p>
+             <h3 className="text-lg font-medium text-gray-900 dark:text-white">{t("about.new_idea_title")}</h3>
+             <p className="mt-2 text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+               {t("about.new_idea_description")}
+             </p>
           </div>
         </section>
       </div>

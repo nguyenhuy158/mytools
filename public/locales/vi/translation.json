@@ -1,40 +1,54 @@
 {
   "app_name": "Ứng dụng của tôi",
-  "nav": {
-    "home": "Trang chủ",
-    "features": "Tính năng",
-    "json_tools": "JSON",
-    "text_diff": "Văn bản",
-    "pomodoro": "Pomodoro",
-    "calendar": "Lịch",
-    "roadmap": "Lộ trình",
-    "about": "Giới thiệu",
-    "toast": {
-      "language_changed": "Đã chuyển sang Tiếng Việt",
-      "dark_mode": "Đã chuyển sang chế độ Tối",
-      "light_mode": "Đã chuyển sang chế độ Sáng"
-    }
-  },
-  "home": {
-    "title": "Chuyển Đổi Ký Tự",
-    "description": "Bạn lỡ bật Caps Lock? Chỉ cần nhập văn bản và chọn kiểu chữ bạn muốn chuyển đổi.",
-    "placeholder": "Nhập hoặc dán nội dung của bạn vào đây...",
-    "stats": {
-      "characters": "Ký tự",
-      "words": "Từ",
-      "sentences": "Câu",
-      "lines": "Dòng"
-    },
-    "history": "Lịch sử",
-    "clear_all": "Xóa tất cả",
-    "toast": {
-      "copy_success": "Đã sao chép văn bản vào clipboard!",
-      "download_success": "Đã bắt đầu tải xuống!",
-      "clear_success": "Đã xóa nội dung!",
-      "clear_history_success": "Đã xóa lịch sử!",
-      "history_restored": "Đã khôi phục từ lịch sử!"
-    }
-  },
+   "nav": {
+     "home": "Trang chủ",
+     "features": "Tính năng",
+     "json_tools": "JSON",
+     "text_diff": "Văn bản",
+     "pomodoro": "Pomodoro",
+     "calendar": "Lịch",
+     "roadmap": "Lộ trình",
+     "about": "Giới thiệu",
+     "it_tools": "Công cụ IT",
+     "language": "Ngôn ngữ",
+     "toast": {
+       "language_changed": "Đã chuyển sang Tiếng Việt",
+       "dark_mode": "Đã chuyển sang chế độ Tối",
+       "light_mode": "Đã chuyển sang chế độ Sáng"
+     }
+   },
+   "home": {
+     "title": "Chuyển Đổi Ký Tự",
+     "description": "Bạn lỡ bật Caps Lock? Chỉ cần nhập văn bản và chọn kiểu chữ bạn muốn chuyển đổi.",
+     "placeholder": "Nhập hoặc dán nội dung của bạn vào đây...",
+     "stats": {
+       "characters": "Ký tự",
+       "words": "Từ",
+       "sentences": "Câu",
+       "lines": "Dòng"
+     },
+     "history": "Lịch sử",
+     "clear_all": "Xóa tất cả",
+     "buttons": {
+       "sentence_case": "Viết hoa đầu câu",
+       "lower_case": "Chữ thường",
+       "upper_case": "CHỮ HOA",
+       "capitalized_case": "Viết hoa các từ",
+       "alternating_case": "Chữ xen kẽ",
+       "title_case": "Dạng tiêu đề",
+       "inverse_case": "Đảo ngược chữ",
+       "copy": "Sao chép",
+       "download": "Tải xuống",
+       "clear": "Xóa"
+     },
+     "toast": {
+       "copy_success": "Đã sao chép văn bản vào clipboard!",
+       "download_success": "Đã bắt đầu tải xuống!",
+       "clear_success": "Đã xóa nội dung!",
+       "clear_history_success": "Đã xóa lịch sử!",
+       "history_restored": "Đã khôi phục từ lịch sử!"
+     }
+   },
   "features": {
     "title": "Tính Năng Nổi Bật",
     "description": "Khám phá các công cụ chuyển đổi văn bản mạnh mẽ của chúng tôi.",
@@ -168,12 +182,38 @@
       "sun": "CN"
     }
   },
-  "countdown": {
-    "day": "Ngày",
-    "hour": "Giờ",
-    "minute": "Phút",
-    "second": "Giây"
-  },
+   "pomodoro": {
+     "title": "Đồng Hồ Pomodoro",
+     "description": "Đồng hồ tập trung với âm thanh nền.",
+     "modes": {
+       "pomodoro": "Pomodoro",
+       "short_break": "Nghỉ ngắn",
+       "long_break": "Nghỉ dài",
+       "custom": "Tùy chỉnh"
+     },
+     "sounds": {
+       "rain": "Mưa",
+       "wind": "Gió",
+       "fire": "Lửa",
+       "water": "Nước"
+     },
+     "buttons": {
+       "start": "Bắt đầu",
+       "pause": "Tạm dừng",
+       "reset": "Đặt lại",
+       "settings": "Cài đặt"
+     },
+     "settings": {
+       "title": "Cài đặt đồng hồ",
+       "pomodoro_duration": "Thời gian Pomodoro (phút)",
+       "short_break_duration": "Thời gian nghỉ ngắn (phút)",
+       "long_break_duration": "Thời gian nghỉ dài (phút)",
+       "auto_start_breaks": "Tự động bắt đầu nghỉ",
+       "auto_start_pomodoros": "Tự động bắt đầu pomodoro",
+       "long_break_interval": "Nghỉ dài sau X pomodoro",
+       "save": "Lưu cài đặt"
+     }
+   },
   "text_diff": {
     "title": "So sánh văn bản",
     "description": "So sánh hai văn bản và xem sự khác biệt giữa chúng.",
@@ -190,18 +230,30 @@
         "cleared": "Đã xóa lịch sử"
     }
   },
-  "about": {
-    "title": "Giới Thiệu",
-    "description": "Tìm hiểu thêm về công cụ chuyển đổi văn bản này.",
-    "content": "Case Converter là một công cụ trực tuyến miễn phí và đơn giản giúp bạn chuyển đổi văn bản giữa các định dạng khác nhau. Cho dù bạn vô tình để Caps Lock hay muốn tạo kiểu chữ độc đáo cho mạng xã hội, chúng tôi đều có thể hỗ trợ bạn. Mọi quá trình xử lý đều diễn ra ngay trên trình duyệt của bạn, đảm bảo tính riêng tư và tốc độ tối đa."
-  },
-  "newsletter": {
-    "title": "Đăng ký nhận tin",
-    "description": "Cập nhật các công cụ và tính năng mới nhất. Không spam, hủy đăng ký bất cứ lúc nào.",
-    "placeholder": "Nhập email của bạn",
-    "button": "Đăng ký",
-    "button_success": "Đã đăng ký!",
-    "success": "Cảm ơn bạn đã đăng ký!",
-    "error_invalid": "Vui lòng nhập địa chỉ email hợp lệ."
-  }
+   "about": {
+     "title": "Giới Thiệu",
+     "description": "Tìm hiểu thêm về công cụ chuyển đổi văn bản này.",
+     "content": "Case Converter là một công cụ trực tuyến miễn phí và đơn giản giúp bạn chuyển đổi văn bản giữa các định dạng khác nhau. Cho dù bạn vô tình để Caps Lock hay muốn tạo kiểu chữ độc đáo cho mạng xã hội, chúng tôi đều có thể hỗ trợ bạn. Mọi quá trình xử lý đều diễn ra ngay trên trình duyệt của bạn, đảm bảo tính riêng tư và tốc độ tối đa.",
+     "privacy_first": "Riêng tư trước tiên",
+     "client_side_processing": "Chỉ xử lý phía client",
+     "lightning_fast": "Siêu nhanh",
+     "instant_conversion": "Chuyển đổi tức thì",
+     "accessible": "Dễ tiếp cận",
+     "works_everywhere": "Hoạt động mọi nơi",
+     "roadmap": "Lộ trình",
+     "roadmap_description": "Hành trình phát triển và các tính năng sắp tới",
+     "new_idea_title": "Bạn có ý tưởng mới?",
+     "new_idea_description": "Chúng tôi luôn lắng nghe ý kiến đóng góp để phát triển bộ công cụ hữu ích hơn.",
+     "open_link": "(Mở)"
+   },
+   "newsletter": {
+     "title": "Đăng ký nhận tin",
+     "description": "Cập nhật các công cụ và tính năng mới nhất. Không spam, hủy đăng ký bất cứ lúc nào.",
+     "placeholder": "Nhập email của bạn",
+     "button": "Đăng ký",
+     "button_success": "Đã đăng ký!",
+     "success": "Cảm ơn bạn đã đăng ký!",
+     "error_invalid": "Vui lòng nhập địa chỉ email hợp lệ.",
+     "all_rights_reserved": "Tất cả quyền được bảo lưu."
+   }
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import type { MetaArgs } from "react-router";
+import { useTranslation } from "react-i18next";
 import { Play, Pause, RotateCcw, Volume2, VolumeX, Music, CloudRain, Wind, Flame, Waves, Settings } from "lucide-react";
 
 export function meta({}: MetaArgs) {
@@ -47,6 +48,7 @@ const MODES: Record<TimerMode, { label: string; minutes: number }> = {
 const ALARM_URL = "https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg";
 
 export default function Pomodoro() {
+  const { t } = useTranslation();
   // Timer State
   const [mode, setMode] = useState<TimerMode>("pomodoro");
   const [customMinutes, setCustomMinutes] = useState(30);
