@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Gamepad2 } from "lucide-react";
+import { Gamepad2, Activity, Bomb } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 export default function GamesHome() {
@@ -12,6 +12,20 @@ export default function GamesHome() {
       href: "/games/2048",
       icon: Gamepad2,
       color: "bg-yellow-500",
+    },
+    {
+      name: t("games.snake.name"),
+      description: t("games.snake.description"),
+      href: "/games/snake",
+      icon: Activity,
+      color: "bg-green-600",
+    },
+    {
+      name: t("games.minesweeper.name"),
+      description: t("games.minesweeper.description"),
+      href: "/games/minesweeper",
+      icon: Bomb,
+      color: "bg-red-500",
     },
   ];
 

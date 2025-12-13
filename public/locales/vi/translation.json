@@ -48,6 +48,14 @@
         "new_game": "Trò chơi mới",
         "leaderboard": "Bảng xếp hạng",
         "no_scores": "Chưa có điểm nào. Hãy là người đầu tiên!"
+      },
+      "snake": {
+        "name": "Rắn Săn Mồi",
+        "description": "Trò chơi rắn cổ điển trên Nokia."
+      },
+      "minesweeper": {
+        "name": "Dò Mìn",
+        "description": "Dọn sạch bãi mìn mà không kích nổ quả bom nào!"
       }
     },
    "home": {

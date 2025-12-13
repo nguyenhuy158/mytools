@@ -16,5 +16,7 @@ export default [
   route("games", "routes/games.tsx", [
     index("routes/games-home.tsx"),
     route("2048", "routes/2048.tsx"),
+    route("snake", "routes/snake.tsx"),
+    route("minesweeper", "routes/minesweeper.tsx"),
   ]),
 ] satisfies RouteConfig;

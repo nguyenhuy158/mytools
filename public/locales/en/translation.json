@@ -48,6 +48,14 @@
         "new_game": "New Game",
         "leaderboard": "Leaderboard",
         "no_scores": "No scores yet. Be the first!"
+      },
+      "snake": {
+        "name": "Snake",
+        "description": "The classic Nokia snake game."
+      },
+      "minesweeper": {
+        "name": "Minesweeper",
+        "description": "Clear the minefield without detonating any bombs!"
       }
     },
    "home": {

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import type { MetaArgs } from "react-router";
 import { useTranslation } from "react-i18next";
-import { Play, Pause, RotateCcw, Volume2, VolumeX, Music, CloudRain, Wind, Flame, Waves, Settings, Minus, Plus } from "lucide-react";
+import { Play, Pause, RotateCcw, Volume2, VolumeX, Music, CloudRain, Wind, Flame, Waves, Minus, Plus } from "lucide-react";
 
 export function meta({}: MetaArgs) {
   return [
@@ -245,6 +245,7 @@ export default function Pomodoro() {
           {mode === 'custom' && (
             <div className="flex items-center justify-center gap-2 animate-in fade-in slide-in-from-top-1">
               <span className="text-sm text-slate-500 dark:text-gray-400">{t("pomodoro.custom_minutes_label")}</span>
+              
               <div className="flex items-center gap-1 bg-gray-50 dark:bg-gray-800 rounded-lg p-1 border border-gray-200 dark:border-gray-700">
                 <button
                   onClick={handleDecrement}
