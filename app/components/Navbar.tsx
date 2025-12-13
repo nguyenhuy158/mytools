@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Menu, X, Home, Settings, Info, Sun, Moon, CaseUpper, FileJson, Calendar, FileDiff, Timer, Map, Code } from "lucide-react";
+import { Menu, X, Home, Settings, Info, Sun, Moon, CaseUpper, FileJson, Calendar, FileDiff, Timer, Map, Code, Coffee } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { TetCountdown } from "./TetCountdown";
@@ -63,7 +63,14 @@ export function Navbar() {
          { name: t("nav.text_diff"), href: "/it/text-diff", icon: FileDiff },
        ]
      },
-    { name: t("nav.pomodoro"), href: "/pomodoro", icon: Timer },
+    { 
+      name: t("nav.lifestyle"), 
+      href: "/lifestyle", 
+      icon: Coffee,
+      children: [
+        { name: t("nav.pomodoro"), href: "/lifestyle/pomodoro", icon: Timer },
+      ]
+    },
     { name: t("nav.calendar"), href: "/calendar", icon: Calendar },
     { name: t("nav.about"), href: "/about", icon: Info },
   ];
