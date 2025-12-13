@@ -1,8 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { Form, useLoaderData, useSubmit, useNavigation } from "react-router";
-import { Trophy, RefreshCcw, Save } from "lucide-react";
+import { Save, RefreshCcw } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { LoaderFunctionArgs, ActionFunctionArgs } from "react-router";
+import { GameScore } from "../components/GameScore";
+import { GameOverlay } from "../components/GameOverlay";
+import { GameGrid } from "../components/GameGrid";
+import { Leaderboard } from "../components/Leaderboard";
 
 interface Score {
   name: string;
@@ -55,7 +59,6 @@ function addRandomTile(grid: number[]) {
   return newGrid;
 }
 
-// Improved Logic with Score
 function processMove(grid: number[], direction: "LEFT" | "RIGHT" | "UP" | "DOWN") {
   let newGrid = [...grid];
   let scoreGain = 0;
@@ -121,13 +124,10 @@ function processMove(grid: number[], direction: "LEFT" | "RIGHT" | "UP" | "DOWN"
 
 function isGameOver(grid: number[]) {
   if (getEmptyCells(grid).length > 0) return false;
-  // Check possible merges
   for (let r = 0; r < SIZE; r++) {
     for (let c = 0; c < SIZE; c++) {
       const current = grid[r * SIZE + c];
-      // Check right
       if (c < SIZE - 1 && current === grid[r * SIZE + c + 1]) return false;
-      // Check down
       if (r < SIZE - 1 && current === grid[(r + 1) * SIZE + c]) return false;
     }
   }
@@ -221,19 +221,18 @@ export default function Game2048() {
              <h1 className="text-4xl font-bold text-gray-800 dark:text-white">{t("games.2048.title")}</h1>
              <p className="text-gray-600 dark:text-gray-400">{t("games.2048.subtitle")}</p>
            </div>
-           <div className="bg-gray-800 text-white p-3 rounded-lg text-center min-w-[100px]">
-             <div className="text-xs uppercase font-bold text-gray-400">{t("games.2048.score")}</div>
-            <div className="text-xl font-bold">{score}</div>
-          </div>
+           <GameScore score={score} label={t("games.2048.score")} />
         </div>
 
-        <div className="relative bg-gray-300 dark:bg-gray-700 p-4 rounded-xl shadow-lg touch-none">
-          {gameOver && (
-             <div className="absolute inset-0 bg-white/80 dark:bg-black/80 z-10 rounded-xl flex flex-col items-center justify-center p-6 text-center backdrop-blur-sm">
-               <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-4">{t("games.2048.game_over")}</h2>
-               <p className="text-lg mb-6 text-gray-600 dark:text-gray-300">{t("games.2048.final_score")}: {score}</p>
-              
-              <Form method="post" onSubmit={saveScore} className="w-full space-y-4 mb-6">
+        <GameGrid>
+          <GameOverlay 
+            isVisible={gameOver}
+            title={t("games.2048.game_over")}
+            message={`${t("games.2048.final_score")}: ${score}`}
+            onRestart={initGame}
+            restartLabel={t("games.2048.try_again")}
+          >
+             <Form method="post" onSubmit={saveScore} className="w-full space-y-4 mb-6">
                  <input
                    type="text"
                    name="name"
@@ -252,15 +251,7 @@ export default function Game2048() {
                    <Save className="w-4 h-4" /> {t("games.2048.save_score")}
                  </button>
               </Form>
-
-               <button
-                 onClick={initGame}
-                 className="flex items-center gap-2 bg-gray-800 hover:bg-gray-900 text-white py-2 px-6 rounded-lg font-medium transition-colors"
-               >
-                 <RefreshCcw className="w-4 h-4" /> {t("games.2048.try_again")}
-               </button>
-            </div>
-          )}
+          </GameOverlay>
 
           <div className="grid grid-cols-4 gap-3">
             {grid.map((cell, idx) => (
@@ -274,7 +265,7 @@ export default function Game2048() {
               </div>
             ))}
           </div>
-        </div>
+        </GameGrid>
         
         <div className="mt-6 flex justify-center">
              <button
@@ -286,43 +277,11 @@ export default function Game2048() {
         </div>
       </div>
 
-      <div className="w-full lg:w-80 bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-800">
-         <div className="flex items-center gap-2 mb-6">
-           <Trophy className="w-5 h-5 text-yellow-500" />
-           <h2 className="text-xl font-bold text-gray-900 dark:text-white">{t("games.2048.leaderboard")}</h2>
-         </div>
-        
-        <div className="space-y-4">
-           {scores.length === 0 ? (
-             <p className="text-center text-gray-500 py-4">{t("games.2048.no_scores")}</p>
-           ) : (
-            scores.map((s, idx) => (
-              <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
-                <div className="flex items-center gap-3">
-                  <span className={`w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold ${
-                    idx === 0 ? "bg-yellow-100 text-yellow-700" : 
-                    idx === 1 ? "bg-gray-200 text-gray-700" :
-                    idx === 2 ? "bg-orange-100 text-orange-700" : "bg-gray-100 text-gray-500"
-                  }`}>
-                    {idx + 1}
-                  </span>
-                  <div>
-                    <div className="font-medium text-gray-900 dark:text-white truncate max-w-[120px]">
-                      {s.name}
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      {new Date(s.date).toLocaleDateString()}
-                    </div>
-                  </div>
-                </div>
-                <div className="font-bold text-indigo-600 dark:text-indigo-400">
-                  {s.score}
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
+      <Leaderboard 
+        scores={scores} 
+        title={t("games.2048.leaderboard")} 
+        emptyMessage={t("games.2048.no_scores")}
+      />
     </div>
   );
 }

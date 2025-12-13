@@ -2,9 +2,13 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { diffChars } from "diff";
 import type { Change } from "diff";
-import { Trash2, History, X, RotateCcw, Save } from "lucide-react";
+import { Trash2, Save } from "lucide-react";
 import type { Route } from "./+types/text-diff";
 import { toast } from "sonner";
+import { PageHeader } from "../components/PageHeader";
+import { InputSection } from "../components/InputSection";
+import { ButtonGroup } from "../components/ButtonGroup";
+import { HistorySection } from "../components/HistorySection";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -60,8 +64,7 @@ export default function TextDiff() {
     toast.success(t("text_diff.toast.saved", "Comparison saved to history"));
   };
 
-  const removeFromHistory = (e: React.MouseEvent, indexToRemove: number) => {
-    e.stopPropagation();
+  const removeFromHistory = (indexToRemove: number) => {
     setHistory((prev) => {
       const updated = prev.filter((_, index) => index !== indexToRemove);
       localStorage.setItem("text-diff-history", JSON.stringify(updated));
@@ -89,51 +92,43 @@ export default function TextDiff() {
     setModified("");
   };
 
+  const handleRestore = (item: HistoryItem) => {
+    setOriginal(item.original);
+    setModified(item.modified);
+    toast.success(t("text_diff.toast.restored", "Comparison restored from history"));
+    // Scroll to top smoothly
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-slate-900 dark:text-gray-100 p-4 md:p-8 font-sans">
       <div className="max-w-7xl mx-auto flex flex-col gap-6 h-full">
         
-        {/* Header */}
-        <header className="space-y-2 text-center md:text-left border-b border-gray-200 dark:border-gray-800 pb-6">
-            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-              {t("text_diff.title", "Text diff")}
-            </h1>
-            <p className="text-slate-500 dark:text-gray-400 text-lg">
-                {t("text_diff.description", "Compare two texts and see the differences between them.")}
-            </p>
-        </header>
+        <PageHeader 
+          title={t("text_diff.title", "Text diff")}
+          description={t("text_diff.description", "Compare two texts and see the differences between them.")}
+        />
 
         {/* Input Area */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Original Input */}
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              {t("text_diff.original", "Original Text")}
-            </label>
-            <textarea
-              className="w-full h-40 p-4 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none resize-y text-sm font-mono text-slate-700 dark:text-gray-300 placeholder-gray-400 transition-all"
-              placeholder={t("text_diff.original_placeholder", "Paste original text here...")}
-              value={original}
-              onChange={(e) => setOriginal(e.target.value)}
-            />
-          </div>
-
-          {/* Modified Input */}
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              {t("text_diff.modified", "Modified Text")}
-            </label>
-            <textarea
-              className="w-full h-40 p-4 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none resize-y text-sm font-mono text-slate-700 dark:text-gray-300 placeholder-gray-400 transition-all"
-              placeholder={t("text_diff.modified_placeholder", "Paste modified text here...")}
-              value={modified}
-              onChange={(e) => setModified(e.target.value)}
-            />
-          </div>
+          <InputSection
+            label={t("text_diff.original", "Original Text")}
+            placeholder={t("text_diff.original_placeholder", "Paste original text here...")}
+            value={original}
+            onChange={setOriginal}
+            className="h-40"
+          />
+          <InputSection
+            label={t("text_diff.modified", "Modified Text")}
+            placeholder={t("text_diff.modified_placeholder", "Paste modified text here...")}
+            value={modified}
+            onChange={setModified}
+            className="h-40"
+          />
         </div>
 
         {/* Actions */}
-        <div className="flex justify-end gap-2">
+        <ButtonGroup className="justify-end">
             <Button onClick={saveToHistory} variant="primary">
                 <span className="flex items-center gap-2">
                     <Save className="w-4 h-4" />
@@ -146,7 +141,7 @@ export default function TextDiff() {
                     {t("text_diff.clear", "Clear All")}
                 </span>
             </Button>
-        </div>
+        </ButtonGroup>
 
         {/* Diff Output */}
         {(original || modified) && (
@@ -176,65 +171,30 @@ export default function TextDiff() {
             </div>
         )}
 
-        {/* History Section */}
-        {history.length > 0 && (
-            <div className="w-full space-y-4 pt-6 border-t border-gray-200 dark:border-gray-800">
-                <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-bold flex items-center gap-2 text-slate-900 dark:text-white">
-                        <History className="w-5 h-5" />
-                        {t("text_diff.history", "History")}
-                    </h3>
-                    <button 
-                        onClick={clearHistory}
-                        className="text-xs text-slate-500 hover:text-red-600 transition-colors"
-                    >
-                        {t("text_diff.clear", "Clear All")}
-                    </button>
+        <HistorySection
+          history={history}
+          onRestore={handleRestore}
+          onRemove={removeFromHistory}
+          onClear={clearHistory}
+          title={t("text_diff.history", "History")}
+          clearLabel={t("text_diff.clear", "Clear All")}
+          renderItem={(item) => (
+            <>
+                <div className="flex gap-2 text-xs mb-2 text-gray-400">
+                    <span>{new Date(item.timestamp).toLocaleTimeString()}</span>
+                    <span>{new Date(item.timestamp).toLocaleDateString()}</span>
                 </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                    {history.map((item, idx) => (
-                        <div 
-                            key={idx}
-                            onClick={() => {
-                                setOriginal(item.original);
-                                setModified(item.modified);
-                                toast.success(t("text_diff.toast.restored", "Comparison restored from history"));
-                                // Scroll to top smoothly
-                                window.scrollTo({ top: 0, behavior: 'smooth' });
-                            }}
-                            className="group relative bg-white dark:bg-gray-900 p-3 rounded-lg border border-gray-200 dark:border-gray-800 hover:border-blue-400 dark:hover:border-blue-500 cursor-pointer shadow-sm transition-all hover:shadow-md"
-                        >
-                            <div className="flex gap-2 text-xs mb-2 text-gray-400">
-                                <span>{new Date(item.timestamp).toLocaleTimeString()}</span>
-                                <span>{new Date(item.timestamp).toLocaleDateString()}</span>
-                            </div>
-                            <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-                                <div className="p-1 bg-red-50 dark:bg-red-900/10 rounded truncate text-red-700 dark:text-red-300">
-                                    {item.original.substring(0, 50) || "(empty)"}
-                                </div>
-                                <div className="p-1 bg-green-50 dark:bg-green-900/10 rounded truncate text-green-700 dark:text-green-300">
-                                    {item.modified.substring(0, 50) || "(empty)"}
-                                </div>
-                            </div>
-                            
-                            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1 bg-white dark:bg-gray-800 p-1 rounded-md shadow-sm border border-gray-100 dark:border-gray-700">
-                                <button 
-                                    onClick={(e) => removeFromHistory(e, idx)}
-                                    className="p-1 hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-400 hover:text-red-500 rounded transition-colors"
-                                >
-                                    <X className="w-3 h-3" />
-                                </button>
-                                <div className="w-px h-3 bg-gray-200 dark:bg-gray-700 my-auto"></div>
-                                <button className="p-1 hover:bg-blue-50 dark:hover:bg-blue-900/20 text-slate-400 hover:text-blue-600 rounded transition-colors">
-                                    <RotateCcw className="w-3 h-3" />
-                                </button>
-                            </div>
-                        </div>
-                    ))}
+                <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                    <div className="p-1 bg-red-50 dark:bg-red-900/10 rounded truncate text-red-700 dark:text-red-300">
+                        {item.original.substring(0, 50) || "(empty)"}
+                    </div>
+                    <div className="p-1 bg-green-50 dark:bg-green-900/10 rounded truncate text-green-700 dark:text-green-300">
+                        {item.modified.substring(0, 50) || "(empty)"}
+                    </div>
                 </div>
-            </div>
-        )}
+            </>
+          )}
+        />
 
       </div>
     </div>

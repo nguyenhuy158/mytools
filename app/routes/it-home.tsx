@@ -1,6 +1,8 @@
-import { Link } from "react-router";
 import { FileJson, FileDiff } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { PageHeader } from "../components/PageHeader";
+import { ToolGrid } from "../components/ToolGrid";
+import { ToolCard } from "../components/ToolCard";
 
 export default function ITToolsLanding() {
   const { t } = useTranslation();
@@ -11,50 +13,33 @@ export default function ITToolsLanding() {
       description: t("it_tools.json_tools.description"),
       href: "/it/json-tools",
       icon: FileJson,
-      color: "text-blue-600 dark:text-blue-400",
-      bgColor: "bg-blue-50 dark:bg-blue-900/20",
+      color: "bg-blue-600",
     },
     {
       name: t("it_tools.text_diff.name"),
       description: t("it_tools.text_diff.description"),
       href: "/it/text-diff",
       icon: FileDiff,
-      color: "text-green-600 dark:text-green-400",
-      bgColor: "bg-green-50 dark:bg-green-900/20",
+      color: "bg-green-600",
     },
   ];
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-slate-900 dark:text-gray-100 p-4 md:p-8 font-sans">
       <div className="max-w-7xl mx-auto space-y-8">
-        <header className="space-y-2 text-center">
-          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-            {t("it_tools.title")}
-          </h1>
-          <p className="text-slate-500 dark:text-gray-400 text-lg">
-            {t("it_tools.description")}
-          </p>
-        </header>
+        <PageHeader 
+          title={t("it_tools.title")} 
+          description={t("it_tools.description")} 
+        />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <ToolGrid>
           {tools.map((tool) => (
-            <Link
+            <ToolCard
               key={tool.href}
-              to={tool.href}
-              className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 hover:shadow-md transition-shadow group"
-            >
-              <div className={`w-12 h-12 ${tool.bgColor} rounded-xl flex items-center justify-center mb-4 ${tool.color}`}>
-                <tool.icon className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold mb-2 text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                {tool.name}
-              </h3>
-              <p className="text-slate-500 dark:text-gray-400 leading-relaxed">
-                {tool.description}
-              </p>
-            </Link>
+              {...tool}
+            />
           ))}
-        </div>
+        </ToolGrid>
       </div>
     </div>
   );

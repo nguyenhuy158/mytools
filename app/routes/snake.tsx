@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { RetroContainer } from "../components/RetroContainer";
-import { Play, RotateCcw } from "lucide-react";
+import { Play } from "lucide-react";
+import { GameScore } from "../components/GameScore";
+import { GameOverlay } from "../components/GameOverlay";
+import { GameGrid } from "../components/GameGrid";
 
 // Game constants
 const GRID_SIZE = 20;
@@ -17,12 +19,10 @@ export default function SnakeGame() {
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
   
-  // Use ref for direction to prevent multiple direction changes in one tick
   const directionRef = useRef<Direction>('RIGHT');
   const gameLoopRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
-    // Load high score from local storage
     const saved = localStorage.getItem("snake-highscore");
     if (saved) setHighScore(parseInt(saved, 10));
   }, []);
@@ -116,7 +116,6 @@ export default function SnakeGame() {
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      // Prevent default scrolling for arrow keys
       if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(e.key)) {
         e.preventDefault();
       }
@@ -151,78 +150,69 @@ export default function SnakeGame() {
   }, [isPlaying, gameOver]);
 
   return (
-    <RetroContainer title="SNAKE">
-      <div className="flex flex-col items-center w-full max-w-[300px]">
-        
-        {/* Score Board */}
-        <div className="flex justify-between w-full mb-2 font-bold text-sm">
-          <span>SCORE: {score}</span>
-          <span>HI: {highScore}</span>
+    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] p-4">
+      <div className="w-full max-w-md space-y-6">
+        <div className="flex justify-between items-center">
+          <h1 className="text-3xl font-black text-gray-900 dark:text-white">SNAKE</h1>
+          <div className="flex gap-4">
+            <GameScore score={score} label="Score" />
+            <GameScore score={highScore} label="Best" className="bg-yellow-600" />
+          </div>
         </div>
 
-        {/* Game Area */}
-        <div 
-          className="relative bg-[#c7f0d8] border-2 border-[#43523d]"
-          style={{
-            width: '300px',
-            height: '300px',
-            display: 'grid',
-            gridTemplateColumns: `repeat(${GRID_SIZE}, 1fr)`,
-            gridTemplateRows: `repeat(${GRID_SIZE}, 1fr)`,
-          }}
-        >
-          {/* Overlay for Game Over / Start */}
-          {(!isPlaying && !gameOver && score === 0) && (
-             <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#c7f0d8]/80 z-10 text-center">
-               <p className="mb-2 font-bold">PRESS START</p>
+        <GameGrid className="aspect-square bg-gray-900 dark:bg-black p-1 border-4 border-gray-800 dark:border-gray-800">
+          <GameOverlay 
+            isVisible={!isPlaying || gameOver}
+            title={gameOver ? "GAME OVER" : "SNAKE"}
+            message={gameOver ? `Score: ${score}` : "Press Start to Play"}
+            onRestart={resetGame}
+            restartLabel={gameOver ? "Try Again" : "Start Game"}
+          >
+             {!gameOver && !isPlaying && score === 0 && (
                <button 
                  onClick={resetGame}
-                 className="flex items-center gap-2 px-4 py-2 border-2 border-[#43523d] hover:bg-[#43523d] hover:text-[#c7f0d8] transition-colors font-bold"
+                 className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-6 rounded-lg font-medium transition-colors mt-4"
                >
-                 <Play size={16} /> PLAY
+                 <Play className="w-4 h-4" /> Start Game
                </button>
-             </div>
-          )}
+             )}
+          </GameOverlay>
 
-          {gameOver && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#c7f0d8]/80 z-10 text-center">
-              <p className="mb-2 font-bold text-xl">GAME OVER</p>
-              <button 
-                 onClick={resetGame}
-                 className="flex items-center gap-2 px-4 py-2 border-2 border-[#43523d] hover:bg-[#43523d] hover:text-[#c7f0d8] transition-colors font-bold"
-               >
-                 <RotateCcw size={16} /> RETRY
-               </button>
-            </div>
-          )}
-
-          {/* Grid Cells */}
-          {Array.from({ length: GRID_SIZE * GRID_SIZE }).map((_, i) => {
-             const x = i % GRID_SIZE;
-             const y = Math.floor(i / GRID_SIZE);
-             const isSnake = snake.some(s => s.x === x && s.y === y);
-             const isFood = food.x === x && food.y === y;
-             
-             return (
-               <div 
-                 key={i}
-                 className={`
-                   ${isSnake ? 'bg-[#43523d]' : ''}
-                   ${isFood ? 'bg-[#43523d] animate-pulse rounded-full' : ''}
-                 `}
-                 style={{
-                    // Small gap for grid effect if desired, but pixel perfect is better
-                    border: '1px solid rgba(67, 82, 61, 0.05)' 
-                 }}
-               />
-             );
-          })}
-        </div>
+          <div 
+            style={{
+              display: 'grid',
+              gridTemplateColumns: `repeat(${GRID_SIZE}, 1fr)`,
+              gridTemplateRows: `repeat(${GRID_SIZE}, 1fr)`,
+              height: '100%',
+              width: '100%'
+            }}
+          >
+            {Array.from({ length: GRID_SIZE * GRID_SIZE }).map((_, i) => {
+               const x = i % GRID_SIZE;
+               const y = Math.floor(i / GRID_SIZE);
+               const isSnake = snake.some(s => s.x === x && s.y === y);
+               const isFood = food.x === x && food.y === y;
+               const isHead = snake[0].x === x && snake[0].y === y;
+               
+               return (
+                 <div 
+                   key={i}
+                   className={`
+                     rounded-sm border border-gray-900/50
+                     ${isHead ? 'bg-green-400 z-10' : isSnake ? 'bg-green-600' : ''}
+                     ${isFood ? 'bg-red-500 rounded-full scale-75' : ''}
+                     ${!isSnake && !isFood ? 'bg-gray-800/20' : ''}
+                   `}
+                 />
+               );
+            })}
+          </div>
+        </GameGrid>
         
-        <div className="mt-4 text-xs text-center opacity-75">
-          USE ARROW KEYS TO MOVE
+        <div className="text-center text-sm text-gray-500 dark:text-gray-400">
+          Use arrow keys to move • Space to restart
         </div>
       </div>
-    </RetroContainer>
+    </div>
   );
 }

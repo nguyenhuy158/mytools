@@ -1,8 +1,11 @@
-import { Download, Upload, Copy, Trash2, FileJson, Check, XCircle, Minimize, Maximize, Wrench, ClipboardPaste, History, RotateCcw, Sparkles, X, ChevronDown, ArrowLeft } from "lucide-react";
+import { Download, Upload, Copy, Trash2, FileJson, Check, Minimize, Maximize, Wrench, ClipboardPaste, Sparkles, ChevronDown, ArrowLeft } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import JSON5 from "json5";
+import { ButtonGroup } from "../components/ButtonGroup";
+import { InputSection } from "../components/InputSection";
+import { HistorySection } from "../components/HistorySection";
 
 export function meta() {
   return [
@@ -56,8 +59,7 @@ export default function JsonTools() {
     });
   };
 
-  const removeFromHistory = (e: React.MouseEvent, indexToRemove: number) => {
-    e.stopPropagation();
+  const removeFromHistory = (indexToRemove: number) => {
     setHistory((prev) => {
       const updated = prev.filter((_, index) => index !== indexToRemove);
       localStorage.setItem("json-tools-history", JSON.stringify(updated));
@@ -215,6 +217,12 @@ export default function JsonTools() {
     URL.revokeObjectURL(url);
   };
 
+  const handleRestoreHistory = (item: string) => {
+    setInput(item);
+    validate(item, false);
+    toast.success(t("json_tools.toast.history_restored"));
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-slate-900 dark:text-gray-100 p-4 md:p-8 font-sans">
       <div className="max-w-7xl mx-auto flex flex-col gap-6 items-start justify-center h-full">
@@ -232,7 +240,7 @@ export default function JsonTools() {
           </header>
 
           {/* Toolbar */}
-          <div className="bg-white dark:bg-gray-900 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 flex flex-wrap gap-3 items-center justify-between">
+          <ButtonGroup>
               <div className="flex flex-wrap gap-2">
                   <Button onClick={handleFormat} variant="primary">
                       <Maximize className="w-4 h-4 mr-2" />
@@ -292,111 +300,67 @@ export default function JsonTools() {
                       {t("json_tools.actions.clear")}
                   </Button>
               </div>
-          </div>
+          </ButtonGroup>
 
           {/* Editors */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-[600px]">
               {/* Input */}
-              <div className="flex flex-col gap-2 h-full">
-                  <div className="flex justify-between items-center px-1">
-                      <span className="font-semibold text-sm text-gray-500">Input</span>
-                      <div className="flex items-center gap-2">
-                          <button onClick={handlePaste} className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium transition-colors">
-                              <ClipboardPaste className="w-3 h-3" /> {t("json_tools.actions.paste")}
-                          </button>
-                          <button onClick={() => handleCopy(input)} className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium transition-colors">
-                              <Copy className="w-3 h-3" /> {t("json_tools.actions.copy")}
-                          </button>
-                      </div>
-                  </div>
-                  <textarea
-                      className={`w-full flex-1 p-4 border rounded-xl bg-white dark:bg-gray-900 font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:outline-none ${
-                          error ? 'border-red-500 focus:ring-red-500' : 'border-gray-200 dark:border-gray-800'
-                      }`}
-                      placeholder={t("json_tools.input_placeholder")}
-                      value={input}
-                      onChange={(e) => setInput(e.target.value)}
-                      spellCheck={false}
-                  />
-                  {error && (
-                      <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg text-sm flex items-start gap-2">
-                          <XCircle className="w-4 h-4 mt-0.5 shrink-0" />
-                          <span className="font-mono break-all">{error}</span>
-                      </div>
-                  )}
+              <div className="flex flex-col h-full gap-2">
+                <InputSection
+                  label="Input"
+                  value={input}
+                  onChange={setInput}
+                  placeholder={t("json_tools.input_placeholder")}
+                  error={error}
+                  actions={
+                    <>
+                      <button onClick={handlePaste} className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium transition-colors">
+                          <ClipboardPaste className="w-3 h-3" /> {t("json_tools.actions.paste")}
+                      </button>
+                      <button onClick={() => handleCopy(input)} className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium transition-colors">
+                          <Copy className="w-3 h-3" /> {t("json_tools.actions.copy")}
+                      </button>
+                    </>
+                  }
+                />
               </div>
 
               {/* Output */}
-              <div className="flex flex-col gap-2 h-full">
-                  <div className="flex justify-between items-center px-1">
-                      <span className="font-semibold text-sm text-gray-500">Output</span>
-                      <div className="flex items-center gap-2">
-                        <button onClick={handleMoveToInput} className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium transition-colors">
-                            <ArrowLeft className="w-3 h-3" /> {t("json_tools.actions.use_as_input")}
-                        </button>
-                        <button onClick={() => handleCopy(output)} className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium transition-colors">
-                            <Copy className="w-3 h-3" /> {t("json_tools.actions.copy")}
-                        </button>
-                      </div>
-                  </div>
-                  <textarea
-                      className="w-full flex-1 p-4 border border-gray-200 dark:border-gray-800 rounded-xl bg-gray-50 dark:bg-gray-950 font-mono text-sm resize-none focus:outline-none cursor-text"
-                      readOnly
-                      value={output}
-                      placeholder="Output will appear here..."
-                  />
+              <div className="flex flex-col h-full gap-2">
+                <InputSection
+                  label="Output"
+                  value={output}
+                  onChange={setOutput} // Readonly but we might want to edit output? 
+                  readOnly={true} // Original was readonly but InputSection supports readOnly
+                  placeholder="Output will appear here..."
+                  actions={
+                    <>
+                      <button onClick={handleMoveToInput} className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium transition-colors">
+                          <ArrowLeft className="w-3 h-3" /> {t("json_tools.actions.use_as_input")}
+                      </button>
+                      <button onClick={() => handleCopy(output)} className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium transition-colors">
+                          <Copy className="w-3 h-3" /> {t("json_tools.actions.copy")}
+                      </button>
+                    </>
+                  }
+                />
               </div>
           </div>
         </div>
 
-        {/* History Sidebar */}
-        {history.length > 0 && (
-          <div className="w-full space-y-4 pt-6 border-t border-gray-200 dark:border-gray-800">
-             <div className="flex items-center justify-between">
-                <h3 className="text-lg font-bold flex items-center gap-2 text-slate-900 dark:text-white">
-                  <History className="w-5 h-5" />
-                  {t("history")}
-                </h3>
-                <button 
-                  onClick={clearHistory}
-                  className="text-xs text-slate-500 hover:text-red-600 transition-colors"
-                >
-                  {t("clear_all")}
-                </button>
-             </div>
-             
-             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {history.map((item, idx) => (
-                  <div 
-                    key={idx}
-                    onClick={() => {
-                      setInput(item);
-                      validate(item, false); // Auto validate when restoring
-                      toast.success(t("json_tools.toast.history_restored"));
-                    }}
-                    className="group relative bg-white dark:bg-gray-900 p-3 rounded-lg border border-gray-200 dark:border-gray-800 hover:border-blue-400 dark:hover:border-blue-500 cursor-pointer shadow-sm transition-all hover:shadow-md"
-                  >
-                    <p className="text-xs text-slate-600 dark:text-gray-300 line-clamp-3 font-mono break-all pr-6">
-                      {item.length > 150 ? item.substring(0, 150) + "..." : item}
-                    </p>
-                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1 bg-white dark:bg-gray-800 p-1 rounded-md shadow-sm">
-                       <button 
-                         onClick={(e) => removeFromHistory(e, idx)}
-                         className="p-1 hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-400 hover:text-red-500 rounded transition-colors"
-                         title={t("json_tools.actions.clear")}
-                       >
-                         <X className="w-3 h-3" />
-                       </button>
-                       <div className="w-px h-3 bg-gray-200 dark:bg-gray-700 my-auto"></div>
-                       <button className="p-1 hover:bg-blue-50 dark:hover:bg-blue-900/20 text-slate-400 hover:text-blue-600 rounded transition-colors">
-                          <RotateCcw className="w-3 h-3" />
-                       </button>
-                    </div>
-                  </div>
-                ))}
-             </div>
-          </div>
-        )}
+        <HistorySection
+          history={history}
+          onRestore={handleRestoreHistory}
+          onRemove={removeFromHistory}
+          onClear={clearHistory}
+          title={t("history")}
+          clearLabel={t("clear_all")}
+          renderItem={(item) => (
+            <p className="text-xs text-slate-600 dark:text-gray-300 line-clamp-3 font-mono break-all">
+              {item.length > 150 ? item.substring(0, 150) + "..." : item}
+            </p>
+          )}
+        />
       </div>
     </div>
   );

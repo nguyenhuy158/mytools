@@ -1,7 +1,10 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import type { MetaArgs } from "react-router";
 import { useTranslation } from "react-i18next";
-import { Play, Pause, RotateCcw, Volume2, VolumeX, Music, CloudRain, Wind, Flame, Waves, Minus, Plus } from "lucide-react";
+import { Play, Pause, RotateCcw, CloudRain, Wind, Flame, Waves, Minus, Plus } from "lucide-react";
+import { PageHeader } from "../components/PageHeader";
+import { ModeSelector } from "../components/ModeSelector";
+import { SoundControls } from "../components/SoundControls";
 
 export function meta({}: MetaArgs) {
   return [
@@ -217,29 +220,18 @@ export default function Pomodoro() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-slate-900 dark:text-gray-100 p-4 md:p-8 font-sans flex flex-col items-center justify-center">
       <div className="max-w-md w-full space-y-8">
-        <header className="text-center space-y-2">
-          <h1 className="text-3xl font-extrabold tracking-tight">{t("pomodoro.header_title")}</h1>
-          <p className="text-slate-500 dark:text-gray-400">{t("pomodoro.header_description")}</p>
-        </header>
+        <PageHeader 
+          title={t("pomodoro.header_title")} 
+          description={t("pomodoro.header_description")} 
+        />
 
         <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 p-8 space-y-8 text-center">
           
-          {/* Mode Selector */}
-          <div className="flex flex-wrap justify-center gap-2">
-            {(Object.keys(MODES) as TimerMode[]).map((m) => (
-              <button
-                key={m}
-                onClick={() => changeMode(m)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  mode === m
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 dark:bg-gray-800 text-slate-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-                }`}
-              >
-                {MODES[m].label}
-              </button>
-            ))}
-          </div>
+          <ModeSelector
+            modes={MODES}
+            currentMode={mode}
+            onModeChange={changeMode}
+          />
 
           {/* Custom Time Input (Only visible when Custom mode is selected) */}
           {mode === 'custom' && (
@@ -298,70 +290,17 @@ export default function Pomodoro() {
           </div>
         </div>
 
-        {/* Sound Controls */}
-        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-6 space-y-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-lg ${isPlayingSound ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400' : 'bg-gray-100 text-gray-400 dark:bg-gray-800'}`}>
-                <Music className="w-5 h-5" />
-              </div>
-               <div>
-                 <h3 className="font-semibold text-slate-900 dark:text-white">{t("pomodoro.background_sound_title")}</h3>
-                 <p className="text-xs text-slate-500 dark:text-gray-400">{t("pomodoro.background_sound_description")}</p>
-               </div>
-            </div>
-            <button
-              onClick={toggleSound}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 ${
-                isPlayingSound ? "bg-blue-600" : "bg-gray-200 dark:bg-gray-700"
-              }`}
-            >
-              <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                  isPlayingSound ? "translate-x-6" : "translate-x-1"
-                }`}
-              />
-            </button>
-          </div>
-
-          {isPlayingSound && (
-            <div className="space-y-4 pt-2 border-t border-gray-100 dark:border-gray-800 animate-in fade-in slide-in-from-top-2 duration-200">
-              <div className="grid grid-cols-2 gap-2">
-                {(Object.entries(SOUND_CONFIG) as [SoundType, typeof SOUND_CONFIG[SoundType]][]).map(([key, config]) => {
-                  const Icon = config.icon;
-                  return (
-                    <button
-                      key={key}
-                      onClick={() => setSelectedSound(key)}
-                      className={`px-3 py-2 text-sm rounded-lg border transition-all flex items-center justify-center gap-2 ${
-                        selectedSound === key
-                          ? "bg-indigo-50 border-indigo-200 text-indigo-700 dark:bg-indigo-900/20 dark:border-indigo-800 dark:text-indigo-300"
-                          : "bg-transparent border-transparent hover:bg-gray-50 dark:hover:bg-gray-800 text-slate-600 dark:text-gray-400"
-                      }`}
-                    >
-                      <Icon className="w-4 h-4" />
-                      {config.label}
-                    </button>
-                  );
-                })}
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <VolumeX className="w-4 h-4 text-gray-400" />
-                <input
-                  type="range"
-                  min="0"
-                  max="1"
-                  step="0.01"
-                  value={volume}
-                  onChange={(e) => setVolume(parseFloat(e.target.value))}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-blue-600"
-                />
-                <Volume2 className="w-4 h-4 text-gray-400" />
-              </div>
-            </div>
-          )}
-        </div>
+        <SoundControls
+          isPlaying={isPlayingSound}
+          onToggle={toggleSound}
+          volume={volume}
+          onVolumeChange={setVolume}
+          selectedSound={selectedSound}
+          onSoundChange={setSelectedSound}
+          sounds={SOUND_CONFIG}
+          title={t("pomodoro.background_sound_title")}
+          description={t("pomodoro.background_sound_description")}
+        />
       </div>
     </div>
   );
