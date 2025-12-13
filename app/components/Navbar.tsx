@@ -58,7 +58,6 @@ export function Navbar() {
     { name: t("nav.text_diff"), href: "/text-diff", icon: FileDiff },
     { name: t("nav.pomodoro"), href: "/pomodoro", icon: Timer },
     { name: t("nav.calendar"), href: "/calendar", icon: Calendar },
-    { name: t("nav.roadmap"), href: "/roadmap", icon: Map },
     { name: t("nav.about"), href: "/about", icon: Info },
   ];
 
