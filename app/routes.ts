@@ -7,7 +7,10 @@ export default [
     route("json-tools", "routes/json-tools.tsx"),
     route("text-diff", "routes/text-diff.tsx"),
   ]),
+  route("lifestyle", "routes/lifestyle.tsx", [
+    index("routes/lifestyle-home.tsx"),
+    route("pomodoro", "routes/pomodoro.tsx"),
+  ]),
   route("calendar", "routes/calendar.tsx"),
-  route("pomodoro", "routes/pomodoro.tsx"),
   route("about", "routes/about.tsx"),
 ] satisfies RouteConfig;
