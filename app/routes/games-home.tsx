@@ -7,8 +7,8 @@ export default function GamesHome() {
 
   const games = [
     {
-      name: "2048",
-      description: "Join the numbers and get to the 2048 tile!",
+      name: t("games.2048.name"),
+      description: t("games.2048.description"),
       href: "/games/2048",
       icon: Gamepad2,
       color: "bg-yellow-500",
@@ -22,7 +22,7 @@ export default function GamesHome() {
           {t("nav.games")}
         </h1>
         <p className="text-xl text-gray-600 dark:text-gray-400">
-          Play fun games directly in your browser.
+          {t("games.description")}
         </p>
       </div>
 

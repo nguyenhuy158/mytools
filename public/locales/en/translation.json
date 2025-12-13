@@ -1,24 +1,55 @@
 {
   "app_name": "MyApp",
-   "nav": {
-     "home": "Home",
-     "features": "Features",
-     "json_tools": "JSON",
-     "text_diff": "Text",
-     "pomodoro": "Pomodoro",
-     "calendar": "Calendar",
-     "roadmap": "Roadmap",
-     "about": "About",
-     "it_tools": "IT Tools",
-     "lifestyle": "Lifestyle",
-     "games": "Games",
-     "language": "Language",
-     "toast": {
-       "language_changed": "Language changed to English",
-       "dark_mode": "Switched to Dark Mode",
-       "light_mode": "Switched to Light Mode"
-     }
-   },
+    "nav": {
+      "home": "Home",
+      "features": "Features",
+      "json_tools": "JSON",
+      "text_diff": "Text",
+      "pomodoro": "Pomodoro",
+      "calendar": "Calendar",
+      "roadmap": "Roadmap",
+      "about": "About",
+      "it_tools": "IT Tools",
+      "lifestyle": "Lifestyle",
+      "games": "Games",
+      "language": "Language",
+      "lifestyle_description": "Tools for a better life.",
+      "toast": {
+        "language_changed": "Language changed to English",
+        "dark_mode": "Switched to Dark Mode",
+        "light_mode": "Switched to Light Mode"
+      }
+    },
+    "it_tools": {
+      "title": "IT Tools",
+      "description": "Essential tools for developers and IT professionals.",
+      "json_tools": {
+        "name": "JSON Tools",
+        "description": "Format, minify, and validate JSON data."
+      },
+      "text_diff": {
+        "name": "Text Diff",
+        "description": "Compare text differences side by side."
+      }
+    },
+    "games": {
+      "description": "Play fun games directly in your browser.",
+      "2048": {
+        "name": "2048",
+        "description": "Join the numbers and get to the 2048 tile!",
+        "title": "2048",
+        "subtitle": "Join the numbers to get 2048!",
+        "score": "Score",
+        "game_over": "Game Over!",
+        "final_score": "Final Score",
+        "enter_name": "Enter your name",
+        "save_score": "Save Score",
+        "try_again": "Try Again",
+        "new_game": "New Game",
+        "leaderboard": "Leaderboard",
+        "no_scores": "No scores yet. Be the first!"
+      }
+    },
    "home": {
      "title": "Case Converter",
      "description": "Accidentally left the caps lock on? Simply enter your text and choose the case you want to convert it to.",
@@ -184,38 +215,45 @@
       "sun": "Sun"
     }
   },
-   "pomodoro": {
-     "title": "Pomodoro Timer",
-     "description": "Focus timer with ambient background sounds.",
-     "modes": {
-       "pomodoro": "Pomodoro",
-       "short_break": "Short Break",
-       "long_break": "Long Break",
-       "custom": "Custom"
-     },
-     "sounds": {
-       "rain": "Rain",
-       "wind": "Wind",
-       "fire": "Fire",
-       "water": "Water"
-     },
-     "buttons": {
-       "start": "Start",
-       "pause": "Pause",
-       "reset": "Reset",
-       "settings": "Settings"
-     },
-     "settings": {
-       "title": "Timer Settings",
-       "pomodoro_duration": "Pomodoro Duration (minutes)",
-       "short_break_duration": "Short Break Duration (minutes)",
-       "long_break_duration": "Long Break Duration (minutes)",
-       "auto_start_breaks": "Auto-start breaks",
-       "auto_start_pomodoros": "Auto-start pomodoros",
-       "long_break_interval": "Long break after X pomodoros",
-       "save": "Save Settings"
-     }
-   },
+    "pomodoro": {
+      "title": "Pomodoro Timer",
+      "description": "Focus timer with ambient background sounds.",
+      "meta_title": "Pomodoro Timer - MyTools",
+      "meta_description": "Focus timer with ambient background sounds.",
+      "header_title": "Pomodoro Timer",
+      "header_description": "Stay focused and productive.",
+      "custom_minutes_label": "Minutes:",
+      "background_sound_title": "Background Sound",
+      "background_sound_description": "Play ambient noise",
+      "modes": {
+        "pomodoro": "Pomodoro",
+        "short_break": "Short Break",
+        "long_break": "Long Break",
+        "custom": "Custom"
+      },
+      "sounds": {
+        "rain": "Rain",
+        "wind": "Wind",
+        "fire": "Fire",
+        "water": "Water"
+      },
+      "buttons": {
+        "start": "Start",
+        "pause": "Pause",
+        "reset": "Reset",
+        "settings": "Settings"
+      },
+      "settings": {
+        "title": "Timer Settings",
+        "pomodoro_duration": "Pomodoro Duration (minutes)",
+        "short_break_duration": "Short Break Duration (minutes)",
+        "long_break_duration": "Long Break Duration (minutes)",
+        "auto_start_breaks": "Auto-start breaks",
+        "auto_start_pomodoros": "Auto-start pomodoros",
+        "long_break_interval": "Long break after X pomodoros",
+        "save": "Save Settings"
+      }
+    },
   "text_diff": {
     "title": "Text Diff",
     "description": "Compare two texts and see the differences between them.",

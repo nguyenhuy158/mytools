@@ -24,7 +24,7 @@ export default function LifestyleHome() {
             {t("nav.lifestyle")}
           </h1>
           <p className="text-slate-500 dark:text-gray-400 text-lg">
-            Tools for a better life.
+            {t("nav.lifestyle_description")}
           </p>
         </header>
 

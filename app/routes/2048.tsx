@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Form, useLoaderData, useSubmit, useNavigation } from "react-router";
 import { Trophy, RefreshCcw, Save } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { LoaderFunctionArgs, ActionFunctionArgs } from "react-router";
 
 interface Score {
@@ -137,6 +138,7 @@ export default function Game2048() {
   const { scores } = useLoaderData() as { scores: Score[] };
   const submit = useSubmit();
   const navigation = useNavigation();
+  const { t } = useTranslation();
   
   const [grid, setGrid] = useState<number[]>(Array(16).fill(0));
   const [score, setScore] = useState(0);
@@ -215,48 +217,48 @@ export default function Game2048() {
     <div className="flex flex-col lg:flex-row gap-8 items-start justify-center">
       <div className="flex-1 max-w-md w-full mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-4xl font-bold text-gray-800 dark:text-white">2048</h1>
-            <p className="text-gray-600 dark:text-gray-400">Join the numbers to get 2048!</p>
-          </div>
-          <div className="bg-gray-800 text-white p-3 rounded-lg text-center min-w-[100px]">
-            <div className="text-xs uppercase font-bold text-gray-400">Score</div>
+           <div>
+             <h1 className="text-4xl font-bold text-gray-800 dark:text-white">{t("games.2048.title")}</h1>
+             <p className="text-gray-600 dark:text-gray-400">{t("games.2048.subtitle")}</p>
+           </div>
+           <div className="bg-gray-800 text-white p-3 rounded-lg text-center min-w-[100px]">
+             <div className="text-xs uppercase font-bold text-gray-400">{t("games.2048.score")}</div>
             <div className="text-xl font-bold">{score}</div>
           </div>
         </div>
 
         <div className="relative bg-gray-300 dark:bg-gray-700 p-4 rounded-xl shadow-lg touch-none">
           {gameOver && (
-            <div className="absolute inset-0 bg-white/80 dark:bg-black/80 z-10 rounded-xl flex flex-col items-center justify-center p-6 text-center backdrop-blur-sm">
-              <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-4">Game Over!</h2>
-              <p className="text-lg mb-6 text-gray-600 dark:text-gray-300">Final Score: {score}</p>
+             <div className="absolute inset-0 bg-white/80 dark:bg-black/80 z-10 rounded-xl flex flex-col items-center justify-center p-6 text-center backdrop-blur-sm">
+               <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-4">{t("games.2048.game_over")}</h2>
+               <p className="text-lg mb-6 text-gray-600 dark:text-gray-300">{t("games.2048.final_score")}: {score}</p>
               
               <Form method="post" onSubmit={saveScore} className="w-full space-y-4 mb-6">
-                <input
-                  type="text"
-                  name="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter your name"
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                  required
-                />
+                 <input
+                   type="text"
+                   name="name"
+                   value={name}
+                   onChange={(e) => setName(e.target.value)}
+                   placeholder={t("games.2048.enter_name")}
+                   className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                   required
+                 />
                 <input type="hidden" name="score" value={score} />
-                <button
-                  type="submit"
-                  disabled={navigation.state === "submitting"}
-                  className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg font-medium transition-colors"
-                >
-                  <Save className="w-4 h-4" /> Save Score
-                </button>
+                 <button
+                   type="submit"
+                   disabled={navigation.state === "submitting"}
+                   className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg font-medium transition-colors"
+                 >
+                   <Save className="w-4 h-4" /> {t("games.2048.save_score")}
+                 </button>
               </Form>
 
-              <button
-                onClick={initGame}
-                className="flex items-center gap-2 bg-gray-800 hover:bg-gray-900 text-white py-2 px-6 rounded-lg font-medium transition-colors"
-              >
-                <RefreshCcw className="w-4 h-4" /> Try Again
-              </button>
+               <button
+                 onClick={initGame}
+                 className="flex items-center gap-2 bg-gray-800 hover:bg-gray-900 text-white py-2 px-6 rounded-lg font-medium transition-colors"
+               >
+                 <RefreshCcw className="w-4 h-4" /> {t("games.2048.try_again")}
+               </button>
             </div>
           )}
 
@@ -275,25 +277,25 @@ export default function Game2048() {
         </div>
         
         <div className="mt-6 flex justify-center">
-            <button
-                onClick={initGame}
-                className="flex items-center gap-2 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 py-2 px-4 rounded-lg font-medium transition-colors"
-            >
-                <RefreshCcw className="w-4 h-4" /> New Game
-            </button>
+             <button
+                 onClick={initGame}
+                 className="flex items-center gap-2 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 py-2 px-4 rounded-lg font-medium transition-colors"
+             >
+                 <RefreshCcw className="w-4 h-4" /> {t("games.2048.new_game")}
+             </button>
         </div>
       </div>
 
       <div className="w-full lg:w-80 bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-800">
-        <div className="flex items-center gap-2 mb-6">
-          <Trophy className="w-5 h-5 text-yellow-500" />
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white">Leaderboard</h2>
-        </div>
+         <div className="flex items-center gap-2 mb-6">
+           <Trophy className="w-5 h-5 text-yellow-500" />
+           <h2 className="text-xl font-bold text-gray-900 dark:text-white">{t("games.2048.leaderboard")}</h2>
+         </div>
         
         <div className="space-y-4">
-          {scores.length === 0 ? (
-            <p className="text-center text-gray-500 py-4">No scores yet. Be the first!</p>
-          ) : (
+           {scores.length === 0 ? (
+             <p className="text-center text-gray-500 py-4">{t("games.2048.no_scores")}</p>
+           ) : (
             scores.map((s, idx) => (
               <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
                 <div className="flex items-center gap-3">

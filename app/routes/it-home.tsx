@@ -1,19 +1,22 @@
 import { Link } from "react-router";
 import { FileJson, FileDiff } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function ITToolsLanding() {
+  const { t } = useTranslation();
+
   const tools = [
     {
-      name: "JSON Tools",
-      description: "Format, minify, and validate JSON data.",
+      name: t("it_tools.json_tools.name"),
+      description: t("it_tools.json_tools.description"),
       href: "/it/json-tools",
       icon: FileJson,
       color: "text-blue-600 dark:text-blue-400",
       bgColor: "bg-blue-50 dark:bg-blue-900/20",
     },
     {
-      name: "Text Diff",
-      description: "Compare text differences side by side.",
+      name: t("it_tools.text_diff.name"),
+      description: t("it_tools.text_diff.description"),
       href: "/it/text-diff",
       icon: FileDiff,
       color: "text-green-600 dark:text-green-400",
@@ -26,10 +29,10 @@ export default function ITToolsLanding() {
       <div className="max-w-7xl mx-auto space-y-8">
         <header className="space-y-2 text-center">
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-            IT Tools
+            {t("it_tools.title")}
           </h1>
           <p className="text-slate-500 dark:text-gray-400 text-lg">
-            Essential tools for developers and IT professionals.
+            {t("it_tools.description")}
           </p>
         </header>
 

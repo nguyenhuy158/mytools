@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import type { MetaArgs } from "react-router";
 import { useTranslation } from "react-i18next";
 import { Play, Pause, RotateCcw, Volume2, VolumeX, Music, CloudRain, Wind, Flame, Waves, Settings } from "lucide-react";
@@ -11,44 +11,64 @@ export function meta({}: MetaArgs) {
 }
 
 // Sound assets configuration
-const SOUND_CONFIG = {
+const SOUND_CONFIG_BASE = {
   rain: {
-    label: "Rain",
     icon: CloudRain,
     url: "https://actions.google.com/sounds/v1/weather/rain_heavy_loud.ogg"
   },
   wind: {
-    label: "Wind",
     icon: Wind,
     url: "https://actions.google.com/sounds/v1/weather/wind.ogg"
   },
   fire: {
-    label: "Fire",
     icon: Flame,
     url: "https://actions.google.com/sounds/v1/ambiences/fire.ogg"
   },
   water: {
-    label: "Water",
     icon: Waves,
     url: "https://actions.google.com/sounds/v1/water/water_leak.ogg"
   },
 };
 
 type TimerMode = "pomodoro" | "shortBreak" | "longBreak" | "custom";
-type SoundType = keyof typeof SOUND_CONFIG;
-
-const MODES: Record<TimerMode, { label: string; minutes: number }> = {
-  pomodoro: { label: "Pomodoro", minutes: 25 },
-  shortBreak: { label: "Short Break", minutes: 5 },
-  longBreak: { label: "Long Break", minutes: 15 },
-  custom: { label: "Custom", minutes: 30 }, // Default custom time
-};
+type SoundType = keyof typeof SOUND_CONFIG_BASE;
 
 // Alarm Sound
 const ALARM_URL = "https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg";
 
 export default function Pomodoro() {
   const { t } = useTranslation();
+
+  const MODES = useMemo(() => ({
+    pomodoro: { label: t("pomodoro.modes.pomodoro"), minutes: 25 },
+    shortBreak: { label: t("pomodoro.modes.short_break"), minutes: 5 },
+    longBreak: { label: t("pomodoro.modes.long_break"), minutes: 15 },
+    custom: { label: t("pomodoro.modes.custom"), minutes: 30 }, // Default custom time
+  }), [t]);
+
+  const SOUND_CONFIG = useMemo(() => ({
+    rain: {
+      label: t("pomodoro.sounds.rain"),
+      icon: CloudRain,
+      url: "https://actions.google.com/sounds/v1/weather/rain_heavy_loud.ogg"
+    },
+    wind: {
+      label: t("pomodoro.sounds.wind"),
+      icon: Wind,
+      url: "https://actions.google.com/sounds/v1/weather/wind.ogg"
+    },
+    fire: {
+      label: t("pomodoro.sounds.fire"),
+      icon: Flame,
+      url: "https://actions.google.com/sounds/v1/ambiences/fire.ogg"
+    },
+    water: {
+      label: t("pomodoro.sounds.water"),
+      icon: Waves,
+      url: "https://actions.google.com/sounds/v1/water/water_leak.ogg"
+    },
+  }), [t]);
+
   // Timer State
   const [mode, setMode] = useState<TimerMode>("pomodoro");
   const [customMinutes, setCustomMinutes] = useState(30);
@@ -190,8 +210,8 @@ export default function Pomodoro() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-slate-900 dark:text-gray-100 p-4 md:p-8 font-sans flex flex-col items-center justify-center">
       <div className="max-w-md w-full space-y-8">
         <header className="text-center space-y-2">
-          <h1 className="text-3xl font-extrabold tracking-tight">Pomodoro Timer</h1>
-          <p className="text-slate-500 dark:text-gray-400">Stay focused and productive.</p>
+          <h1 className="text-3xl font-extrabold tracking-tight">{t("pomodoro.header_title")}</h1>
+          <p className="text-slate-500 dark:text-gray-400">{t("pomodoro.header_description")}</p>
         </header>
 
         <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 p-8 space-y-8 text-center">
@@ -216,7 +236,7 @@ export default function Pomodoro() {
           {/* Custom Time Input (Only visible when Custom mode is selected) */}
           {mode === 'custom' && (
             <div className="flex items-center justify-center gap-2 animate-in fade-in slide-in-from-top-1">
-              <span className="text-sm text-slate-500 dark:text-gray-400">Minutes:</span>
+              <span className="text-sm text-slate-500 dark:text-gray-400">{t("pomodoro.custom_minutes_label")}</span>
               <input
                 type="number"
                 min="1"
@@ -244,7 +264,7 @@ export default function Pomodoro() {
               }`}
             >
               {isRunning ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6" />}
-              {isRunning ? "Pause" : "Start"}
+              {isRunning ? t("pomodoro.buttons.pause") : t("pomodoro.buttons.start")}
             </button>
             <button
               onClick={resetTimer}
@@ -263,10 +283,10 @@ export default function Pomodoro() {
               <div className={`p-2 rounded-lg ${isPlayingSound ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400' : 'bg-gray-100 text-gray-400 dark:bg-gray-800'}`}>
                 <Music className="w-5 h-5" />
               </div>
-              <div>
-                <h3 className="font-semibold text-slate-900 dark:text-white">Background Sound</h3>
-                <p className="text-xs text-slate-500 dark:text-gray-400">Play ambient noise</p>
-              </div>
+               <div>
+                 <h3 className="font-semibold text-slate-900 dark:text-white">{t("pomodoro.background_sound_title")}</h3>
+                 <p className="text-xs text-slate-500 dark:text-gray-400">{t("pomodoro.background_sound_description")}</p>
+               </div>
             </div>
             <button
               onClick={toggleSound}

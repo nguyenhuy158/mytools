@@ -1,24 +1,55 @@
 {
   "app_name": "Ứng dụng của tôi",
-   "nav": {
-     "home": "Trang chủ",
-     "features": "Tính năng",
-     "json_tools": "JSON",
-     "text_diff": "Văn bản",
-     "pomodoro": "Pomodoro",
-     "calendar": "Lịch",
-     "roadmap": "Lộ trình",
-     "about": "Giới thiệu",
-     "it_tools": "Công cụ IT",
-     "lifestyle": "Phong cách sống",
-     "games": "Trò chơi",
-     "language": "Ngôn ngữ",
-     "toast": {
-       "language_changed": "Đã chuyển sang Tiếng Việt",
-       "dark_mode": "Đã chuyển sang chế độ Tối",
-       "light_mode": "Đã chuyển sang chế độ Sáng"
-     }
-   },
+    "nav": {
+      "home": "Trang chủ",
+      "features": "Tính năng",
+      "json_tools": "JSON",
+      "text_diff": "Văn bản",
+      "pomodoro": "Pomodoro",
+      "calendar": "Lịch",
+      "roadmap": "Lộ trình",
+      "about": "Giới thiệu",
+      "it_tools": "Công cụ IT",
+      "lifestyle": "Phong cách sống",
+      "games": "Trò chơi",
+      "language": "Ngôn ngữ",
+      "lifestyle_description": "Công cụ cho một cuộc sống tốt hơn.",
+      "toast": {
+        "language_changed": "Đã chuyển sang Tiếng Việt",
+        "dark_mode": "Đã chuyển sang chế độ Tối",
+        "light_mode": "Đã chuyển sang chế độ Sáng"
+      }
+    },
+    "it_tools": {
+      "title": "Công cụ IT",
+      "description": "Công cụ thiết yếu cho nhà phát triển và chuyên gia IT.",
+      "json_tools": {
+        "name": "Công cụ JSON",
+        "description": "Định dạng, tối ưu hóa và kiểm tra dữ liệu JSON."
+      },
+      "text_diff": {
+        "name": "So sánh văn bản",
+        "description": "So sánh sự khác biệt văn bản song song."
+      }
+    },
+    "games": {
+      "description": "Chơi trò chơi vui nhộn trực tiếp trong trình duyệt của bạn.",
+      "2048": {
+        "name": "2048",
+        "description": "Ghép các số và đạt đến ô 2048!",
+        "title": "2048",
+        "subtitle": "Ghép các số để đạt 2048!",
+        "score": "Điểm",
+        "game_over": "Kết thúc!",
+        "final_score": "Điểm cuối cùng",
+        "enter_name": "Nhập tên của bạn",
+        "save_score": "Lưu điểm",
+        "try_again": "Thử lại",
+        "new_game": "Trò chơi mới",
+        "leaderboard": "Bảng xếp hạng",
+        "no_scores": "Chưa có điểm nào. Hãy là người đầu tiên!"
+      }
+    },
    "home": {
      "title": "Chuyển Đổi Ký Tự",
      "description": "Bạn lỡ bật Caps Lock? Chỉ cần nhập văn bản và chọn kiểu chữ bạn muốn chuyển đổi.",
@@ -184,38 +215,45 @@
       "sun": "CN"
     }
   },
-   "pomodoro": {
-     "title": "Đồng Hồ Pomodoro",
-     "description": "Đồng hồ tập trung với âm thanh nền.",
-     "modes": {
-       "pomodoro": "Pomodoro",
-       "short_break": "Nghỉ ngắn",
-       "long_break": "Nghỉ dài",
-       "custom": "Tùy chỉnh"
-     },
-     "sounds": {
-       "rain": "Mưa",
-       "wind": "Gió",
-       "fire": "Lửa",
-       "water": "Nước"
-     },
-     "buttons": {
-       "start": "Bắt đầu",
-       "pause": "Tạm dừng",
-       "reset": "Đặt lại",
-       "settings": "Cài đặt"
-     },
-     "settings": {
-       "title": "Cài đặt đồng hồ",
-       "pomodoro_duration": "Thời gian Pomodoro (phút)",
-       "short_break_duration": "Thời gian nghỉ ngắn (phút)",
-       "long_break_duration": "Thời gian nghỉ dài (phút)",
-       "auto_start_breaks": "Tự động bắt đầu nghỉ",
-       "auto_start_pomodoros": "Tự động bắt đầu pomodoro",
-       "long_break_interval": "Nghỉ dài sau X pomodoro",
-       "save": "Lưu cài đặt"
-     }
-   },
+    "pomodoro": {
+      "title": "Đồng Hồ Pomodoro",
+      "description": "Đồng hồ tập trung với âm thanh nền.",
+      "meta_title": "Đồng Hồ Pomodoro - MyTools",
+      "meta_description": "Đồng hồ tập trung với âm thanh nền.",
+      "header_title": "Đồng Hồ Pomodoro",
+      "header_description": "Giữ tập trung và năng suất.",
+      "custom_minutes_label": "Phút:",
+      "background_sound_title": "Âm Thanh Nền",
+      "background_sound_description": "Phát âm thanh môi trường",
+      "modes": {
+        "pomodoro": "Pomodoro",
+        "short_break": "Nghỉ ngắn",
+        "long_break": "Nghỉ dài",
+        "custom": "Tùy chỉnh"
+      },
+      "sounds": {
+        "rain": "Mưa",
+        "wind": "Gió",
+        "fire": "Lửa",
+        "water": "Nước"
+      },
+      "buttons": {
+        "start": "Bắt đầu",
+        "pause": "Tạm dừng",
+        "reset": "Đặt lại",
+        "settings": "Cài đặt"
+      },
+      "settings": {
+        "title": "Cài đặt đồng hồ",
+        "pomodoro_duration": "Thời gian Pomodoro (phút)",
+        "short_break_duration": "Thời gian nghỉ ngắn (phút)",
+        "long_break_duration": "Thời gian nghỉ dài (phút)",
+        "auto_start_breaks": "Tự động bắt đầu nghỉ",
+        "auto_start_pomodoros": "Tự động bắt đầu pomodoro",
+        "long_break_interval": "Nghỉ dài sau X pomodoro",
+        "save": "Lưu cài đặt"
+      }
+    },
   "text_diff": {
     "title": "So sánh văn bản",
     "description": "So sánh hai văn bản và xem sự khác biệt giữa chúng.",
