@@ -13,4 +13,8 @@ export default [
   ]),
   route("calendar", "routes/calendar.tsx"),
   route("about", "routes/about.tsx"),
+  route("games", "routes/games.tsx", [
+    index("routes/games-home.tsx"),
+    route("2048", "routes/2048.tsx"),
+  ]),
 ] satisfies RouteConfig;

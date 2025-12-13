@@ -13,6 +13,13 @@
 	"observability": {
 		"enabled": true
 	},
+  "kv_namespaces": [
+    {
+      "binding": "KV_GAMES",
+      "id": "YOUR_KV_ID",
+      "preview_id": "YOUR_PREVIEW_KV_ID"
+    }
+  ],
 	"routes": [
 		{
 			"pattern": "huycode.click",
