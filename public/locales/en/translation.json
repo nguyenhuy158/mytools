@@ -35,6 +35,34 @@
       "image_tools": {
         "name": "Image Tools",
         "description": "Upload, crop, pick colors, and manipulate images directly in your browser."
+      },
+      "api_tester": {
+        "name": "API Tester",
+        "description": "Test HTTP requests and view responses."
+      }
+    },
+    "api_tester": {
+      "title": "API Tester",
+      "description": "Test API endpoints with a simple, client-side HTTP client.",
+      "labels": {
+        "headers": "Headers",
+        "body": "Body",
+        "response": "Response",
+        "response_headers": "Response Headers",
+        "response_body": "Response Body"
+      },
+      "actions": {
+        "send": "Send",
+        "copy": "Copy",
+        "clear_all": "Clear All"
+      },
+      "toast": {
+        "url_required": "Please enter a URL",
+        "history_cleared": "History cleared",
+        "copied": "Copied to clipboard"
+      },
+      "history": {
+        "title": "Request History"
       }
     },
     "image_tools": {

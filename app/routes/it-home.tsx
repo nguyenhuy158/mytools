@@ -1,4 +1,4 @@
-import { FileJson, FileDiff, Image } from "lucide-react";
+import { FileJson, FileDiff, Image, Network } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PageHeader } from "../components/PageHeader";
 import { ToolGrid } from "../components/ToolGrid";
@@ -28,6 +28,13 @@ export default function ITToolsLanding() {
       href: "/it/image-tools",
       icon: Image,
       color: "bg-purple-600",
+    },
+    {
+      name: t("it_tools.api_tester.name"),
+      description: t("it_tools.api_tester.description"),
+      href: "/it/api-tester",
+      icon: Network,
+      color: "bg-orange-600",
     },
   ];
 

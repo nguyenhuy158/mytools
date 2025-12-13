@@ -7,6 +7,7 @@ export default [
     route("json-tools", "routes/json-tools.tsx"),
     route("text-diff", "routes/text-diff.tsx"),
     route("image-tools", "routes/it/image-tools.tsx"),
+    route("api-tester", "routes/it/api-tester.tsx"),
   ]),
   route("lifestyle", "routes/lifestyle.tsx", [
     index("routes/lifestyle-home.tsx"),

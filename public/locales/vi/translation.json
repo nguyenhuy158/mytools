@@ -35,6 +35,34 @@
       "image_tools": {
         "name": "Công cụ hình ảnh",
         "description": "Tải lên, cắt, lấy mã màu và chỉnh sửa hình ảnh trực tiếp trên trình duyệt."
+      },
+      "api_tester": {
+        "name": "API Tester",
+        "description": "Gửi yêu cầu HTTP và xem phản hồi."
+      }
+    },
+    "api_tester": {
+      "title": "API Tester",
+      "description": "Kiểm thử API với trình gửi yêu cầu HTTP đơn giản.",
+      "labels": {
+        "headers": "Headers",
+        "body": "Nội dung (Body)",
+        "response": "Phản hồi",
+        "response_headers": "Headers phản hồi",
+        "response_body": "Nội dung phản hồi"
+      },
+      "actions": {
+        "send": "Gửi",
+        "copy": "Sao chép",
+        "clear_all": "Xóa tất cả"
+      },
+      "toast": {
+        "url_required": "Vui lòng nhập URL",
+        "history_cleared": "Đã xóa lịch sử",
+        "copied": "Đã sao chép vào clipboard"
+      },
+      "history": {
+        "title": "Lịch sử yêu cầu"
       }
     },
     "image_tools": {
