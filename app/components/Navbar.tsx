@@ -59,7 +59,6 @@ export function Navbar() {
     { name: t("nav.pomodoro"), href: "/pomodoro", icon: Timer },
     { name: t("nav.calendar"), href: "/calendar", icon: Calendar },
     { name: t("nav.roadmap"), href: "/roadmap", icon: Map },
-    { name: t("nav.features"), href: "/features", icon: Settings },
     { name: t("nav.about"), href: "/about", icon: Info },
   ];
 
