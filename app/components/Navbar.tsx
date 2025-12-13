@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Menu, X, Home, Settings, Info, Sun, Moon, CaseUpper, FileJson, Calendar, FileDiff, Timer, Map, Code, Coffee, Gamepad2 } from "lucide-react";
+import { Menu, X, Home, Settings, Info, Sun, Moon, CaseUpper, FileJson, Calendar, FileDiff, Timer, Map, Code, Coffee, Gamepad2, Activity, Bomb, LayoutGrid } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { TetCountdown } from "./TetCountdown";
@@ -77,6 +77,9 @@ export function Navbar() {
       icon: Gamepad2,
       children: [
         { name: "2048", href: "/games/2048", icon: Gamepad2 },
+        { name: "Snake", href: "/games/snake", icon: Activity },
+        { name: "Minesweeper", href: "/games/minesweeper", icon: Bomb },
+        { name: "Tetris", href: "/games/tetris", icon: LayoutGrid },
       ]
     },
     { name: t("nav.calendar"), href: "/calendar", icon: Calendar },

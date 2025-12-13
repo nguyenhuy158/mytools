@@ -57,6 +57,10 @@
       "minesweeper": {
         "name": "Minesweeper",
         "description": "Clear the minefield without detonating any bombs!"
+      },
+      "tetris": {
+        "name": "Tetris",
+        "description": "Classic block stacking game."
       }
     },
    "home": {

@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Gamepad2, Activity, Bomb } from "lucide-react";
+import { Gamepad2, Activity, Bomb, LayoutGrid } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 export default function GamesHome() {
@@ -26,6 +26,13 @@ export default function GamesHome() {
       href: "/games/minesweeper",
       icon: Bomb,
       color: "bg-red-500",
+    },
+    {
+      name: t("games.tetris.name"),
+      description: t("games.tetris.description"),
+      href: "/games/tetris",
+      icon: LayoutGrid,
+      color: "bg-blue-500",
     },
   ];
 

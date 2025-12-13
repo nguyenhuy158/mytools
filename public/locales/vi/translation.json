@@ -57,6 +57,10 @@
       "minesweeper": {
         "name": "Dò Mìn",
         "description": "Dọn sạch bãi mìn mà không kích nổ quả bom nào!"
+      },
+      "tetris": {
+        "name": "Xếp Gạch",
+        "description": "Trò chơi xếp gạch cổ điển."
       }
     },
    "home": {
