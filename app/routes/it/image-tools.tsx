@@ -4,6 +4,7 @@ import { Upload, Download, Copy, ClipboardPaste, Crop, Palette, Trash2, Image as
 import { toast } from "sonner";
 import { PageHeader } from "../../components/PageHeader";
 import { ButtonGroup } from "../../components/ButtonGroup";
+import { HistorySection } from "../../components/HistorySection";
 
 export function meta() {
   return [
@@ -19,6 +20,9 @@ export default function ImageTools() {
   const [image, setImage] = useState<string | null>(null);
   const [mode, setMode] = useState<ToolMode>("view");
   const [pickedColor, setPickedColor] = useState<string | null>(null);
+  const [hoverColor, setHoverColor] = useState<string | null>(null);
+  const [colorHistory, setColorHistory] = useState<string[]>([]);
+  const [cursorPos, setCursorPos] = useState<{ x: number; y: number } | null>(null);
   
   // Selection state
   const [selection, setSelection] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
@@ -28,6 +32,42 @@ export default function ImageTools() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Load color history on mount
+  useEffect(() => {
+    const saved = localStorage.getItem("image-tools-color-history");
+    if (saved) {
+      try {
+        setColorHistory(JSON.parse(saved));
+      } catch (e) {
+        console.error("Failed to parse color history", e);
+      }
+    }
+  }, []);
+
+  const addToHistory = (color: string) => {
+    setColorHistory(prev => {
+      // Remove if exists to move to top
+      const filtered = prev.filter(c => c !== color);
+      const updated = [color, ...filtered].slice(0, 20); // Keep last 20
+      localStorage.setItem("image-tools-color-history", JSON.stringify(updated));
+      return updated;
+    });
+  };
+
+  const removeFromHistory = (index: number) => {
+    setColorHistory(prev => {
+      const updated = prev.filter((_, i) => i !== index);
+      localStorage.setItem("image-tools-color-history", JSON.stringify(updated));
+      return updated;
+    });
+  };
+
+  const clearHistory = () => {
+    setColorHistory([]);
+    localStorage.removeItem("image-tools-color-history");
+    toast.success(t("image_tools.toast.history_cleared"));
+  };
 
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -41,6 +81,7 @@ export default function ImageTools() {
         setImage(event.target?.result as string);
         setSelection(null);
         setPickedColor(null);
+        setHoverColor(null);
       };
       reader.readAsDataURL(file);
     }
@@ -92,6 +133,7 @@ export default function ImageTools() {
             setImage(event.target?.result as string);
             setSelection(null);
             setPickedColor(null);
+            setHoverColor(null);
             toast.success(t("image_tools.toast.pasted"));
           };
           reader.readAsDataURL(blob);
@@ -169,8 +211,22 @@ export default function ImageTools() {
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
+    const pos = getCanvasCoordinates(e);
+    setCursorPos({ x: e.clientX, y: e.clientY });
+
+    if (mode === "picker" && canvasRef.current) {
+        const ctx = canvasRef.current.getContext("2d");
+        if (ctx) {
+            // Get color at cursor for preview
+            const pixel = ctx.getImageData(pos.x, pos.y, 1, 1).data;
+            const hex = "#" + [pixel[0], pixel[1], pixel[2]].map(x => x.toString(16).padStart(2, "0")).join("");
+            setHoverColor(hex);
+        }
+    } else {
+        setHoverColor(null);
+    }
+
     if (mode === "crop" && isDragging && startPos) {
-      const pos = getCanvasCoordinates(e);
       const w = pos.x - startPos.x;
       const h = pos.y - startPos.y;
       
@@ -189,6 +245,13 @@ export default function ImageTools() {
     }
   };
 
+  const handleMouseLeave = () => {
+      setHoverColor(null);
+      if (mode === "crop") {
+          setIsDragging(false);
+      }
+  }
+
   const handleClick = (e: React.MouseEvent) => {
     if (mode === "picker" && canvasRef.current) {
       const pos = getCanvasCoordinates(e);
@@ -197,6 +260,7 @@ export default function ImageTools() {
         const pixel = ctx.getImageData(pos.x, pos.y, 1, 1).data;
         const hex = "#" + [pixel[0], pixel[1], pixel[2]].map(x => x.toString(16).padStart(2, "0")).join("");
         setPickedColor(hex);
+        addToHistory(hex);
         navigator.clipboard.writeText(hex);
         toast.success(t("image_tools.toast.color_copied", { hex }));
       }
@@ -207,6 +271,7 @@ export default function ImageTools() {
     setImage(null);
     setSelection(null);
     setPickedColor(null);
+    setHoverColor(null);
     setMode("view");
   };
 
@@ -277,7 +342,7 @@ export default function ImageTools() {
         </ButtonGroup>
 
         {/* Workspace */}
-        <div className="flex-1 flex flex-col lg:flex-row gap-6 min-h-0">
+        <div className="flex-1 flex flex-col gap-6 min-h-0">
           
           {/* Main Canvas Area */}
           <div 
@@ -287,10 +352,11 @@ export default function ImageTools() {
             {image ? (
               <canvas 
                 ref={canvasRef} 
-                className={`max-w-full max-h-[70vh] shadow-lg ${mode === "picker" ? "cursor-crosshair" : mode === "crop" ? "cursor-crosshair" : "cursor-default"}`}
+                className={`max-w-full max-h-[70vh] shadow-lg ${mode === "picker" ? "cursor-none" : mode === "crop" ? "cursor-crosshair" : "cursor-default"}`}
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseLeave}
                 onClick={handleClick}
               />
             ) : (
@@ -300,6 +366,20 @@ export default function ImageTools() {
               </div>
             )}
             
+            {/* Hover Color Preview - Follows Cursor */}
+            {hoverColor && mode === "picker" && cursorPos && (
+                <div 
+                    className="fixed pointer-events-none z-50 flex items-center gap-2 bg-white dark:bg-gray-900 px-3 py-1.5 rounded-full shadow-xl border border-gray-200 dark:border-gray-700"
+                    style={{ 
+                        left: cursorPos.x + 20, 
+                        top: cursorPos.y + 20,
+                    }}
+                >
+                    <div className="w-4 h-4 rounded-full border border-gray-300 dark:border-gray-600" style={{ backgroundColor: hoverColor }} />
+                    <span className="font-mono text-xs font-bold text-gray-900 dark:text-white">{hoverColor}</span>
+                </div>
+            )}
+
             {/* Color Picker Result Overlay */}
             {pickedColor && (
               <div className="absolute top-4 right-4 bg-white dark:bg-gray-800 p-2 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 flex items-center gap-2 animate-in fade-in zoom-in duration-200">
@@ -323,6 +403,24 @@ export default function ImageTools() {
                </div>
             )}
           </div>
+
+          <HistorySection
+            history={colorHistory}
+            onRestore={(color) => {
+                navigator.clipboard.writeText(color);
+                toast.success(t("image_tools.toast.color_copied", { hex: color }));
+            }}
+            onRemove={removeFromHistory}
+            onClear={clearHistory}
+            title={t("image_tools.color_history", "Color History")}
+            clearLabel={t("image_tools.actions.clear_all", "Clear All")}
+            renderItem={(color) => (
+                <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm" style={{ backgroundColor: color }} />
+                    <span className="font-mono text-sm font-medium text-gray-700 dark:text-gray-300">{color}</span>
+                </div>
+            )}
+          />
 
         </div>
       </div>
