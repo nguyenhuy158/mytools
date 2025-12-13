@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import type { MetaArgs } from "react-router";
 import { useTranslation } from "react-i18next";
-import { Play, Pause, RotateCcw, Volume2, VolumeX, Music, CloudRain, Wind, Flame, Waves, Settings } from "lucide-react";
+import { Play, Pause, RotateCcw, Volume2, VolumeX, Music, CloudRain, Wind, Flame, Waves, Settings, Minus, Plus } from "lucide-react";
 
 export function meta({}: MetaArgs) {
   return [
@@ -186,13 +186,21 @@ export default function Pomodoro() {
     }
   };
 
-  const handleCustomTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = parseInt(e.target.value);
-    if (!isNaN(val) && val > 0 && val <= 180) { // Limit to 3 hours
-      setCustomMinutes(val);
-      if (mode === 'custom' && !isRunning) {
-        setTimeLeft(val * 60);
-      }
+  const handleIncrement = () => {
+    if (customMinutes >= 180) return;
+    const newVal = customMinutes + 1;
+    setCustomMinutes(newVal);
+    if (mode === 'custom' && !isRunning) {
+      setTimeLeft(newVal * 60);
+    }
+  };
+
+  const handleDecrement = () => {
+    if (customMinutes <= 1) return;
+    const newVal = customMinutes - 1;
+    setCustomMinutes(newVal);
+    if (mode === 'custom' && !isRunning) {
+      setTimeLeft(newVal * 60);
     }
   };
 
@@ -237,14 +245,27 @@ export default function Pomodoro() {
           {mode === 'custom' && (
             <div className="flex items-center justify-center gap-2 animate-in fade-in slide-in-from-top-1">
               <span className="text-sm text-slate-500 dark:text-gray-400">{t("pomodoro.custom_minutes_label")}</span>
-              <input
-                type="number"
-                min="1"
-                max="180"
-                value={customMinutes}
-                onChange={handleCustomTimeChange}
-                className="w-20 px-3 py-1 text-center rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+              <div className="flex items-center gap-1 bg-gray-50 dark:bg-gray-800 rounded-lg p-1 border border-gray-200 dark:border-gray-700">
+                <button
+                  onClick={handleDecrement}
+                  disabled={customMinutes <= 1}
+                  className="p-1 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 text-slate-600 dark:text-gray-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  aria-label="Decrease time"
+                >
+                  <Minus className="w-4 h-4" />
+                </button>
+                <span className="w-12 text-center font-mono font-medium text-slate-900 dark:text-white">
+                  {customMinutes}
+                </span>
+                <button
+                  onClick={handleIncrement}
+                  disabled={customMinutes >= 180}
+                  className="p-1 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 text-slate-600 dark:text-gray-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  aria-label="Increase time"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           )}
 
