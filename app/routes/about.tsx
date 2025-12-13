@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { 
   Shield, Zap, Globe, 
   Check, Type, ArrowRightLeft, CaseSensitive, FileType, AlignLeft, Code, Braces, Copy, ClipboardPaste, Download, Upload, History, Trash2, Settings, MoveRight, FileDiff,
-  CheckCircle2, Circle, Hammer, Lightbulb, Construction
+  CheckCircle2, Hammer, Lightbulb, Construction
 } from "lucide-react";
 import type { Route } from "./+types/about";
 
@@ -42,6 +42,7 @@ export default function About() {
   const roadmapItems = [
     {
       status: "done",
+      phase: "Phase 1",
       title: "Core Tools",
       items: [
         { name: "JSON Formatter/Minifier", desc: "Format and validate JSON data", link: "/json-tools" },
@@ -53,6 +54,7 @@ export default function About() {
     },
     {
       status: "planned",
+      phase: "Phase 2",
       title: "Developer Tools (Sắp tới)",
       items: [
         { name: "QR Code Generator", desc: "Create QR codes for URLs and text" },
@@ -63,6 +65,7 @@ export default function About() {
     },
     {
       status: "idea",
+      phase: "Phase 3",
       title: "Utilities & Lifestyle (Ý tưởng)",
       items: [
         { name: "Markdown Preview", desc: "Live markdown editor and preview" },
@@ -75,19 +78,19 @@ export default function About() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "done": return <CheckCircle2 className="w-5 h-5 text-green-500" />;
-      case "planned": return <Hammer className="w-5 h-5 text-blue-500" />;
-      case "idea": return <Lightbulb className="w-5 h-5 text-yellow-500" />;
-      default: return <Circle className="w-5 h-5 text-gray-400" />;
+      case "done": return <CheckCircle2 className="w-6 h-6 text-white" />;
+      case "planned": return <Hammer className="w-6 h-6 text-white" />;
+      case "idea": return <Lightbulb className="w-6 h-6 text-white" />;
+      default: return <Construction className="w-6 h-6 text-white" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "done": return "border-green-200 bg-green-50 dark:bg-green-900/20 dark:border-green-800";
-      case "planned": return "border-blue-200 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-800";
-      case "idea": return "border-yellow-200 bg-yellow-50 dark:bg-yellow-900/20 dark:border-yellow-800";
-      default: return "border-gray-200 bg-gray-50";
+      case "done": return "bg-green-500 border-green-200";
+      case "planned": return "bg-blue-500 border-blue-200";
+      case "idea": return "bg-yellow-500 border-yellow-200";
+      default: return "bg-gray-500 border-gray-200";
     }
   };
 
@@ -171,8 +174,8 @@ export default function About() {
           </div>
         </section>
 
-        {/* Section 3: Roadmap */}
-        <section className="space-y-8">
+        {/* Section 3: Roadmap (Vertical Timeline) */}
+        <section className="space-y-16">
           <div className="text-center max-w-2xl mx-auto">
             <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">
               Roadmap
@@ -182,41 +185,76 @@ export default function About() {
             </p>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {roadmapItems.map((category, idx) => (
-              <div key={idx} className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden flex flex-col h-full">
-                <div className={`px-6 py-4 border-b ${getStatusColor(category.status)} flex items-center gap-2`}>
-                  {getStatusIcon(category.status)}
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white uppercase tracking-wider">
-                    {category.title}
-                  </h3>
-                </div>
-                <ul className="divide-y divide-gray-200 dark:divide-gray-800 flex-1">
-                  {category.items.map((item, itemIdx) => (
-                    <li key={itemIdx} className="p-6 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                      <div className="flex items-start">
-                        <div className="flex-1">
-                          <h4 className="text-base font-medium text-gray-900 dark:text-white flex items-center gap-2">
-                            {item.name}
-                            {category.status === 'done' && item.link && (
-                              <a href={item.link} className="text-xs font-normal text-blue-600 hover:text-blue-500 hover:underline">
-                                (Open)
-                              </a>
-                            )}
-                          </h4>
-                          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            {item.desc}
-                          </p>
-                        </div>
+          <div className="relative max-w-4xl mx-auto">
+             {/* Central Line */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gray-200 dark:bg-gray-800 rounded-full" />
+
+            <div className="space-y-16">
+              {roadmapItems.map((category, idx) => {
+                const isEven = idx % 2 === 0;
+                return (
+                  <div key={idx} className={`relative flex items-center ${isEven ? 'flex-row' : 'flex-row-reverse'}`}>
+                    
+                    {/* Content Box */}
+                    <div className="w-1/2 px-8">
+                       <div className={`text-right ${isEven ? 'text-right' : 'text-left'}`}>
+                          <div className={`inline-block mb-2 font-bold uppercase tracking-wider text-sm ${
+                              category.status === 'done' ? 'text-green-600 dark:text-green-400' :
+                              category.status === 'planned' ? 'text-blue-600 dark:text-blue-400' :
+                              'text-yellow-600 dark:text-yellow-400'
+                          }`}>
+                            {category.phase}
+                          </div>
+                          <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">{category.title}</h3>
+                          
+                          <div className={`bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-md border border-gray-200 dark:border-gray-800 relative z-10 ${isEven ? 'ml-auto' : 'mr-auto'}`}>
+                             {/* Arrow pointing to center */}
+                             <div className={`absolute top-8 w-4 h-4 bg-white dark:bg-gray-900 border-t border-r border-gray-200 dark:border-gray-800 transform rotate-45 ${isEven ? '-right-2 border-l-0 border-b-0' : '-left-2 border-t-0 border-r-0 border-l border-b'}`}></div>
+
+                             <ul className="space-y-3">
+                              {category.items.map((item, itemIdx) => (
+                                <li key={itemIdx} className="flex items-start gap-3">
+                                  <div className={`mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 ${
+                                    category.status === 'done' ? 'bg-green-500' :
+                                    category.status === 'planned' ? 'bg-blue-500' :
+                                    'bg-yellow-500'
+                                  }`} />
+                                  <div className={`flex-1 ${isEven ? 'text-right' : 'text-left'}`}>
+                                    <span className="font-medium text-slate-900 dark:text-white block">
+                                      {item.name}
+                                       {category.status === 'done' && item.link && (
+                                        <a href={item.link} className="inline-block ml-1 text-xs font-normal text-blue-600 hover:text-blue-500 hover:underline">
+                                          (Open)
+                                        </a>
+                                      )}
+                                    </span>
+                                    <span className="text-sm text-slate-500 dark:text-gray-400 block">{item.desc}</span>
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                       </div>
+                    </div>
+
+                    {/* Central Icon Hexagon */}
+                    <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center z-20">
+                      <div className={`w-16 h-16 ${getStatusColor(category.status)} rounded-2xl rotate-45 flex items-center justify-center shadow-lg border-4 border-white dark:border-gray-950`}>
+                         <div className="-rotate-45">
+                            {getStatusIcon(category.status)}
+                         </div>
                       </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+                    </div>
+
+                    {/* Empty Space for the other side */}
+                    <div className="w-1/2 px-8"></div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm p-8 border border-gray-200 dark:border-gray-800 text-center max-w-3xl mx-auto">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm p-8 border border-gray-200 dark:border-gray-800 text-center max-w-3xl mx-auto mt-16 relative z-10">
             <Construction className="w-12 h-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 dark:text-white">Bạn có ý tưởng mới?</h3>
             <p className="mt-2 text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
