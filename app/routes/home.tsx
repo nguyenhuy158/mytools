@@ -6,7 +6,7 @@ import type { Route } from "./+types/home";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Case Converter - Cloudflare" },
+    { title: "ToolHub - Cloudflare" },
     { name: "description", content: "Convert text case easily." },
   ];
 }
