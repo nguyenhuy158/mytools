@@ -122,6 +122,10 @@
       "tetris": {
         "name": "Tetris",
         "description": "Classic block stacking game."
+      },
+      "sudoku": {
+        "name": "Sudoku",
+        "description": "Classic number puzzle."
       }
     },
    "home": {

@@ -122,6 +122,10 @@
       "tetris": {
         "name": "Xếp Gạch",
         "description": "Trò chơi xếp gạch cổ điển."
+      },
+      "sudoku": {
+        "name": "Sudoku",
+        "description": "Trò chơi giải đố số cổ điển."
       }
     },
    "home": {

@@ -1,4 +1,4 @@
-import { Gamepad2, Activity, Bomb, LayoutGrid } from "lucide-react";
+import { Gamepad2, Activity, Bomb, LayoutGrid, Grid3x3 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PageHeader } from "../components/PageHeader";
 import { ToolGrid } from "../components/ToolGrid";
@@ -14,6 +14,13 @@ export default function GamesHome() {
       href: "/games/2048",
       icon: Gamepad2,
       color: "bg-yellow-500",
+    },
+    {
+      name: t("games.sudoku.name", "Sudoku"),
+      description: t("games.sudoku.description", "Classic number puzzle"),
+      href: "/games/sudoku",
+      icon: Grid3x3,
+      color: "bg-indigo-500",
     },
     {
       name: t("games.snake.name"),

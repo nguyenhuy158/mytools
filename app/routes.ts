@@ -21,5 +21,6 @@ export default [
     route("snake", "routes/snake.tsx"),
     route("minesweeper", "routes/minesweeper.tsx"),
     route("tetris", "routes/games/tetris.tsx"),
+    route("sudoku", "routes/games/sudoku.tsx"),
   ]),
 ] satisfies RouteConfig;
