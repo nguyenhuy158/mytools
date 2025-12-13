@@ -17,18 +17,28 @@ Keep this managed block so 'openspec update' can refresh the instructions.
 
 <!-- OPENSPEC:END -->
 
-# Build & Test
-- **Build**: `npm run build` (Builds for production)
-- **Type Check**: `npm run typecheck` (Runs TypeScript validation)
-- **Dev Server**: `npm run dev` (Starts HMR server)
-- **Tests**: No test runner configured. Verify changes manually or via `npm run build`.
+# ToolHub Agent Guidelines
 
-# Code Style Guidelines
-- **Stack**: React Router v7, Tailwind CSS v4, TypeScript.
-- **Formatting**: 2 spaces indent, double quotes for strings, semicolons required.
-- **Naming**: `PascalCase` for components/interfaces, `camelCase` for functions/variables.
-- **Imports**: Standard ES imports. Use relative paths for internal files (e.g., `./Button`).
-- **Styling**: **STRICTLY** use Tailwind CSS. No new CSS files. Mobile-first approach (`class="block md:flex"`).
-- **Dark Mode**: Mandatory. Default: `bg-white text-gray-900` / `dark:bg-gray-950 dark:text-gray-100`.
-- **Types**: Explicitly type props and event handlers (e.g., `React.MouseEvent`). Avoid `any`.
+**Project Overview:** ToolHub is a collection of essential online tools (JSON, Text Diff, Pomodoro, Games, etc.) built with React Router v7, Tailwind CSS v4, and TypeScript. Fully internationalized (English/Vietnamese) with slogan: "Your Hub for Essential Tools" / "Trung tâm công cụ thiết yếu của bạn".
+
+## Build & Test
+- **Build**: `npm run build` (Production build)
+- **Type Check**: `npm run typecheck` (TypeScript validation)
+- **Dev Server**: `npm run dev` (HMR development)
+- **Tests**: No test runner. Verify manually via build or browser testing. No single test commands available.
+
+## Code Style Guidelines
+- **Stack**: React Router v7, Tailwind CSS v4, TypeScript, i18next for localization.
+- **Formatting**: 2 spaces indent, double quotes, semicolons required.
+- **Naming**: PascalCase for components/interfaces, camelCase for functions/variables.
+- **Imports**: ES imports, relative paths for internals (e.g., `./Button`).
+- **Styling**: STRICTLY Tailwind CSS only. No new CSS files. Mobile-first (`block md:flex`). Dark mode mandatory (`bg-white dark:bg-gray-950`, `text-gray-900 dark:text-gray-100`).
+- **Types**: Explicit props/event handlers (e.g., `React.MouseEvent`). Avoid `any`.
 - **Localization**: Use `useTranslation` hook. Add keys to `public/locales/{en,vi}/translation.json`.
+- **Error Handling**: Use try/catch for async ops, toast notifications for user feedback.
+- **AI Guidelines**: Follow STYLE_GUIDE.md AI_GUIDELINES: Tailwind-only, dark mode compliance, mobile-first, simplicity (avoid arbitrary values).
+
+## Additional Rules
+- Always run `npm run typecheck` and `npm run build` after changes.
+- For new features, create OpenSpec proposals if significant.
+- Privacy-first: No server-side data transmission.
