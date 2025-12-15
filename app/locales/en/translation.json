@@ -83,8 +83,10 @@
         "download": "Download",
         "clear": "Clear",
         "apply_crop": "Apply Crop",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "clear_all": "Clear All"
       },
+      "color_history": "Color History",
       "placeholders": {
         "empty": "Upload an image or paste from clipboard to start"
       },
@@ -96,7 +98,8 @@
         "copied": "Image copied to clipboard",
         "copy_error": "Failed to copy to clipboard",
         "cropped": "Image cropped",
-        "color_copied": "Color copied: {{hex}}"
+        "color_copied": "Color copied: {{hex}}",
+        "history_cleared": "History cleared"
       }
     },
     "games": {
@@ -375,7 +378,13 @@
      "new_idea_description": "We always listen to contributions to develop more useful tools.",
      "open_link": "(Open)"
    },
-   "newsletter": {
+    "countdown": {
+      "day": "Days",
+      "hour": "Hours",
+      "minute": "Minutes",
+      "second": "Seconds"
+    },
+    "newsletter": {
      "title": "Subscribe to our Newsletter",
      "description": "Stay updated with the latest tools and features. No spam, unsubscribe anytime.",
      "placeholder": "Enter your email",

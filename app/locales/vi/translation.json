@@ -83,8 +83,10 @@
         "download": "Tải xuống",
         "clear": "Xóa",
         "apply_crop": "Áp dụng",
-        "cancel": "Hủy"
+        "cancel": "Hủy",
+        "clear_all": "Xóa tất cả"
       },
+      "color_history": "Lịch sử màu",
       "placeholders": {
         "empty": "Tải lên hình ảnh hoặc dán từ clipboard để bắt đầu"
       },
@@ -96,7 +98,8 @@
         "copied": "Đã sao chép hình ảnh vào clipboard",
         "copy_error": "Không thể sao chép vào clipboard",
         "cropped": "Đã cắt hình ảnh",
-        "color_copied": "Đã sao chép mã màu: {{hex}}"
+        "color_copied": "Đã sao chép mã màu: {{hex}}",
+        "history_cleared": "Đã xóa lịch sử"
       }
     },
     "games": {
@@ -375,7 +378,13 @@
      "new_idea_description": "Chúng tôi luôn lắng nghe ý kiến đóng góp để phát triển bộ công cụ hữu ích hơn.",
      "open_link": "(Mở)"
    },
-   "newsletter": {
+    "countdown": {
+      "day": "Ngày",
+      "hour": "Giờ",
+      "minute": "Phút",
+      "second": "Giây"
+    },
+    "newsletter": {
      "title": "Đăng ký nhận tin",
      "description": "Cập nhật các công cụ và tính năng mới nhất. Không spam, hủy đăng ký bất cứ lúc nào.",
      "placeholder": "Nhập email của bạn",

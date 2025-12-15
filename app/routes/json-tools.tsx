@@ -334,8 +334,8 @@ export default function JsonTools() {
           onRestore={handleRestoreHistory}
           onRemove={removeFromHistory}
           onClear={handleClearHistory}
-          title={t("history")}
-          clearLabel={t("clear_all")}
+          title={t("json_tools.history")}
+          clearLabel={t("json_tools.clear_all")}
           renderItem={(item) => (
             <p className="text-xs text-slate-600 dark:text-gray-300 line-clamp-3 font-mono break-all">
               {item.length > 150 ? item.substring(0, 150) + "..." : item}
