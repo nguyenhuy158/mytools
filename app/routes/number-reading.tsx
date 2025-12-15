@@ -14,14 +14,15 @@ export const meta: MetaFunction = () => {
 };
 
 export default function NumberReading() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [input, setInput] = useState("");
   
   // Clean input to get number string
   const cleanInput = input.replace(/[^0-9]/g, "");
   
-  // Format input for display (e.g. 1,234,567)
-  const displayInput = cleanInput ? parseInt(cleanInput).toLocaleString('en-US') : "";
+  // Format input for display based on locale
+  const locale = i18n.language === 'vi' ? 'vi-VN' : 'en-US';
+  const displayInput = cleanInput ? parseInt(cleanInput).toLocaleString(locale) : "";
   
   const englishText = cleanInput ? toEnglish(cleanInput) : "";
   const vietnameseText = cleanInput ? toVietnamese(cleanInput) : "";
