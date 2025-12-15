@@ -40,6 +40,10 @@
       "api_tester": {
         "name": "API Tester",
         "description": "Gửi yêu cầu HTTP và xem phản hồi."
+      },
+      "number_reading": {
+        "name": "Đọc Số",
+        "description": "Học cách đọc số lớn bằng tiếng Anh và tiếng Việt."
       }
     },
     "api_tester": {

@@ -40,6 +40,10 @@
       "api_tester": {
         "name": "API Tester",
         "description": "Test HTTP requests and view responses."
+      },
+      "number_reading": {
+        "name": "Number Reading",
+        "description": "Learn to read large numbers in English and Vietnamese."
       }
     },
     "api_tester": {

@@ -61,6 +61,7 @@ export function Navbar() {
        children: [
          { name: t("nav.json_tools"), href: "/it/json-tools", icon: FileJson },
          { name: t("nav.text_diff"), href: "/it/text-diff", icon: FileDiff },
+         { name: t("nav.number_reading"), href: "/it/number-reading", icon: Hash },
        ]
      },
     { 
@@ -69,7 +70,6 @@ export function Navbar() {
       icon: Coffee,
       children: [
         { name: t("nav.pomodoro"), href: "/lifestyle/pomodoro", icon: Timer },
-        { name: t("nav.number_reading"), href: "/lifestyle/number-reading", icon: Hash },
       ]
     },
     {

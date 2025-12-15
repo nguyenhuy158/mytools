@@ -8,11 +8,11 @@ export default [
     route("text-diff", "routes/text-diff.tsx"),
     route("image-tools", "routes/it/image-tools.tsx"),
     route("api-tester", "routes/it/api-tester.tsx"),
+    route("number-reading", "routes/it/number-reading.tsx"),
   ]),
   route("lifestyle", "routes/lifestyle.tsx", [
     index("routes/lifestyle-home.tsx"),
     route("pomodoro", "routes/pomodoro.tsx"),
-    route("number-reading", "routes/number-reading.tsx"),
   ]),
   route("calendar", "routes/calendar.tsx"),
   route("about", "routes/about.tsx"),
