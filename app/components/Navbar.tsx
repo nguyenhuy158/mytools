@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Menu, X, Home, Settings, Info, Sun, Moon, CaseUpper, FileJson, Calendar, FileDiff, Timer, Map, Code, Coffee, Gamepad2, Activity, Bomb, LayoutGrid, Grid3x3 } from "lucide-react";
+import { Menu, X, Home, Settings, Info, Sun, Moon, CaseUpper, FileJson, Calendar, FileDiff, Timer, Map, Code, Coffee, Gamepad2, Activity, Bomb, LayoutGrid, Grid3x3, Hash } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { TetCountdown } from "./TetCountdown";
@@ -69,6 +69,7 @@ export function Navbar() {
       icon: Coffee,
       children: [
         { name: t("nav.pomodoro"), href: "/lifestyle/pomodoro", icon: Timer },
+        { name: t("nav.number_reading"), href: "/lifestyle/number-reading", icon: Hash },
       ]
     },
     {

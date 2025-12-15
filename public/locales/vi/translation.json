@@ -12,6 +12,7 @@
       "about": "Giới thiệu",
       "it_tools": "Công cụ IT",
       "lifestyle": "Phong cách sống",
+      "number_reading": "Đọc Số",
       "games": "Trò chơi",
       "language": "Ngôn ngữ",
       "lifestyle_description": "Công cụ cho một cuộc sống tốt hơn.",
@@ -331,6 +332,12 @@
         "long_break_interval": "Nghỉ dài sau X pomodoro",
         "save": "Lưu cài đặt"
       }
+    },
+    "number_reading": {
+      "title": "Đọc Số",
+      "description": "Học cách đọc số lớn bằng tiếng Anh và tiếng Việt.",
+      "input_label": "Nhập số",
+      "toast_copied": "Đã sao chép vào clipboard"
     },
   "text_diff": {
     "title": "So sánh văn bản",

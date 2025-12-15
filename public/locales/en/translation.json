@@ -12,6 +12,7 @@
       "about": "About",
       "it_tools": "IT Tools",
       "lifestyle": "Lifestyle",
+      "number_reading": "Number Reading",
       "games": "Games",
       "language": "Language",
       "lifestyle_description": "Tools for a better life.",
@@ -331,6 +332,12 @@
         "long_break_interval": "Long break after X pomodoros",
         "save": "Save Settings"
       }
+    },
+    "number_reading": {
+      "title": "Number Reading",
+      "description": "Learn to read large numbers in English and Vietnamese.",
+      "input_label": "Enter a number",
+      "toast_copied": "Copied to clipboard"
     },
   "text_diff": {
     "title": "Text Diff",
