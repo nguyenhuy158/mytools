@@ -44,6 +44,10 @@
       "number_reading": {
         "name": "Number Reading",
         "description": "Learn to read large numbers in English and Vietnamese."
+      },
+      "odoo_inspector": {
+        "name": "Odoo Field Inspector",
+        "description": "Inspect Odoo model fields via JSON-RPC."
       }
     },
     "api_tester": {
@@ -344,8 +348,38 @@
       "title": "Number Reading",
       "description": "Learn to read large numbers in English and Vietnamese.",
       "input_label": "Enter a number",
-      "toast_copied": "Copied to clipboard"
+    "toast_copied": "Copied to clipboard"
+  },
+  "odoo_inspector": {
+    "title": "Odoo Field Inspector",
+    "description": "Inspect model fields and attributes from any Odoo instance.",
+    "labels": {
+      "url": "Odoo URL",
+      "db": "Database",
+      "username": "Username",
+      "password": "Password",
+      "model": "Model Name"
     },
+    "actions": {
+      "inspect": "Inspect"
+    },
+    "table": {
+      "name": "Field Name",
+      "label": "Label",
+      "type": "Type",
+      "required": "Req",
+      "readonly": "RO",
+      "store": "Store",
+      "help": "Help",
+      "selection": "Selection",
+      "relation": "Relation"
+    },
+    "error": {
+      "connect_failed": "Could not connect to Odoo",
+      "auth_failed": "Authentication failed",
+      "fetch_failed": "Failed to fetch fields"
+    }
+  },
   "text_diff": {
     "title": "Text Diff",
     "description": "Compare two texts and see the differences between them.",

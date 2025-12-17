@@ -1,4 +1,4 @@
-import { FileJson, FileDiff, Image, Network, Hash } from "lucide-react";
+import { FileJson, FileDiff, Image, Network, Hash, Database } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PageHeader } from "../components/PageHeader";
 import { ToolGrid } from "../components/ToolGrid";
@@ -42,6 +42,13 @@ export default function ITToolsLanding() {
       href: "/it/number-reading",
       icon: Hash,
       color: "bg-pink-600",
+    },
+    {
+      name: t("it_tools.odoo_inspector.name"),
+      description: t("it_tools.odoo_inspector.description"),
+      href: "/it/odoo-inspector",
+      icon: Database,
+      color: "bg-indigo-600",
     },
   ];
 

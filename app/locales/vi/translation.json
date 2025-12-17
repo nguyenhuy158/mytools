@@ -44,6 +44,10 @@
       "number_reading": {
         "name": "Đọc Số",
         "description": "Học cách đọc số lớn bằng tiếng Anh và tiếng Việt."
+      },
+      "odoo_inspector": {
+        "name": "Odoo Field Inspector",
+        "description": "Kiểm tra các trường của model Odoo qua JSON-RPC."
       }
     },
     "api_tester": {
@@ -344,8 +348,38 @@
       "title": "Đọc Số",
       "description": "Học cách đọc số lớn bằng tiếng Anh và tiếng Việt.",
       "input_label": "Nhập số",
-      "toast_copied": "Đã sao chép vào clipboard"
+    "toast_copied": "Đã sao chép vào clipboard"
+  },
+  "odoo_inspector": {
+    "title": "Odoo Field Inspector",
+    "description": "Kiểm tra các trường và thuộc tính từ bất kỳ Odoo instance nào.",
+    "labels": {
+      "url": "Odoo URL",
+      "db": "Cơ sở dữ liệu",
+      "username": "Tên đăng nhập",
+      "password": "Mật khẩu",
+      "model": "Tên Model"
     },
+    "actions": {
+      "inspect": "Kiểm tra"
+    },
+    "table": {
+      "name": "Tên trường",
+      "label": "Nhãn",
+      "type": "Kiểu",
+      "required": "Y/C",
+      "readonly": "Đọc",
+      "store": "Lưu",
+      "help": "Trợ giúp",
+      "selection": "Selection",
+      "relation": "Quan hệ"
+    },
+    "error": {
+      "connect_failed": "Không thể kết nối tới Odoo",
+      "auth_failed": "Xác thực thất bại",
+      "fetch_failed": "Không thể lấy thông tin trường"
+    }
+  },
   "text_diff": {
     "title": "So sánh văn bản",
     "description": "So sánh hai văn bản và xem sự khác biệt giữa chúng.",
