@@ -1,15 +1,21 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { safeJsonParse, safeJsonStringify } from "./storage";
 
 export function useLocalStorageHistory<T>(key: string, initialHistory: T[] = []) {
   const [history, setHistoryState] = useState<T[]>(initialHistory);
+  
+  // Use a ref to hold the initialHistory to avoid dependency cycles if it's unstable
+  const initialHistoryRef = useRef(initialHistory);
 
   useEffect(() => {
     const saved = localStorage.getItem(key);
     if (saved) {
-      setHistoryState(safeJsonParse(saved, initialHistory));
+      setHistoryState(safeJsonParse(saved, initialHistoryRef.current));
+    } else {
+      // If nothing in storage, ensure we are using the initialHistory
+      setHistoryState(initialHistoryRef.current);
     }
-  }, [key, initialHistory]);
+  }, [key]);
 
   const setHistory = useCallback((action: T[] | ((prev: T[]) => T[])) => {
     setHistoryState((prev) => {

@@ -1,14 +1,26 @@
+import { useState, useEffect } from "react";
 import { Form, useActionData, useNavigation } from "react-router";
 import { useTranslation } from "react-i18next";
 import { Database, Search, AlertCircle, Check, RotateCw } from "lucide-react";
 import { PageHeader } from "../../components/PageHeader";
 import { fetchOdooFields, type OdooField } from "../../utils/odoo";
+import { useLocalStorageHistory } from "../../utils/history";
+import { HistorySection } from "../../components/HistorySection";
 
 export function meta() {
   return [
     { title: "Odoo Field Inspector" },
     { name: "description", content: "Inspect Odoo model fields via JSON-RPC." },
   ];
+}
+
+interface ConnectionDetails {
+  url: string;
+  db: string;
+  username: string;
+  model: string;
+  // Intentionally excluding password
+  timestamp: number;
 }
 
 export async function action({ request }: { request: Request }) {
@@ -25,7 +37,11 @@ export async function action({ request }: { request: Request }) {
 
   try {
     const fields = await fetchOdooFields({ url, db, username, password, model });
-    return { fields };
+    // Return the successful connection details (minus password) so client can save to history
+    return { 
+      fields,
+      connection: { url, db, username, model }
+    };
   } catch (e) {
     return { error: (e as Error).message };
   }
@@ -33,13 +49,59 @@ export async function action({ request }: { request: Request }) {
 
 export default function OdooInspector() {
   const { t } = useTranslation();
-  const actionData = useActionData<{ fields?: Record<string, OdooField>; error?: string }>();
+  const actionData = useActionData<{ 
+    fields?: Record<string, OdooField>; 
+    error?: string;
+    connection?: Omit<ConnectionDetails, "timestamp">;
+  }>();
   const navigation = useNavigation();
   const isLoading = navigation.state === "submitting";
 
-  // Pre-fill some values if previously submitted (actionData doesn't persist inputs automatically in Remix unless we return them)
-  // For simplicity, we can let the browser handle autocomplete or just clear on refresh.
-  // Ideally we might want to controlled inputs to persist state if we want better UX, but uncontrolled is fine for now.
+  const { history, setHistory, clearHistory, removeFromHistory } = useLocalStorageHistory<ConnectionDetails>("odoo-inspector-history");
+
+  const [formState, setFormState] = useState({
+    url: "",
+    db: "",
+    username: "",
+    password: "",
+    model: ""
+  });
+
+  // Effect to save history upon successful action
+  useEffect(() => {
+    if (actionData?.connection && !actionData.error) {
+      const { url, db, username, model } = actionData.connection;
+      setHistory(prev => {
+        // Dedup: remove identical existing entry
+        const filtered = prev.filter(item => 
+          !(item.url === url && item.db === db && item.username === username && item.model === model)
+        );
+        return [{
+          url, db, username, model, timestamp: Date.now()
+        }, ...filtered].slice(0, 10); // Keep last 10
+      });
+      
+      // Update form state to match what was submitted (if not already)
+      setFormState(prev => ({ ...prev, url, db, username, model }));
+    }
+  }, [actionData, setHistory]);
+
+  const handleRestoreHistory = (item: ConnectionDetails) => {
+    setFormState(prev => ({
+      ...prev,
+      url: item.url,
+      db: item.db,
+      username: item.username,
+      model: item.model,
+      // Keep existing password if present, or clear it? 
+      // User likely needs to re-enter password.
+    }));
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormState(prev => ({ ...prev, [name]: value }));
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-slate-900 dark:text-gray-100 p-4 md:p-8 font-sans">
@@ -50,12 +112,14 @@ export default function OdooInspector() {
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Connection Form */}
+          {/* Left Column: Connection Form + History */}
           <div className="lg:col-span-1 space-y-6">
+            
+            {/* Connection Form */}
             <div className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm">
               <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
                 <Database className="w-5 h-5 text-blue-600" />
-                Connection Details
+                {t("odoo_inspector.title")}
               </h2>
               
               <Form method="post" className="space-y-4">
@@ -66,6 +130,8 @@ export default function OdooInspector() {
                   <input
                     name="url"
                     type="url"
+                    value={formState.url}
+                    onChange={handleInputChange}
                     placeholder="https://odoo.example.com"
                     required
                     className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
@@ -79,6 +145,8 @@ export default function OdooInspector() {
                   <input
                     name="db"
                     type="text"
+                    value={formState.db}
+                    onChange={handleInputChange}
                     required
                     className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                   />
@@ -91,6 +159,8 @@ export default function OdooInspector() {
                   <input
                     name="username"
                     type="text"
+                    value={formState.username}
+                    onChange={handleInputChange}
                     required
                     className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                   />
@@ -103,6 +173,8 @@ export default function OdooInspector() {
                   <input
                     name="password"
                     type="password"
+                    value={formState.password}
+                    onChange={handleInputChange}
                     required
                     className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                   />
@@ -115,6 +187,8 @@ export default function OdooInspector() {
                   <input
                     name="model"
                     type="text"
+                    value={formState.model}
+                    onChange={handleInputChange}
                     placeholder="e.g. res.partner"
                     required
                     className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-mono"
@@ -138,6 +212,27 @@ export default function OdooInspector() {
                 )}
               </Form>
             </div>
+
+             {/* History Section */}
+             <HistorySection
+                history={history}
+                onRestore={handleRestoreHistory}
+                onRemove={removeFromHistory}
+                onClear={clearHistory}
+                title="Recent Connections"
+                clearLabel="Clear All"
+                renderItem={(item) => (
+                  <div className="flex flex-col gap-1 min-w-0">
+                     <div className="font-medium text-sm text-gray-900 dark:text-gray-100 truncate">
+                        {item.model}
+                     </div>
+                     <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                        {item.url} • {item.db}
+                     </div>
+                  </div>
+                )}
+              />
+
           </div>
 
           {/* Results Area */}
