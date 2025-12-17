@@ -9,6 +9,15 @@ export interface OdooField {
   selection?: [string, string][];
   relation?: string;
   domain?: any;
+  // Extra attributes
+  compute?: string;
+  inverse?: string;
+  search?: string;
+  related?: string;
+  company_dependent?: boolean;
+  groups?: string;
+  depends?: string[];
+  manual?: boolean;
 }
 
 export interface OdooModel {
@@ -134,7 +143,11 @@ export async function fetchOdooFields(params: OdooConnectionParams): Promise<Rec
         "fields_get",
         [],
         { 
-          attributes: ["string", "help", "type", "readonly", "required", "store", "selection", "relation", "domain"] 
+          attributes: [
+            "string", "help", "type", "readonly", "required", "store", 
+            "selection", "relation", "domain",
+            "compute", "inverse", "search", "related", "company_dependent", "groups", "depends", "manual"
+          ] 
         }
       ],
     },

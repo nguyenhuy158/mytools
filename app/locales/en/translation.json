@@ -372,7 +372,14 @@
       "store": "Store",
       "help": "Help",
       "selection": "Selection",
-      "relation": "Relation"
+      "relation": "Relation",
+      "compute": "Compute",
+      "search": "Search",
+      "inverse": "Inverse",
+      "related": "Related",
+      "groups": "Groups",
+      "depends": "Depends",
+      "company_dependent": "Company Dep."
     },
     "error": {
       "connect_failed": "Could not connect to Odoo",

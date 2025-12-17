@@ -372,7 +372,14 @@
       "store": "Lưu",
       "help": "Trợ giúp",
       "selection": "Selection",
-      "relation": "Quan hệ"
+      "relation": "Quan hệ",
+      "compute": "Compute",
+      "search": "Search",
+      "inverse": "Inverse",
+      "related": "Related",
+      "groups": "Nhóm",
+      "depends": "Phụ thuộc",
+      "company_dependent": "Phụ thuộc công ty"
     },
     "error": {
       "connect_failed": "Không thể kết nối tới Odoo",
