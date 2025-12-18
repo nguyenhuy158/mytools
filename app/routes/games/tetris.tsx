@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Play, RotateCcw, Trophy, Pause } from "lucide-react";
+import { Play, RotateCcw, Trophy, Pause, ArrowDown, ArrowLeft, ArrowRight } from "lucide-react";
+import { SwipeDetector } from "../../components/SwipeDetector";
+import type { SwipeEvent } from "../../utils/touch";
 
 // Game constants
 const BOARD_WIDTH = 10;
@@ -187,6 +189,26 @@ export default function TetrisGame() {
     setIsPaused(false);
   };
 
+  // Touch/swipe handler
+  const handleSwipe = useCallback((event: SwipeEvent) => {
+    if (!isPlaying || isPaused || gameOver) return;
+
+    switch (event.direction) {
+      case 'LEFT':
+        move(-1);
+        break;
+      case 'RIGHT':
+        move(1);
+        break;
+      case 'DOWN':
+        gameTick(); // Soft drop
+        break;
+      case 'UP':
+        rotate(); // Swipe up to rotate
+        break;
+    }
+  }, [isPlaying, isPaused, gameOver]);
+
   useEffect(() => {
     if (isPlaying && !currentPiece && !gameOver) {
       spawnPiece();
@@ -230,18 +252,23 @@ export default function TetrisGame() {
         
         {/* Left Side - Game Board */}
         <div className="p-6 md:p-8 flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-950/50 flex-1 border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-800">
-          <div className="relative">
-            {/* Board Background/Container */}
-            <div 
-              className="relative bg-gray-900 dark:bg-black rounded-lg overflow-hidden shadow-inner ring-4 ring-gray-200 dark:ring-gray-800"
-              style={{
-                width: '300px', // 30px per cell
-                height: '600px',
-                display: 'grid',
-                gridTemplateColumns: `repeat(${BOARD_WIDTH}, 1fr)`,
-                gridTemplateRows: `repeat(${BOARD_HEIGHT}, 1fr)`,
-              }}
-            >
+          <SwipeDetector
+            onSwipe={handleSwipe}
+            onTap={rotate}
+            disabled={!isPlaying || isPaused || gameOver}
+          >
+            <div className="relative">
+              {/* Board Background/Container */}
+              <div
+                className="relative bg-gray-900 dark:bg-black rounded-lg overflow-hidden shadow-inner ring-4 ring-gray-200 dark:ring-gray-800"
+                style={{
+                  width: '300px', // 30px per cell
+                  height: '600px',
+                  display: 'grid',
+                  gridTemplateColumns: `repeat(${BOARD_WIDTH}, 1fr)`,
+                  gridTemplateRows: `repeat(${BOARD_HEIGHT}, 1fr)`,
+                }}
+              >
               {/* Overlay for Game Over / Start */}
               {(!isPlaying && !gameOver && score === 0) && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm z-20 text-center text-white p-6">
@@ -312,7 +339,44 @@ export default function TetrisGame() {
                    />
                  );
               })}
+              </div>
             </div>
+          </SwipeDetector>
+
+          {/* Mobile Control Buttons */}
+          <div className="mt-6 flex gap-3 md:hidden">
+            <button
+              onClick={() => move(-1)}
+              disabled={!isPlaying || isPaused || gameOver}
+              className="flex items-center justify-center w-14 h-14 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 active:bg-gray-300 dark:active:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors touch-none"
+              aria-label="Move Left"
+            >
+              <ArrowLeft className="w-6 h-6" />
+            </button>
+            <button
+              onClick={rotate}
+              disabled={!isPlaying || isPaused || gameOver}
+              className="flex items-center justify-center w-14 h-14 rounded-lg bg-indigo-500 dark:bg-indigo-600 text-white active:bg-indigo-600 dark:active:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors touch-none"
+              aria-label="Rotate"
+            >
+              <RotateCcw className="w-6 h-6" />
+            </button>
+            <button
+              onClick={() => move(1)}
+              disabled={!isPlaying || isPaused || gameOver}
+              className="flex items-center justify-center w-14 h-14 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 active:bg-gray-300 dark:active:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors touch-none"
+              aria-label="Move Right"
+            >
+              <ArrowRight className="w-6 h-6" />
+            </button>
+            <button
+              onClick={drop}
+              disabled={!isPlaying || isPaused || gameOver}
+              className="flex items-center justify-center w-14 h-14 rounded-lg bg-orange-500 dark:bg-orange-600 text-white active:bg-orange-600 dark:active:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors touch-none"
+              aria-label="Drop"
+            >
+              <ArrowDown className="w-6 h-6" />
+            </button>
           </div>
         </div>
 

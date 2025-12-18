@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Flag, Bomb } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { GameScore } from "../components/GameScore";
@@ -147,6 +147,48 @@ export default function MinesweeperGame() {
     setMineCount(prev => newGrid[idx].isFlagged ? prev - 1 : prev + 1);
   };
 
+  // Touch handlers for mobile
+  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const longPressCell = useRef<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent, idx: number) => {
+    longPressCell.current = null;
+    longPressTimer.current = setTimeout(() => {
+      longPressCell.current = idx;
+      // Toggle flag on long press
+      if (gameState === 'PLAYING' && !grid[idx].isRevealed) {
+        const newGrid = [...grid];
+        newGrid[idx].isFlagged = !newGrid[idx].isFlagged;
+        setGrid(newGrid);
+        setMineCount(prev => newGrid[idx].isFlagged ? prev - 1 : prev + 1);
+
+        // Haptic feedback if available
+        if (navigator.vibrate) {
+          navigator.vibrate(50);
+        }
+      }
+    }, 500);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent, idx: number) => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+    }
+
+    // If it wasn't a long press, treat as tap to reveal
+    if (longPressCell.current !== idx) {
+      revealCell(idx);
+    }
+    longPressCell.current = null;
+  };
+
+  const handleTouchCancel = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+    }
+    longPressCell.current = null;
+  };
+
   const getNumberColor = (num: number) => {
     const colors = [
       '',
@@ -209,18 +251,21 @@ export default function MinesweeperGame() {
                  key={i}
                  onClick={() => revealCell(i)}
                  onContextMenu={(e) => toggleFlag(e, i)}
+                 onTouchStart={(e) => handleTouchStart(e, i)}
+                 onTouchEnd={(e) => handleTouchEnd(e, i)}
+                 onTouchCancel={handleTouchCancel}
                  disabled={gameState === 'WON' || gameState === 'LOST'}
                  className={`
-                   aspect-square flex items-center justify-center font-bold text-lg rounded-sm transition-all duration-75 select-none
-                   ${cell.isRevealed 
-                     ? 'bg-gray-50 dark:bg-gray-800 shadow-inner' 
+                   aspect-square flex items-center justify-center font-bold text-lg rounded-sm transition-all duration-75 select-none touch-none
+                   ${cell.isRevealed
+                     ? 'bg-gray-50 dark:bg-gray-800 shadow-inner'
                      : 'bg-gray-300 dark:bg-gray-600 hover:brightness-110 shadow-[inset_-2px_-2px_0_0_rgba(0,0,0,0.1),inset_2px_2px_0_0_rgba(255,255,255,0.4)] active:shadow-inner active:scale-95'
                    }
                    ${cell.isMine && cell.isRevealed ? 'bg-red-500 dark:bg-red-600' : ''}
                  `}
                >
                  {cell.isRevealed ? (
-                   cell.isMine ? <Bomb size={20} className="text-white fill-white" /> : 
+                   cell.isMine ? <Bomb size={20} className="text-white fill-white" /> :
                    cell.neighborMines > 0 ? (
                      <span className={getNumberColor(cell.neighborMines)}>{cell.neighborMines}</span>
                    ) : ''
@@ -233,7 +278,8 @@ export default function MinesweeperGame() {
         </GameGrid>
         
         <div className="text-sm text-center text-gray-500 dark:text-gray-400">
-          Left click to reveal • Right click to flag
+          Left click to reveal • Right click to flag<br className="md:hidden" />
+          <span className="md:hidden"> • Tap to reveal • Long press to flag</span>
         </div>
       </div>
     </div>

@@ -48,6 +48,10 @@
       "odoo_inspector": {
         "name": "Odoo Field Inspector",
         "description": "Kiểm tra các trường của model Odoo qua JSON-RPC."
+      },
+      "markdown_preview": {
+        "name": "Xem trước Markdown",
+        "description": "Viết Markdown và xem trước kết quả HTML ngay lập tức."
       }
     },
     "api_tester": {
@@ -105,6 +109,13 @@
         "color_copied": "Đã sao chép mã màu: {{hex}}",
         "history_cleared": "Đã xóa lịch sử"
       }
+    },
+    "markdown_preview": {
+      "title": "Xem trước Markdown",
+      "description": "Viết Markdown và xem trước kết quả HTML ngay lập tức.",
+      "editor": "Trình soạn thảo Markdown",
+      "preview": "Xem trước",
+      "placeholder": "Nhập Markdown của bạn vào đây..."
     },
     "games": {
       "description": "Chơi trò chơi vui nhộn trực tiếp trong trình duyệt của bạn.",

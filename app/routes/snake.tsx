@@ -3,6 +3,9 @@ import { Play } from "lucide-react";
 import { GameScore } from "../components/GameScore";
 import { GameOverlay } from "../components/GameOverlay";
 import { GameGrid } from "../components/GameGrid";
+import { SwipeDetector } from "../components/SwipeDetector";
+import { DirectionalControls } from "../components/DirectionalControls";
+import type { SwipeDirection } from "../utils/touch";
 
 // Game constants
 const GRID_SIZE = 20;
@@ -114,6 +117,19 @@ export default function SnakeGame() {
     };
   }, [isPlaying, gameOver, moveSnake]);
 
+  // Unified direction handler for both keyboard and touch controls
+  const handleDirectionChange = useCallback((direction: SwipeDirection) => {
+    if (!isPlaying) return;
+
+    const currentDir = directionRef.current;
+
+    // Prevent reversing direction (can't go opposite way)
+    if (direction === 'UP' && currentDir !== 'DOWN') directionRef.current = 'UP';
+    else if (direction === 'DOWN' && currentDir !== 'UP') directionRef.current = 'DOWN';
+    else if (direction === 'LEFT' && currentDir !== 'RIGHT') directionRef.current = 'LEFT';
+    else if (direction === 'RIGHT' && currentDir !== 'LEFT') directionRef.current = 'RIGHT';
+  }, [isPlaying]);
+
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(e.key)) {
@@ -127,27 +143,20 @@ export default function SnakeGame() {
 
       if (!isPlaying) return;
 
-      const currentDir = directionRef.current;
-      
-      switch (e.key) {
-        case 'ArrowUp':
-          if (currentDir !== 'DOWN') directionRef.current = 'UP';
-          break;
-        case 'ArrowDown':
-          if (currentDir !== 'UP') directionRef.current = 'DOWN';
-          break;
-        case 'ArrowLeft':
-          if (currentDir !== 'RIGHT') directionRef.current = 'LEFT';
-          break;
-        case 'ArrowRight':
-          if (currentDir !== 'LEFT') directionRef.current = 'RIGHT';
-          break;
+      let direction: SwipeDirection | null = null;
+      if (e.key === 'ArrowUp') direction = 'UP';
+      else if (e.key === 'ArrowDown') direction = 'DOWN';
+      else if (e.key === 'ArrowLeft') direction = 'LEFT';
+      else if (e.key === 'ArrowRight') direction = 'RIGHT';
+
+      if (direction) {
+        handleDirectionChange(direction);
       }
     };
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [isPlaying, gameOver]);
+  }, [isPlaying, gameOver, handleDirectionChange]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] p-4">
@@ -160,57 +169,68 @@ export default function SnakeGame() {
           </div>
         </div>
 
-        <GameGrid className="aspect-square bg-gray-900 dark:bg-black p-1 border-4 border-gray-800 dark:border-gray-800">
-          <GameOverlay 
-            isVisible={!isPlaying || gameOver}
-            title={gameOver ? "GAME OVER" : "SNAKE"}
-            message={gameOver ? `Score: ${score}` : "Press Start to Play"}
-            onRestart={resetGame}
-            restartLabel={gameOver ? "Try Again" : "Start Game"}
-          >
-             {!gameOver && !isPlaying && score === 0 && (
-               <button 
-                 onClick={resetGame}
-                 className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-6 rounded-lg font-medium transition-colors mt-4"
-               >
-                 <Play className="w-4 h-4" /> Start Game
-               </button>
-             )}
-          </GameOverlay>
+        <SwipeDetector
+          onSwipe={(event) => handleDirectionChange(event.direction)}
+          disabled={!isPlaying || gameOver}
+        >
+          <GameGrid className="aspect-square bg-gray-900 dark:bg-black p-1 border-4 border-gray-800 dark:border-gray-800">
+            <GameOverlay
+              isVisible={!isPlaying || gameOver}
+              title={gameOver ? "GAME OVER" : "SNAKE"}
+              message={gameOver ? `Score: ${score}` : "Press Start to Play"}
+              onRestart={resetGame}
+              restartLabel={gameOver ? "Try Again" : "Start Game"}
+            >
+               {!gameOver && !isPlaying && score === 0 && (
+                 <button
+                   onClick={resetGame}
+                   className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-6 rounded-lg font-medium transition-colors mt-4"
+                 >
+                   <Play className="w-4 h-4" /> Start Game
+                 </button>
+               )}
+            </GameOverlay>
 
-          <div 
-            style={{
-              display: 'grid',
-              gridTemplateColumns: `repeat(${GRID_SIZE}, 1fr)`,
-              gridTemplateRows: `repeat(${GRID_SIZE}, 1fr)`,
-              height: '100%',
-              width: '100%'
-            }}
-          >
-            {Array.from({ length: GRID_SIZE * GRID_SIZE }).map((_, i) => {
-               const x = i % GRID_SIZE;
-               const y = Math.floor(i / GRID_SIZE);
-               const isSnake = snake.some(s => s.x === x && s.y === y);
-               const isFood = food.x === x && food.y === y;
-               const isHead = snake[0].x === x && snake[0].y === y;
-               
-               return (
-                 <div 
-                   key={i}
-                   className={`
-                     rounded-sm border border-gray-900/50
-                     ${isHead ? 'bg-green-400 z-10' : isSnake ? 'bg-green-600' : ''}
-                     ${isFood ? 'bg-red-500 rounded-full scale-75' : ''}
-                     ${!isSnake && !isFood ? 'bg-gray-800/20' : ''}
-                   `}
-                 />
-               );
-            })}
-          </div>
-        </GameGrid>
-        
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: `repeat(${GRID_SIZE}, 1fr)`,
+                gridTemplateRows: `repeat(${GRID_SIZE}, 1fr)`,
+                height: '100%',
+                width: '100%'
+              }}
+            >
+              {Array.from({ length: GRID_SIZE * GRID_SIZE }).map((_, i) => {
+                 const x = i % GRID_SIZE;
+                 const y = Math.floor(i / GRID_SIZE);
+                 const isSnake = snake.some(s => s.x === x && s.y === y);
+                 const isFood = food.x === x && food.y === y;
+                 const isHead = snake[0].x === x && snake[0].y === y;
+
+                 return (
+                   <div
+                     key={i}
+                     className={`
+                       rounded-sm border border-gray-900/50
+                       ${isHead ? 'bg-green-400 z-10' : isSnake ? 'bg-green-600' : ''}
+                       ${isFood ? 'bg-red-500 rounded-full scale-75' : ''}
+                       ${!isSnake && !isFood ? 'bg-gray-800/20' : ''}
+                     `}
+                   />
+                 );
+              })}
+            </div>
+          </GameGrid>
+        </SwipeDetector>
+
+        <DirectionalControls
+          onDirection={handleDirectionChange}
+          disabled={!isPlaying || gameOver}
+          className="mt-4"
+        />
+
         <div className="text-center text-sm text-gray-500 dark:text-gray-400">
-          Use arrow keys to move • Space to restart
+          Use arrow keys or swipe to move • Space to restart
         </div>
       </div>
     </div>

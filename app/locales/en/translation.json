@@ -48,6 +48,10 @@
       "odoo_inspector": {
         "name": "Odoo Field Inspector",
         "description": "Inspect Odoo model fields via JSON-RPC."
+      },
+      "markdown_preview": {
+        "name": "Markdown Preview",
+        "description": "Write Markdown and preview it instantly in HTML."
       }
     },
     "api_tester": {
@@ -105,6 +109,13 @@
         "color_copied": "Color copied: {{hex}}",
         "history_cleared": "History cleared"
       }
+    },
+    "markdown_preview": {
+      "title": "Markdown Preview",
+      "description": "Write Markdown and preview it instantly in HTML.",
+      "editor": "Markdown Editor",
+      "preview": "Preview",
+      "placeholder": "Type your Markdown here..."
     },
     "games": {
       "description": "Play fun games directly in your browser.",

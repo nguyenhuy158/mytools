@@ -7,6 +7,9 @@ import { GameScore } from "../components/GameScore";
 import { GameOverlay } from "../components/GameOverlay";
 import { GameGrid } from "../components/GameGrid";
 import { Leaderboard } from "../components/Leaderboard";
+import { SwipeDetector } from "../components/SwipeDetector";
+import { DirectionalControls } from "../components/DirectionalControls";
+import type { SwipeDirection } from "../utils/touch";
 
 interface Score {
   name: string;
@@ -99,23 +102,25 @@ function processMove(grid: number[], direction: "LEFT" | "RIGHT" | "UP" | "DOWN"
 
   if (direction === "LEFT" || direction === "RIGHT") {
     for (let r = 0; r < SIZE; r++) {
+      const originalRow = getRow(grid, r);
       let row = getRow(newGrid, r);
       if (direction === "RIGHT") row.reverse();
       const { line, gain } = mergeLine(row);
       if (direction === "RIGHT") line.reverse();
       setRow(newGrid, r, line);
       scoreGain += gain;
-      if (JSON.stringify(row) !== JSON.stringify(getRow(grid, r))) moved = true;
+      if (JSON.stringify(line) !== JSON.stringify(originalRow)) moved = true;
     }
   } else {
     for (let c = 0; c < SIZE; c++) {
+      const originalCol = getCol(grid, c);
       let col = getCol(newGrid, c);
       if (direction === "DOWN") col.reverse();
       const { line, gain } = mergeLine(col);
       if (direction === "DOWN") line.reverse();
       setCol(newGrid, c, line);
       scoreGain += gain;
-      if (JSON.stringify(col) !== JSON.stringify(getCol(grid, c))) moved = true;
+      if (JSON.stringify(line) !== JSON.stringify(originalCol)) moved = true;
     }
   }
 
@@ -158,10 +163,26 @@ export default function Game2048() {
     initGame();
   }, [initGame]);
 
+  // Unified move handler for both keyboard and touch controls
+  const handleMove = useCallback((direction: SwipeDirection) => {
+    if (gameOver) return;
+
+    const { newGrid, scoreGain, moved } = processMove(grid, direction);
+    if (moved) {
+      const gridWithTile = addRandomTile(newGrid);
+      setGrid(gridWithTile);
+      setScore(prev => prev + scoreGain);
+
+      if (isGameOver(gridWithTile)) {
+        setGameOver(true);
+      }
+    }
+  }, [grid, gameOver]);
+
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (gameOver) return;
-    
-    let direction: "LEFT" | "RIGHT" | "UP" | "DOWN" | null = null;
+
+    let direction: SwipeDirection | null = null;
     if (e.key === "ArrowLeft") direction = "LEFT";
     else if (e.key === "ArrowRight") direction = "RIGHT";
     else if (e.key === "ArrowUp") direction = "UP";
@@ -169,18 +190,9 @@ export default function Game2048() {
 
     if (direction) {
       e.preventDefault();
-      const { newGrid, scoreGain, moved } = processMove(grid, direction);
-      if (moved) {
-        const gridWithTile = addRandomTile(newGrid);
-        setGrid(gridWithTile);
-        setScore(prev => prev + scoreGain);
-        
-        if (isGameOver(gridWithTile)) {
-          setGameOver(true);
-        }
-      }
+      handleMove(direction);
     }
-  }, [grid, gameOver]);
+  }, [gameOver, handleMove]);
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
@@ -224,56 +236,66 @@ export default function Game2048() {
            <GameScore score={score} label={t("games.2048.score")} />
         </div>
 
-        <GameGrid>
-          <GameOverlay 
-            isVisible={gameOver}
-            title={t("games.2048.game_over")}
-            message={`${t("games.2048.final_score")}: ${score}`}
-            onRestart={initGame}
-            restartLabel={t("games.2048.try_again")}
-          >
-             <Form method="post" onSubmit={saveScore} className="w-full space-y-4 mb-6">
-                 <input
-                   type="text"
-                   name="name"
-                   value={name}
-                   onChange={(e) => setName(e.target.value)}
-                   placeholder={t("games.2048.enter_name")}
-                   className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                   required
-                 />
-                <input type="hidden" name="score" value={score} />
-                 <button
-                   type="submit"
-                   disabled={navigation.state === "submitting"}
-                   className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg font-medium transition-colors"
-                 >
-                   <Save className="w-4 h-4" /> {t("games.2048.save_score")}
-                 </button>
-              </Form>
-          </GameOverlay>
+        <SwipeDetector
+          onSwipe={(event) => handleMove(event.direction)}
+          disabled={gameOver}
+        >
+          <GameGrid>
+            <GameOverlay
+              isVisible={gameOver}
+              title={t("games.2048.game_over")}
+              message={`${t("games.2048.final_score")}: ${score}`}
+              onRestart={initGame}
+              restartLabel={t("games.2048.try_again")}
+            >
+               <Form method="post" onSubmit={saveScore} className="w-full space-y-4 mb-6">
+                   <input
+                     type="text"
+                     name="name"
+                     value={name}
+                     onChange={(e) => setName(e.target.value)}
+                     placeholder={t("games.2048.enter_name")}
+                     className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                     required
+                   />
+                  <input type="hidden" name="score" value={score} />
+                   <button
+                     type="submit"
+                     disabled={navigation.state === "submitting"}
+                     className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg font-medium transition-colors"
+                   >
+                     <Save className="w-4 h-4" /> {t("games.2048.save_score")}
+                   </button>
+                </Form>
+            </GameOverlay>
 
-          <div className="grid grid-cols-4 gap-3">
-            {grid.map((cell, idx) => (
-              <div
-                key={idx}
-                className={`aspect-square rounded-lg flex items-center justify-center text-2xl font-bold transition-all duration-200 ${
-                  cell === 0 ? "bg-gray-200 dark:bg-gray-600" : getTileColor(cell)
-                }`}
-              >
-                {cell !== 0 && cell}
-              </div>
-            ))}
-          </div>
-        </GameGrid>
-        
-        <div className="mt-6 flex justify-center">
-             <button
-                 onClick={initGame}
-                 className="flex items-center gap-2 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 py-2 px-4 rounded-lg font-medium transition-colors"
-             >
-                 <RefreshCcw className="w-4 h-4" /> {t("games.2048.new_game")}
-             </button>
+            <div className="grid grid-cols-4 gap-3">
+              {grid.map((cell, idx) => (
+                <div
+                  key={idx}
+                  className={`aspect-square rounded-lg flex items-center justify-center text-2xl font-bold transition-all duration-200 ${
+                    cell === 0 ? "bg-gray-200 dark:bg-gray-600" : getTileColor(cell)
+                  }`}
+                >
+                  {cell !== 0 && cell}
+                </div>
+              ))}
+            </div>
+          </GameGrid>
+        </SwipeDetector>
+
+        <div className="mt-6 flex flex-col items-center gap-4">
+          <DirectionalControls
+            onDirection={handleMove}
+            disabled={gameOver}
+          />
+
+          <button
+            onClick={initGame}
+            className="flex items-center gap-2 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 py-2 px-4 rounded-lg font-medium transition-colors"
+          >
+            <RefreshCcw className="w-4 h-4" /> {t("games.2048.new_game")}
+          </button>
         </div>
       </div>
 
