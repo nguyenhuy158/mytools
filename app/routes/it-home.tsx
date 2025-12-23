@@ -1,4 +1,4 @@
-import { FileJson, FileDiff, Image, Network, Hash, Database, FileText } from "lucide-react";
+import { FileJson, FileDiff, Image, Network, Hash, Database, FileText, StickyNote } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PageHeader } from "../components/PageHeader";
 import { ToolGrid } from "../components/ToolGrid";
@@ -56,6 +56,13 @@ export default function ITToolsLanding() {
       href: "/it/odoo-inspector",
       icon: Database,
       color: "bg-indigo-600",
+    },
+    {
+      name: t("it_tools.notes.name"),
+      description: t("it_tools.notes.description"),
+      href: "/it/notes",
+      icon: StickyNote,
+      color: "bg-yellow-600",
     },
   ];
 

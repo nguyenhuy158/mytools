@@ -52,8 +52,12 @@
       "markdown_preview": {
         "name": "Xem trước Markdown",
         "description": "Viết Markdown và xem trước kết quả HTML ngay lập tức."
+      },
+      "notes": {
+        "name": "Ghi chú",
+        "description": "Tạo và quản lý ghi chú với định dạng văn bản phong phú và lưu trữ đám mây."
       }
-    },
+      },
     "api_tester": {
       "title": "API Tester",
       "description": "Kiểm thử API với trình gửi yêu cầu HTTP đơn giản.",
@@ -111,11 +115,30 @@
       }
     },
     "markdown_preview": {
-      "title": "Xem trước Markdown",
-      "description": "Viết Markdown và xem trước kết quả HTML ngay lập tức.",
-      "editor": "Trình soạn thảo Markdown",
-      "preview": "Xem trước",
-      "placeholder": "Nhập Markdown của bạn vào đây..."
+       "title": "Xem trước Markdown",
+       "description": "Viết Markdown và xem trước kết quả HTML ngay lập tức.",
+       "editor": "Trình soạn thảo Markdown",
+       "preview": "Xem trước",
+       "placeholder": "Nhập Markdown của bạn vào đây..."
+     },
+    "notes": {
+      "title": "Ghi chú",
+      "description": "Tạo và quản lý ghi chú với định dạng văn bản phong phú và lưu trữ đám mây.",
+      "toast": {
+        "saved": "Đã lưu ghi chú",
+        "save_error": "Lỗi lưu ghi chú",
+        "created": "Tạo ghi chú mới",
+        "create_error": "Lỗi tạo ghi chú",
+        "deleted": "Đã xóa ghi chú",
+        "delete_error": "Lỗi xóa ghi chú",
+        "load_error": "Lỗi tải ghi chú",
+        "exported": "Đã xuất ghi chú",
+        "imported": "Đã nhập ghi chú",
+        "import_error": "Lỗi nhập ghi chú"
+      },
+      "dialogs": {
+        "confirm_delete": "Xóa ghi chú này?"
+      }
     },
     "games": {
       "description": "Chơi trò chơi vui nhộn trực tiếp trong trình duyệt của bạn.",

@@ -6,7 +6,9 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "case-converter",
 	"compatibility_date": "2025-04-04",
-	"compatibility_flags": ["nodejs_compat"],
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
 	"main": "./workers/app.ts",
 	"vars": {
 		"VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare"
@@ -14,13 +16,18 @@
 	"observability": {
 		"enabled": true
 	},
-  "kv_namespaces": [
-    {
-      "binding": "KV_GAMES",
-      "id": "1b07ec19871e4abd986100f6283bbe0b",
-      "preview_id": "dec7d834ccf848f09e2181572544ef2e"
-    }
-  ],
+	"kv_namespaces": [
+		{
+			"binding": "KV_GAMES",
+			"id": "1b07ec19871e4abd986100f6283bbe0b",
+			"preview_id": "dec7d834ccf848f09e2181572544ef2e"
+		},
+		{
+			"binding": "NOTES",
+			"id": "3de055e116b14527bb68bcd4a31ea6d6",
+			"remote": true
+		}
+	],
 	"routes": [
 		{
 			"pattern": "huycode.click",

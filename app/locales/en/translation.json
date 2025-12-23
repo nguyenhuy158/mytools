@@ -52,8 +52,12 @@
       "markdown_preview": {
         "name": "Markdown Preview",
         "description": "Write Markdown and preview it instantly in HTML."
-      }
-    },
+        },
+      "notes": {
+        "name": "Notes",
+        "description": "Create and manage notes with rich text formatting and cloud storage."
+        }
+      },
     "api_tester": {
       "title": "API Tester",
       "description": "Test API endpoints with a simple, client-side HTTP client.",
@@ -111,11 +115,30 @@
       }
     },
     "markdown_preview": {
-      "title": "Markdown Preview",
-      "description": "Write Markdown and preview it instantly in HTML.",
-      "editor": "Markdown Editor",
-      "preview": "Preview",
-      "placeholder": "Type your Markdown here..."
+        "title": "Markdown Preview",
+        "description": "Write Markdown and preview it instantly in HTML.",
+        "editor": "Markdown Editor",
+        "preview": "Preview",
+        "placeholder": "Type your Markdown here..."
+      },
+    "notes": {
+      "title": "Notes",
+      "description": "Create and manage notes with rich text formatting and cloud storage.",
+      "toast": {
+        "saved": "Note saved",
+        "save_error": "Failed to save note",
+        "created": "New note created",
+        "create_error": "Failed to create note",
+        "deleted": "Note deleted",
+        "delete_error": "Failed to delete note",
+        "load_error": "Failed to load notes",
+        "exported": "Note exported",
+        "imported": "Note imported",
+        "import_error": "Failed to import note"
+      },
+      "dialogs": {
+        "confirm_delete": "Delete this note?"
+      }
     },
     "games": {
       "description": "Play fun games directly in your browser.",
