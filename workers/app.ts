@@ -1,5 +1,8 @@
 import { createRequestHandler } from "react-router";
 
+// Export Durable Object classes
+export { LotoGameRoom } from "./loto-room";
+
 declare module "react-router" {
   export interface AppLoadContext {
     cloudflare: {
