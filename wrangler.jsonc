@@ -32,8 +32,7 @@
 		"bindings": [
 			{
 				"name": "LOTO_ROOMS",
-				"class_name": "LotoGameRoom",
-				"script_name": "case-converter"
+				"class_name": "LotoGameRoom"
 			}
 		]
 	},
