@@ -20,7 +20,7 @@ export function Navbar() {
       : "light";
     const currentTheme = savedTheme || systemTheme;
     setTheme(currentTheme);
-    
+
     // Apply theme class
     if (currentTheme === "dark") {
       document.documentElement.classList.add("dark");
@@ -54,9 +54,9 @@ export function Navbar() {
 
   const navigation = [
     { name: t("nav.home"), href: "/", icon: Home },
-     { 
-       name: t("nav.it_tools"), 
-       href: "/it", 
+     {
+       name: t("nav.it_tools"),
+       href: "/it",
        icon: Code,
        children: [
          { name: t("nav.json_tools"), href: "/it/json-tools", icon: FileJson },
@@ -64,9 +64,9 @@ export function Navbar() {
          { name: t("nav.number_reading"), href: "/it/number-reading", icon: Hash },
        ]
      },
-    { 
-      name: t("nav.lifestyle"), 
-      href: "/lifestyle", 
+    {
+      name: t("nav.lifestyle"),
+      href: "/lifestyle",
       icon: Coffee,
       children: [
         { name: t("nav.pomodoro"), href: "/lifestyle/pomodoro", icon: Timer },
@@ -144,11 +144,11 @@ export function Navbar() {
             </div>
 
             {/* Language Switcher */}
-            <div 
+            <div
               onClick={toggleLanguage}
               className="bg-gray-100 dark:bg-gray-800 p-1 rounded-lg flex items-center relative h-9 w-28 cursor-pointer"
             >
-              <div 
+              <div
                 className={`absolute w-[calc(50%-4px)] h-[calc(100%-8px)] top-1 bg-white dark:bg-gray-600 rounded-md shadow-sm transition-transform duration-200 ease-in-out ${
                   i18n.language === 'en' ? 'translate-x-[calc(100%+4px)]' : 'translate-x-1'
                 }`}
@@ -180,7 +180,7 @@ export function Navbar() {
 
             <OnlineUsers />
           </div>
-          
+
           <div className="-mr-2 flex items-center sm:hidden gap-2">
             <button
               onClick={toggleTheme}
@@ -249,11 +249,11 @@ export function Navbar() {
             ))}
               <div className="pl-3 pr-4 py-2 border-l-4 border-transparent flex items-center justify-between">
                 <span className="text-gray-500 dark:text-gray-400 text-base font-medium">{t("nav.language")}</span>
-               <div 
+               <div
                  onClick={toggleLanguage}
                  className="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-lg w-28 relative cursor-pointer"
                >
-                  <div 
+                  <div
                     className={`absolute w-[calc(50%-4px)] h-[calc(100%-8px)] top-1 bg-white dark:bg-gray-600 rounded-md shadow-sm transition-transform duration-200 ease-in-out ${
                       i18n.language === 'en' ? 'translate-x-[calc(100%+4px)]' : 'translate-x-1'
                     }`}
