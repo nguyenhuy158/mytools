@@ -2,8 +2,9 @@ import { useTranslation } from "react-i18next";
 import {
   Shield, Zap, Globe,
   Check, Type, ArrowRightLeft, CaseSensitive, FileType, AlignLeft, Code, Braces, Copy, ClipboardPaste, Download, Upload, History, Trash2, Settings, MoveRight, FileDiff,
-  CheckCircle2, Hammer, Lightbulb, Construction
+  Construction
 } from "lucide-react";
+import { MermaidTimeline } from "../components/MermaidTimeline";
 import type { Route } from "./+types/about";
 
 export function meta({}: Route.MetaArgs) {
@@ -58,7 +59,6 @@ export default function About() {
         { name: "Text Diff Checker", desc: "Compare text differences", link: "/it/text-diff" },
         { name: "Pomodoro Timer", desc: "Productivity timer with custom settings", link: "/pomodoro" },
         { name: "Calendar & Events", desc: "Lunar calendar and event tracking", link: "/calendar" },
-        { name: "Tet Countdown", desc: "Countdown to Vietnamese New Year", link: "/" },
       ]
     },
     {
@@ -69,7 +69,6 @@ export default function About() {
         { name: "QR Code Generator", desc: "Create QR codes for URLs and text" },
         { name: "Password Generator", desc: "Secure random password creator" },
         { name: "Base64 Converter", desc: "Encode and decode Base64 strings" },
-        { name: "Hash Calculator", desc: "MD5, SHA-1, SHA-256 hash generation" },
       ]
     },
     {
@@ -80,21 +79,9 @@ export default function About() {
         { name: "Markdown Preview", desc: "Live markdown editor and preview" },
         { name: "Unit Converter", desc: "Convert length, weight, temperature" },
         { name: "Image Converter", desc: "Convert image formats client-side" },
-        { name: "Internet Speed Test", desc: "Basic download speed check" },
       ]
     }
   ];
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "done": return <CheckCircle2 className="w-6 h-6 text-white" />;
-      case "planned": return <Hammer className="w-6 h-6 text-white" />;
-      case "idea": return <Lightbulb className="w-6 h-6 text-white" />;
-      default: return <Construction className="w-6 h-6 text-white" />;
-    }
-  };
-
-
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-slate-900 dark:text-gray-100 p-4 md:p-8 font-sans">
@@ -176,7 +163,7 @@ export default function About() {
           </div>
         </section>
 
-        {/* Section 3: Roadmap (Mermaid-style Timeline) */}
+        {/* Section 3: Roadmap (Mermaid Timeline) */}
         <section className="space-y-12">
           <div className="text-center max-w-2xl mx-auto">
              <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">
@@ -187,64 +174,9 @@ export default function About() {
              </p>
           </div>
 
-          {/* Timeline Container */}
+          {/* Mermaid Timeline */}
           <div className="max-w-4xl mx-auto">
-            {/* Horizontal Timeline Line */}
-            <div className="relative">
-              <div className="hidden md:block absolute top-6 left-0 right-0 h-1 bg-gradient-to-r from-green-500 via-blue-500 to-yellow-500 dark:from-green-600 dark:via-blue-600 dark:to-yellow-600 rounded-full" />
-
-              {/* Timeline Items */}
-              <div className="relative grid grid-cols-1 md:grid-cols-3 gap-8">
-                {roadmapItems.map((category, idx) => (
-                  <div key={idx} className="flex flex-col items-center">
-                    {/* Timeline Dot */}
-                    <div className={`w-12 h-12 rounded-full shadow-lg border-4 border-white dark:border-gray-950 flex items-center justify-center mb-4 flex-shrink-0 z-10 ${
-                      category.status === 'done' ? 'bg-green-500' :
-                      category.status === 'planned' ? 'bg-blue-500' :
-                      'bg-yellow-500'
-                    }`}>
-                      {getStatusIcon(category.status)}
-                    </div>
-
-                    {/* Timeline Card */}
-                    <div className="w-full bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-md border border-gray-200 dark:border-gray-800">
-                      <div className={`inline-block mb-2 font-bold uppercase tracking-wider text-xs px-3 py-1 rounded-full ${
-                        category.status === 'done' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' :
-                        category.status === 'planned' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400' :
-                        'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
-                      }`}>
-                        {category.phase}
-                      </div>
-
-                      <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4">{category.title}</h3>
-
-                      <ul className="space-y-3">
-                        {category.items.map((item, itemIdx) => (
-                          <li key={itemIdx} className="flex items-start gap-2 text-sm">
-                            <div className={`mt-1 w-1.5 h-1.5 rounded-full flex-shrink-0 ${
-                              category.status === 'done' ? 'bg-green-500' :
-                              category.status === 'planned' ? 'bg-blue-500' :
-                              'bg-yellow-500'
-                            }`} />
-                            <div className="flex-1">
-                              <span className="font-medium text-slate-900 dark:text-white block">
-                                {item.name}
-                                {item.link && (
-                                  <a href={item.link} className="ml-1 text-xs font-normal text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 hover:underline">
-                                    {t("about.open_link")}
-                                  </a>
-                                )}
-                              </span>
-                              <span className="text-xs text-slate-500 dark:text-gray-400 block">{item.desc}</span>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <MermaidTimeline items={roadmapItems} />
           </div>
 
           <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm p-8 border border-gray-200 dark:border-gray-800 text-center max-w-3xl mx-auto mt-16 relative z-10">
