@@ -22,9 +22,9 @@ Keep this managed block so 'openspec update' can refresh the instructions.
 **Project Overview:** ToolHub is a collection of essential online tools (JSON, Text Diff, Pomodoro, Games, etc.) built with React Router v7, Tailwind CSS v4, and TypeScript. Fully internationalized (English/Vietnamese) with slogan: "Your Hub for Essential Tools" / "Trung tâm công cụ thiết yếu của bạn".
 
 ## Build & Test
-- **Build**: `npm run build` (Production build)
-- **Type Check**: `npm run typecheck` (TypeScript validation)
-- **Dev Server**: `npm run dev` (HMR development)
+- **Build**: `pnpm build` (Production build)
+- **Type Check**: `pnpm typecheck` (TypeScript validation)
+- **Dev Server**: `pnpm dev` (HMR development)
 - **Tests**: No test runner. Verify manually via build or browser testing. No single test commands available.
 
 ## Code Style Guidelines
@@ -39,6 +39,6 @@ Keep this managed block so 'openspec update' can refresh the instructions.
 - **AI Guidelines**: Follow STYLE_GUIDE.md AI_GUIDELINES: Tailwind-only, dark mode compliance, mobile-first, simplicity (avoid arbitrary values).
 
 ## Additional Rules
-- Always run `npm run typecheck` and `npm run build` after changes.
+- Always run `pnpm typecheck` and `pnpm build` after changes.
 - For new features, create OpenSpec proposals if significant.
 - Privacy-first: No server-side data transmission.

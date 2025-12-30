@@ -52,7 +52,7 @@ A comprehensive collection of essential online tools built with modern web techn
 
 ### Prerequisites
 - Node.js 18+
-- npm or pnpm
+- pnpm
 - Git
 
 ### Installation
@@ -65,17 +65,17 @@ A comprehensive collection of essential online tools built with modern web techn
 
 2. **Install dependencies**
    ```bash
-   npm install
+   pnpm install
    ```
 
 3. **Generate Cloudflare types**
    ```bash
-   npm run cf-typegen
+   pnpm cf-typegen
    ```
 
 4. **Start development server**
    ```bash
-   npm run dev
+   pnpm dev
    ```
 
    Your application will be available at `http://localhost:5173`
@@ -86,16 +86,14 @@ A comprehensive collection of essential online tools built with modern web techn
 
 | Command | Description |
 |---------|-------------|
-| `npm run dev` | Start development server with HMR |
-| `npm run build` | Create production build |
-| `npm run preview` | Preview production build locally |
-| `npm run typecheck` | Run TypeScript type checking |
-| `npm run deploy` | Build and deploy to Cloudflare |
+| `pnpm dev` | Start development server with HMR |
+| `pnpm build` | Create production build |
+| `pnpm preview` | Preview production build locally |
+| `pnpm typecheck` | Run TypeScript type checking |
+| `pnpm deploy` | Build and deploy to Cloudflare |
 
-### Development Workflow
-
-1. **Type Checking**: Always run `npm run typecheck` before committing
-2. **Build Verification**: Run `npm run build` to ensure production compatibility
+1. **Type Checking**: Always run `pnpm typecheck` before committing
+2. **Build Verification**: Run `pnpm build` to ensure production compatibility
 3. **Code Style**: Follow the established patterns in `STYLE_GUIDE.md`
 4. **Testing**: Manual testing via browser (no automated test suite currently)
 
@@ -111,11 +109,11 @@ The project uses Cloudflare Workers environment variables:
 
 **Automatic Deployment:**
 ```bash
-npm run deploy
+pnpm deploy
 ```
 
 **Manual Deployment Steps:**
-1. Build the project: `npm run build`
+1. Build the project: `pnpm build`
 2. Deploy with Wrangler: `wrangler deploy --config build/server/wrangler.json`
 
 ### Preview Deployment
@@ -385,8 +383,8 @@ function MyComponent() {
 3. **Make your changes**
 4. **Test thoroughly**
    ```bash
-   npm run typecheck
-   npm run build
+   pnpm typecheck
+   pnpm build
    ```
 5. **Commit with clear messages**
 6. **Submit a pull request**

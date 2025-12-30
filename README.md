@@ -1,6 +1,6 @@
 # ToolHub
 
-Your Hub for Essential Tools  
+Your Hub for Essential Tools
 Trung tâm công cụ thiết yếu của bạn
 
 A collection of useful online tools built with React Router.
@@ -25,7 +25,7 @@ A collection of useful online tools built with React Router.
 Install the dependencies:
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### Development
@@ -33,7 +33,7 @@ npm install
 Start the development server with HMR:
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 Your application will be available at `http://localhost:5173`.
@@ -43,7 +43,7 @@ Your application will be available at `http://localhost:5173`.
 Preview the production build locally:
 
 ```bash
-npm run preview
+pnpm preview
 ```
 
 ## Building for Production
@@ -51,7 +51,7 @@ npm run preview
 Create a production build:
 
 ```bash
-npm run build
+pnpm build
 ```
 
 ## Deployment
@@ -61,7 +61,7 @@ Deployment is done using the Wrangler CLI.
 To build and deploy directly to production:
 
 ```sh
-npm run deploy
+pnpm deploy
 ```
 
 To deploy a preview URL:
