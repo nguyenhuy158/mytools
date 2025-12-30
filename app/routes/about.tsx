@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { 
-  Shield, Zap, Globe, 
+import {
+  Shield, Zap, Globe,
   Check, Type, ArrowRightLeft, CaseSensitive, FileType, AlignLeft, Code, Braces, Copy, ClipboardPaste, Download, Upload, History, Trash2, Settings, MoveRight, FileDiff,
   CheckCircle2, Hammer, Lightbulb, Construction
 } from "lucide-react";
@@ -94,14 +94,7 @@ export default function About() {
     }
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "done": return "bg-green-500 border-green-200";
-      case "planned": return "bg-blue-500 border-blue-200";
-      case "idea": return "bg-yellow-500 border-yellow-200";
-      default: return "bg-gray-500 border-gray-200";
-    }
-  };
+
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-slate-900 dark:text-gray-100 p-4 md:p-8 font-sans">
@@ -132,7 +125,7 @@ export default function About() {
                  <h3 className="font-semibold text-slate-900 dark:text-white">{t("about.privacy_first")}</h3>
                  <p className="text-sm text-slate-500 dark:text-gray-400">{t("about.client_side_processing")}</p>
               </div>
-              
+
               <div className="text-center space-y-3">
                 <div className="w-12 h-12 mx-auto bg-purple-50 dark:bg-purple-900/20 rounded-full flex items-center justify-center text-purple-600 dark:text-purple-400">
                   <Zap className="w-6 h-6" />
@@ -162,10 +155,10 @@ export default function About() {
               {t("features.description")}
              </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature) => (
-              <div 
+              <div
                 key={feature.key}
                 className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 hover:shadow-md transition-shadow"
               >
@@ -183,8 +176,8 @@ export default function About() {
           </div>
         </section>
 
-        {/* Section 3: Roadmap (Vertical Timeline) */}
-        <section className="space-y-16">
+        {/* Section 3: Roadmap (Mermaid-style Timeline) */}
+        <section className="space-y-12">
           <div className="text-center max-w-2xl mx-auto">
              <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">
                {t("about.roadmap")}
@@ -194,72 +187,63 @@ export default function About() {
              </p>
           </div>
 
-          <div className="relative max-w-4xl mx-auto">
-             {/* Central Line */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gray-200 dark:bg-gray-800 rounded-full" />
+          {/* Timeline Container */}
+          <div className="max-w-4xl mx-auto">
+            {/* Horizontal Timeline Line */}
+            <div className="relative">
+              <div className="hidden md:block absolute top-6 left-0 right-0 h-1 bg-gradient-to-r from-green-500 via-blue-500 to-yellow-500 dark:from-green-600 dark:via-blue-600 dark:to-yellow-600 rounded-full" />
 
-            <div className="space-y-16">
-              {roadmapItems.map((category, idx) => {
-                const isEven = idx % 2 === 0;
-                return (
-                  <div key={idx} className={`relative flex items-center ${isEven ? 'flex-row' : 'flex-row-reverse'}`}>
-                    
-                    {/* Content Box */}
-                    <div className="w-1/2 px-8">
-                       <div className={`text-right ${isEven ? 'text-right' : 'text-left'}`}>
-                          <div className={`inline-block mb-2 font-bold uppercase tracking-wider text-sm ${
-                              category.status === 'done' ? 'text-green-600 dark:text-green-400' :
-                              category.status === 'planned' ? 'text-blue-600 dark:text-blue-400' :
-                              'text-yellow-600 dark:text-yellow-400'
-                          }`}>
-                            {category.phase}
-                          </div>
-                          <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">{category.title}</h3>
-                          
-                          <div className={`bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-md border border-gray-200 dark:border-gray-800 relative z-10 ${isEven ? 'ml-auto' : 'mr-auto'}`}>
-                             {/* Arrow pointing to center */}
-                             <div className={`absolute top-8 w-4 h-4 bg-white dark:bg-gray-900 border-t border-r border-gray-200 dark:border-gray-800 transform rotate-45 ${isEven ? '-right-2 border-l-0 border-b-0' : '-left-2 border-t-0 border-r-0 border-l border-b'}`}></div>
-
-                             <ul className="space-y-3">
-                              {category.items.map((item, itemIdx) => (
-                                <li key={itemIdx} className="flex items-start gap-3">
-                                  <div className={`mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 ${
-                                    category.status === 'done' ? 'bg-green-500' :
-                                    category.status === 'planned' ? 'bg-blue-500' :
-                                    'bg-yellow-500'
-                                  }`} />
-                                  <div className={`flex-1 ${isEven ? 'text-right' : 'text-left'}`}>
-                                     <span className="font-medium text-slate-900 dark:text-white block">
-                                       {item.name}
-                                        {item.link && (
-                                         <a href={item.link} className="inline-block ml-1 text-xs font-normal text-blue-600 hover:text-blue-500 hover:underline">
-                                           {t("about.open_link")}
-                                         </a>
-                                       )}
-                                     </span>
-                                    <span className="text-sm text-slate-500 dark:text-gray-400 block">{item.desc}</span>
-                                  </div>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                       </div>
+              {/* Timeline Items */}
+              <div className="relative grid grid-cols-1 md:grid-cols-3 gap-8">
+                {roadmapItems.map((category, idx) => (
+                  <div key={idx} className="flex flex-col items-center">
+                    {/* Timeline Dot */}
+                    <div className={`w-12 h-12 rounded-full shadow-lg border-4 border-white dark:border-gray-950 flex items-center justify-center mb-4 flex-shrink-0 z-10 ${
+                      category.status === 'done' ? 'bg-green-500' :
+                      category.status === 'planned' ? 'bg-blue-500' :
+                      'bg-yellow-500'
+                    }`}>
+                      {getStatusIcon(category.status)}
                     </div>
 
-                    {/* Central Icon Hexagon */}
-                    <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center z-20">
-                      <div className={`w-16 h-16 ${getStatusColor(category.status)} rounded-2xl rotate-45 flex items-center justify-center shadow-lg border-4 border-white dark:border-gray-950`}>
-                         <div className="-rotate-45">
-                            {getStatusIcon(category.status)}
-                         </div>
+                    {/* Timeline Card */}
+                    <div className="w-full bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-md border border-gray-200 dark:border-gray-800">
+                      <div className={`inline-block mb-2 font-bold uppercase tracking-wider text-xs px-3 py-1 rounded-full ${
+                        category.status === 'done' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' :
+                        category.status === 'planned' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400' :
+                        'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
+                      }`}>
+                        {category.phase}
                       </div>
-                    </div>
 
-                    {/* Empty Space for the other side */}
-                    <div className="w-1/2 px-8"></div>
+                      <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4">{category.title}</h3>
+
+                      <ul className="space-y-3">
+                        {category.items.map((item, itemIdx) => (
+                          <li key={itemIdx} className="flex items-start gap-2 text-sm">
+                            <div className={`mt-1 w-1.5 h-1.5 rounded-full flex-shrink-0 ${
+                              category.status === 'done' ? 'bg-green-500' :
+                              category.status === 'planned' ? 'bg-blue-500' :
+                              'bg-yellow-500'
+                            }`} />
+                            <div className="flex-1">
+                              <span className="font-medium text-slate-900 dark:text-white block">
+                                {item.name}
+                                {item.link && (
+                                  <a href={item.link} className="ml-1 text-xs font-normal text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 hover:underline">
+                                    {t("about.open_link")}
+                                  </a>
+                                )}
+                              </span>
+                              <span className="text-xs text-slate-500 dark:text-gray-400 block">{item.desc}</span>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                );
-              })}
+                ))}
+              </div>
             </div>
           </div>
 
