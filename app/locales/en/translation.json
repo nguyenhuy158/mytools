@@ -7,6 +7,7 @@
       "json_tools": "JSON",
       "text_diff": "Text",
       "pomodoro": "Pomodoro",
+      "quotes": "Quotes",
       "calendar": "Calendar",
       "roadmap": "Roadmap",
       "about": "About",
@@ -468,5 +469,11 @@
      "success": "Thanks for subscribing!",
      "error_invalid": "Please enter a valid email address.",
      "all_rights_reserved": "All rights reserved."
+   },
+   "quotes": {
+     "title": "Random Quotes",
+     "description": "Get inspired with daily quotes",
+     "button_next": "Get Random Quote",
+     "source": "Source"
    }
 }

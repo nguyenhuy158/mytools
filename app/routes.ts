@@ -20,6 +20,7 @@ export default [
   route("lifestyle", "routes/lifestyle.tsx", [
     index("routes/lifestyle-home.tsx"),
     route("pomodoro", "routes/pomodoro.tsx"),
+    route("quotes", "routes/quotes.tsx"),
   ]),
   route("calendar", "routes/calendar.tsx"),
   route("about", "routes/about.tsx"),

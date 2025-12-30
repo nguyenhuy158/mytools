@@ -7,6 +7,7 @@
       "json_tools": "JSON",
       "text_diff": "Văn bản",
       "pomodoro": "Pomodoro",
+      "quotes": "Danh ngôn",
       "calendar": "Lịch",
       "roadmap": "Lộ trình",
       "about": "Giới thiệu",
@@ -468,5 +469,11 @@
      "success": "Cảm ơn bạn đã đăng ký!",
      "error_invalid": "Vui lòng nhập địa chỉ email hợp lệ.",
      "all_rights_reserved": "Tất cả quyền được bảo lưu."
+   },
+   "quotes": {
+     "title": "Những câu danh ngôn",
+     "description": "Cảm hứng hàng ngày từ những câu danh ngôn",
+     "button_next": "Lấy câu danh ngôn ngẫu nhiên",
+     "source": "Nguồn"
    }
 }
