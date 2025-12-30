@@ -5,11 +5,11 @@
 	"scripts": {
 		"build": "react-router build",
 		"cf-typegen": "wrangler types",
-		"deploy": "npm run build && wrangler deploy --config build/server/wrangler.json",
+		"deploy": "pnpm build && wrangler deploy --config build/server/wrangler.json",
 		"dev": "react-router dev",
-		"postinstall": "npm run cf-typegen",
-		"preview": "npm run build && vite preview",
-		"typecheck": "npm run cf-typegen && react-router typegen && tsc -b"
+		"postinstall": "pnpm cf-typegen",
+		"preview": "pnpm build && vite preview",
+		"typecheck": "pnpm cf-typegen && react-router typegen && tsc -b"
 	},
 	"dependencies": {
 		"@tailwindcss/typography": "^0.5.19",
