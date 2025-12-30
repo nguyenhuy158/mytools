@@ -24,6 +24,10 @@ export function MermaidTimeline({ items }: MermaidTimelineProps) {
       startOnLoad: true,
       theme: "default",
       securityLevel: "loose",
+      themeVariables: {
+        fontSize: "16px",
+        fontFamily: "Inter, sans-serif",
+      },
     });
   }, []);
 
@@ -39,10 +43,20 @@ export function MermaidTimeline({ items }: MermaidTimelineProps) {
         .join("\n    ");
 
       const mermaidDef = `timeline
-    title Project Roadmap
     ${timelineEvents}`;
 
       containerRef.current.textContent = "";
+      
+      // Inject style to override Tailwind's max-width: 100% on SVGs within this container
+      const style = document.createElement("style");
+      style.textContent = `
+        .mermaid-wrapper svg {
+          max-width: none !important;
+          width: auto !important;
+        }
+      `;
+      containerRef.current.appendChild(style);
+
       const pre = document.createElement("pre");
       pre.className = "mermaid";
       pre.textContent = mermaidDef;
@@ -55,7 +69,7 @@ export function MermaidTimeline({ items }: MermaidTimelineProps) {
   return (
     <div
       ref={containerRef}
-      className="flex justify-center items-center bg-white dark:bg-gray-900 rounded-2xl p-8 border border-gray-200 dark:border-gray-800 overflow-x-auto"
+      className="mermaid-wrapper w-full overflow-x-auto bg-white dark:bg-gray-900 rounded-2xl p-4 md:p-8 border border-gray-200 dark:border-gray-800"
     />
   );
 }
