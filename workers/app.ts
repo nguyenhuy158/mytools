@@ -2,6 +2,7 @@ import { createRequestHandler } from "react-router";
 
 // Export Durable Object classes
 export { LotoGameRoom } from "./loto-room";
+export { OnlineCounter } from "./online-counter";
 
 declare module "react-router" {
   export interface AppLoadContext {

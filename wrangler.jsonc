@@ -33,6 +33,10 @@
 			{
 				"name": "LOTO_ROOMS",
 				"class_name": "LotoGameRoom"
+			},
+			{
+				"name": "ONLINE_COUNTER",
+				"class_name": "OnlineCounter"
 			}
 		]
 	},
@@ -41,6 +45,12 @@
 			"tag": "v1",
 			"new_sqlite_classes": [
 				"LotoGameRoom"
+			]
+		},
+		{
+			"tag": "v2",
+			"new_sqlite_classes": [
+				"OnlineCounter"
 			]
 		}
 	],

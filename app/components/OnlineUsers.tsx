@@ -1,26 +1,56 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export function OnlineUsers() {
-    // Initial random count between 3 and 15
-    const [count, setCount] = useState(3);
+    const [count, setCount] = useState(0);
     const [mounted, setMounted] = useState(false);
+    const wsRef = useRef<WebSocket | null>(null);
 
     useEffect(() => {
         setMounted(true);
-        setCount(Math.floor(Math.random() * 12) + 3);
 
-        const interval = setInterval(() => {
-            // Randomly fluctuate by -1, 0, or +1, keeping within bounds
-            setCount(prev => {
-                const change = Math.floor(Math.random() * 3) - 1; 
-                let next = prev + change;
-                if (next < 2) next = 2;
-                if (next > 30) next = 30;
-                return next;
-            });
-        }, 8000); // Change every 8 seconds
+        // Connect to WebSocket for real-time user count
+        const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+        const wsUrl = `${protocol}//${window.location.host}/api/online-counter/ws`;
 
-        return () => clearInterval(interval);
+        const ws = new WebSocket(wsUrl);
+        wsRef.current = ws;
+
+        ws.onopen = () => {
+            console.log("Connected to online counter");
+        };
+
+        ws.onmessage = (event) => {
+            try {
+                const data = JSON.parse(event.data);
+                if (data.type === "count") {
+                    setCount(data.count);
+                }
+            } catch (error) {
+                console.error("Failed to parse message:", error);
+            }
+        };
+
+        ws.onerror = (error) => {
+            console.error("WebSocket error:", error);
+        };
+
+        ws.onclose = () => {
+            console.log("Disconnected from online counter");
+        };
+
+        // Send periodic ping to keep connection alive
+        const pingInterval = setInterval(() => {
+            if (ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ type: "ping" }));
+            }
+        }, 30000);
+
+        return () => {
+            clearInterval(pingInterval);
+            if (wsRef.current) {
+                wsRef.current.close();
+            }
+        };
     }, []);
 
     if (!mounted) return null;
