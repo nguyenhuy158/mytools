@@ -86,7 +86,7 @@ export default function Calendar() {
   const getCountdown = (targetDate: Date) => {
     const now = currentTime;
     const days = differenceInDays(targetDate, now);
-    
+
     if (days > 0) {
       return `${days} ${days === 1 ? 'day' : 'days'}`;
     } else if (days === 0) {
@@ -103,7 +103,7 @@ export default function Calendar() {
   const nextMonth = () => setCurrentDate(addMonths(currentDate, 1));
   const prevMonth = () => setCurrentDate(subMonths(currentDate, 1));
   const goToToday = () => setCurrentDate(new Date());
-  
+
   const upcomingHolidays = getUpcomingHolidays();
 
   const monthStart = startOfMonth(currentDate);
@@ -256,7 +256,7 @@ export default function Calendar() {
               </h2>
             </div>
           </div>
-          
+
           <div className="max-h-[600px] overflow-y-auto">
             {upcomingHolidays.length === 0 ? (
               <div className="p-6 text-center text-gray-500 dark:text-gray-400">
@@ -267,7 +267,7 @@ export default function Calendar() {
                     {upcomingHolidays.map((holiday, index) => {
                       const countdown = getCountdown(holiday.dateObj);
                       const isToday = isSameDay(holiday.dateObj, currentTime);
-                      
+
                       return (
                         <div
                           key={`${holiday.date}-${index}`}
@@ -292,7 +292,7 @@ export default function Calendar() {
                                 )}
                               </div>
                             </div>
-                            
+
                             <div className="flex flex-col items-end flex-shrink-0">
                               <span
                                 className={`px-2 py-1 rounded-full text-xs font-semibold ${
