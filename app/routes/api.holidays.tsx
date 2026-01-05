@@ -5,171 +5,57 @@ export interface Holiday {
   type: "solar" | "lunar";
 }
 
-const solarHolidays2026: Holiday[] = [
-  { date: "01/01/2026", lunarDate: "13/11/2025", name: "Tết Dương lịch năm 2026", type: "solar" },
-  { date: "06/01/2026", lunarDate: "18/11/2025", name: "Tổng tuyển cử quốc hội khóa đầu tiên của nước Việt Nam năm 2026", type: "solar" },
-  { date: "09/01/2026", lunarDate: "21/11/2025", name: "Ngày Học sinh - Sinh viên Việt Nam năm 2026", type: "solar" },
-  { date: "11/01/2026", lunarDate: "23/11/2025", name: "Việt Nam chính thức gia nhập WTO năm 2026", type: "solar" },
-  { date: "27/01/2026", lunarDate: "09/12/2025", name: "Ký Hiệp định Pari chấm dứt chiến tranh ở Việt Nam năm 2026", type: "solar" },
-  { date: "03/02/2026", lunarDate: "16/12/2025", name: "Ngày thành lập Đảng Cộng sản Việt Nam năm 2026", type: "solar" },
-  { date: "04/02/2026", lunarDate: "17/12/2025", name: "Ngày thống nhất các tổ chức mặt trận thành mặt trận Tổ quốc Việt Nam năm 2026", type: "solar" },
-  { date: "14/02/2026", lunarDate: "27/12/2025", name: "Ngày lễ tình nhân (Valentine) năm 2026", type: "solar" },
-  { date: "20/02/2026", lunarDate: "04/01/2026", name: "Ngày Công bằng xã hội thế giới năm 2026", type: "solar" },
-  { date: "21/02/2026", lunarDate: "05/01/2026", name: "Ngày Ngôn ngữ mẹ đẻ Quốc tế năm 2026", type: "solar" },
-  { date: "27/02/2026", lunarDate: "11/01/2026", name: "Ngày thầy thuốc Việt Nam năm 2026", type: "solar" },
-  { date: "08/03/2026", lunarDate: "20/01/2026", name: "Ngày Quốc tế Phụ nữ năm 2026", type: "solar" },
-  { date: "19/03/2026", lunarDate: "01/02/2026", name: "Ngày toàn quốc chống Mỹ năm 2026", type: "solar" },
-  { date: "20/03/2026", lunarDate: "02/02/2026", name: "Ngày Quốc Tế hạnh phúc năm 2026", type: "solar" },
-  { date: "21/03/2026", lunarDate: "03/02/2026", name: "Ngày Hội chứng Down thế giới và Ngày Quốc tế xóa bỏ phân biệt chủng tộc năm 2026", type: "solar" },
-  { date: "22/03/2026", lunarDate: "04/02/2026", name: "Ngày Nước sạch Thế giới năm 2026", type: "solar" },
-  { date: "23/03/2026", lunarDate: "05/02/2026", name: "Ngày Khí tượng Thế giới năm 2026", type: "solar" },
-  { date: "26/03/2026", lunarDate: "08/02/2026", name: "Ngày thành lập Đoàn TNCS Hồ Chí Minh năm 2026", type: "solar" },
-  { date: "27/03/2026", lunarDate: "09/02/2026", name: "Ngày Thể Thao Việt Nam năm 2026", type: "solar" },
-  { date: "01/04/2026", lunarDate: "14/02/2026", name: "Ngày Cá tháng Tư năm 2026", type: "solar" },
-  { date: "04/04/2026", lunarDate: "17/02/2026", name: "Ngày Quốc tế Nhận thức bom mìn và Hỗ trợ bằng hành động chống bom mìn năm 2026", type: "solar" },
-  { date: "05/04/2026", lunarDate: "18/02/2026", name: "Tết Thanh minh năm 2026", type: "solar" },
-  { date: "07/04/2026", lunarDate: "20/02/2026", name: "Ngày Y tế Thế giới năm 2026", type: "solar" },
-  { date: "14/04/2026", lunarDate: "27/02/2026", name: "Tết Dân tộc Khmer Nam Bộ năm 2026", type: "solar" },
-  { date: "22/04/2026", lunarDate: "06/03/2026", name: "Ngày Trái đất năm 2026", type: "solar" },
-  { date: "23/04/2026", lunarDate: "07/03/2026", name: "Ngày Sách và Bản quyền Thế giới năm 2026", type: "solar" },
-  { date: "26/04/2026", lunarDate: "10/03/2026", name: "Ngày Sở hữu trí tuệ thế giới năm 2026", type: "solar" },
-  { date: "30/04/2026", lunarDate: "14/03/2026", name: "Ngày giải phóng miền Nam năm 2026", type: "solar" },
-  { date: "01/05/2026", lunarDate: "15/03/2026", name: "Ngày Quốc tế Lao động năm 2026", type: "solar" },
-  { date: "03/05/2026", lunarDate: "17/03/2026", name: "Ngày Tự do Báo chí thế giới năm 2026", type: "solar" },
-  { date: "05/05/2026", lunarDate: "19/03/2026", name: "Ngày sinh Các - Mác năm 2026", type: "solar" },
-  { date: "07/05/2026", lunarDate: "21/03/2026", name: "Ngày chiến thắng Điện Biên Phủ năm 2026", type: "solar" },
-  { date: "15/05/2026", lunarDate: "29/03/2026", name: "Ngày thành lập Đội Thiếu niên Tiền phong Hồ Chí Minh năm 2026", type: "solar" },
-  { date: "17/05/2026", lunarDate: "01/04/2026", name: "Ngày Xã hội Thông tin Thế giới năm 2026", type: "solar" },
-  { date: "19/05/2026", lunarDate: "03/04/2026", name: "Ngày sinh chủ tịch Hồ Chí Minh năm 2026", type: "solar" },
-  { date: "21/05/2026", lunarDate: "05/04/2026", name: "Ngày Thế giới về Đa dạng Văn hóa vì Đối thoại và Phát triển năm 2026", type: "solar" },
-  { date: "22/05/2026", lunarDate: "06/04/2026", name: "Ngày quốc tế Đa dạng sinh học năm 2026", type: "solar" },
-  { date: "29/05/2026", lunarDate: "13/04/2026", name: "Ngày Quốc tế Gìn giữ hòa bình Liên Hiệp Quốc năm 2026", type: "solar" },
-  { date: "31/05/2026", lunarDate: "15/04/2026", name: "Ngày Thế giới không thuốc lá năm 2026", type: "solar" },
-  { date: "01/06/2026", lunarDate: "16/04/2026", name: "Ngày Quốc tế thiếu nhi năm 2026", type: "solar" },
-  { date: "04/06/2026", lunarDate: "19/04/2026", name: "Ngày Quốc tế của trẻ em vô tội và là nạn nhân bị xâm lược năm 2026", type: "solar" },
-  { date: "05/06/2026", lunarDate: "20/04/2026", name: "Ngày Môi trường Thế giới năm 2026", type: "solar" },
-  { date: "17/06/2026", lunarDate: "03/05/2026", name: "Ngày Thế giới chống sa mạc hóa và hạn hán năm 2026", type: "solar" },
-  { date: "20/06/2026", lunarDate: "06/05/2026", name: "Ngày Tị nạn Thế giới năm 2026", type: "solar" },
-  { date: "21/06/2026", lunarDate: "07/05/2026", name: "Ngày báo chí Việt Nam năm 2026", type: "solar" },
-  { date: "23/06/2026", lunarDate: "09/05/2026", name: "Ngày Dịch vụ Công cộng Liên Hiệp Quốc năm 2026", type: "solar" },
-  { date: "28/06/2026", lunarDate: "14/05/2026", name: "Ngày gia đình Việt Nam năm 2026", type: "solar" },
-  { date: "02/07/2026", lunarDate: "18/05/2026", name: "Quốc hội Khóa VI quyết nghị lấy tên nước là Cộng hòa Xã hội Chủ nghĩa Việt Nam năm 2026", type: "solar" },
-  { date: "06/07/2026", lunarDate: "22/05/2026", name: "Ngày Hôn thế giới năm 2026", type: "solar" },
-  { date: "11/07/2026", lunarDate: "27/05/2026", name: "Ngày dân số thế giới năm 2026", type: "solar" },
-  { date: "15/07/2026", lunarDate: "02/06/2026", name: "Ngày truyền thống Thanh niên xung phong năm 2026", type: "solar" },
-  { date: "27/07/2026", lunarDate: "14/06/2026", name: "Ngày Thương binh liệt sĩ năm 2026", type: "solar" },
-  { date: "28/07/2026", lunarDate: "15/06/2026", name: "Ngày thành lập công đoàn Việt Nam năm 2026", type: "solar" },
-  { date: "09/08/2026", lunarDate: "27/06/2026", name: "Ngày Quốc tế của người thổ dân thế giới năm 2026", type: "solar" },
-  { date: "12/08/2026", lunarDate: "30/06/2026", name: "Ngày Quốc tế Thanh Thiếu niên năm 2026", type: "solar" },
-  { date: "19/08/2026", lunarDate: "07/07/2026", name: "Ngày tổng khởi nghĩa năm 2026", type: "solar" },
-  { date: "23/08/2026", lunarDate: "11/07/2026", name: "Ngày Quốc tế tưởng niệm việc buôn bán nô lệ và việc hủy bỏ nó năm 2026", type: "solar" },
-  { date: "25/08/2026", lunarDate: "13/07/2026", name: "Bảo Đại thoái vị năm 2026", type: "solar" },
-  { date: "30/08/2026", lunarDate: "18/07/2026", name: "Ngày sinh tỷ phú Warren Edward Buffett năm 2026", type: "solar" },
-  { date: "01/09/2026", lunarDate: "20/07/2026", name: "Chiến tranh thế giới thứ hai bùng nổ năm 2026", type: "solar" },
-  { date: "02/09/2026", lunarDate: "21/07/2026", name: "Ngày Quốc Khánh năm 2026", type: "solar" },
-  { date: "10/09/2026", lunarDate: "29/07/2026", name: "Ngày thành lập Mặt trận Tổ quốc Việt Nam năm 2026", type: "solar" },
-  { date: "12/09/2026", lunarDate: "02/08/2026", name: "Chiến dịch Xô Viết Nghệ Tĩnh năm 2026", type: "solar" },
-  { date: "15/09/2026", lunarDate: "05/08/2026", name: "Ngày Quốc tế Dân chủ năm 2026", type: "solar" },
-  { date: "16/09/2026", lunarDate: "06/08/2026", name: "Ngày Quốc tế Bảo vệ Tầng ôzôn năm 2026", type: "solar" },
-  { date: "20/09/2026", lunarDate: "10/08/2026", name: "Việt Nam gia nhập Liên Hiệp Quốc năm 2026", type: "solar" },
-  { date: "21/09/2026", lunarDate: "11/08/2026", name: "Ngày Quốc tế Hòa bình năm 2026", type: "solar" },
-  { date: "23/09/2026", lunarDate: "13/08/2026", name: "Ngày Nam Bộ kháng chiến năm 2026", type: "solar" },
-  { date: "27/09/2026", lunarDate: "17/08/2026", name: "Khởi nghĩa Bắc Sơn năm 2026", type: "solar" },
-  { date: "01/10/2026", lunarDate: "21/08/2026", name: "Ngày quốc tế người cao tuổi năm 2026", type: "solar" },
-  { date: "02/10/2026", lunarDate: "22/08/2026", name: "Ngày Quốc tế bất bạo động năm 2026", type: "solar" },
-  { date: "04/10/2026", lunarDate: "24/08/2026", name: "Ngày Động vật thế giới năm 2026", type: "solar" },
-  { date: "05/10/2026", lunarDate: "25/08/2026", name: "Ngày Nhà giáo thế giới năm 2026", type: "solar" },
-  { date: "09/10/2026", lunarDate: "29/08/2026", name: "Ngày Bưu chính Thế giới năm 2026", type: "solar" },
-  { date: "13/10/2026", lunarDate: "04/09/2026", name: "Ngày doanh nhân Việt Nam năm 2026", type: "solar" },
-  { date: "14/10/2026", lunarDate: "05/09/2026", name: "Ngày thành lập Hội Nông dân Việt Nam năm 2026", type: "solar" },
-  { date: "15/10/2026", lunarDate: "06/09/2026", name: "Ngày truyền thống Hội liên hiệp Thanh niên Việt Nam năm 2026", type: "solar" },
-  { date: "16/10/2026", lunarDate: "07/09/2026", name: "Ngày Lương thực thế giới năm 2026", type: "solar" },
-  { date: "17/10/2026", lunarDate: "08/09/2026", name: "Ngày quốc tế xóa nghèo năm 2026", type: "solar" },
-  { date: "20/10/2026", lunarDate: "11/09/2026", name: "Ngày Phụ nữ Việt Nam năm 2026", type: "solar" },
-  { date: "31/10/2026", lunarDate: "22/09/2026", name: "Ngày Hallowen năm 2026", type: "solar" },
-  { date: "09/11/2026", lunarDate: "01/10/2026", name: "Ngày pháp luật Việt Nam năm 2026", type: "solar" },
-  { date: "20/11/2026", lunarDate: "12/10/2026", name: "Ngày Nhà giáo Việt Nam năm 2026", type: "solar" },
-  { date: "23/11/2026", lunarDate: "15/10/2026", name: "Ngày thành lập Hội chữ thập đỏ Việt Nam năm 2026", type: "solar" },
-  { date: "28/11/2026", lunarDate: "20/10/2026", name: "Ngày Lâm nghiệp Việt Nam năm 2026", type: "solar" },
-  { date: "01/12/2026", lunarDate: "23/10/2026", name: "Ngày thế giới phòng chống AIDS năm 2026", type: "solar" },
-  { date: "02/12/2026", lunarDate: "24/10/2026", name: "Ngày Quốc tế Giải phóng Nô lệ năm 2026", type: "solar" },
-  { date: "07/12/2026", lunarDate: "29/10/2026", name: "Ngày Hàng không Dân dụng Quốc tế năm 2026", type: "solar" },
-  { date: "09/12/2026", lunarDate: "01/11/2026", name: "Ngày Quốc tế chống Tham nhũng năm 2026", type: "solar" },
-  { date: "19/12/2026", lunarDate: "11/11/2026", name: "Ngày toàn quốc kháng chiến năm 2026", type: "solar" },
-  { date: "22/12/2026", lunarDate: "14/11/2026", name: "Ngày thành lập quân đội nhân dân Việt Nam năm 2026", type: "solar" },
-  { date: "24/12/2026", lunarDate: "16/11/2026", name: "Lễ Giáng sinh (Noen) năm 2026", type: "solar" },
-];
+function parseCSV(csvText: string): Holiday[] {
+  const lines = csvText.trim().split("\n");
+  const holidays: Holiday[] = [];
 
-const lunarHolidays2026: Holiday[] = [
-  { date: "17/02/2026", lunarDate: "01/01/2026", name: "Tết Nguyên Đán năm 2026", type: "lunar" },
-  { date: "20/02/2026", lunarDate: "04/01/2026", name: "Lễ hội Đồng Kỵ (Bắc Ninh) năm 2026", type: "lunar" },
-  { date: "21/02/2026", lunarDate: "05/01/2026", name: "Lễ hội gò Đống Đa năm 2026", type: "lunar" },
-  { date: "22/02/2026", lunarDate: "06/01/2026", name: "Hội Gióng Sóc Sơn (Hà Nội), Khai hội chùa Hương năm 2026", type: "lunar" },
-  { date: "23/02/2026", lunarDate: "07/01/2026", name: "Hội chợ Viềng (Nam Định), Lễ hội đầm Ô Loan (Phú Yên) năm 2026", type: "lunar" },
-  { date: "24/02/2026", lunarDate: "08/01/2026", name: "Lễ hội đền Vua Bà (Hòa Bình) năm 2026", type: "lunar" },
-  { date: "25/02/2026", lunarDate: "09/01/2026", name: "Lễ hội Đức Chí Tôn (Tây Ninh) năm 2026", type: "lunar" },
-  { date: "26/02/2026", lunarDate: "10/01/2026", name: "Khai hội Yên Tử (Quảng Ninh) năm 2026", type: "lunar" },
-  { date: "01/03/2026", lunarDate: "13/01/2026", name: "Hội Lim (Tiên Du - Bắc Ninh) năm 2026", type: "lunar" },
-  { date: "02/03/2026", lunarDate: "14/01/2026", name: "Lễ hội Bà Chúa Kho (Bắc Ninh) năm 2026", type: "lunar" },
-  { date: "03/03/2026", lunarDate: "15/01/2026", name: "Tết Nguyên tiêu năm 2026", type: "lunar" },
-  { date: "05/03/2026", lunarDate: "17/01/2026", name: "Lễ hội chọi trâu (Vĩnh Phúc) năm 2026", type: "lunar" },
-  { date: "15/03/2026", lunarDate: "27/01/2026", name: "Lễ Cầu tháng Giêng (Phú Thọ) năm 2026", type: "lunar" },
-  { date: "16/03/2026", lunarDate: "28/01/2026", name: "Hội làng Bùi (Bắc Ninh) năm 2026", type: "lunar" },
-  { date: "20/03/2026", lunarDate: "02/02/2026", name: "Lễ hội Chùa Trầm năm 2026", type: "lunar" },
-  { date: "26/03/2026", lunarDate: "08/02/2026", name: "Hội làng Long Khám (Bắc Ninh) năm 2026", type: "lunar" },
-  { date: "28/03/2026", lunarDate: "10/02/2026", name: "Lễ hội đình Yên Phụ (Hà Nội) năm 2026", type: "lunar" },
-  { date: "30/03/2026", lunarDate: "12/02/2026", name: "Hội chọi trâu Phù Ninh (Phú Thọ), Lễ hội Làng rèn Tây Phương Danh (Bình Định) năm 2026", type: "lunar" },
-  { date: "31/03/2026", lunarDate: "13/02/2026", name: "Lễ hội Hoa Ban (Lai Châu) năm 2026", type: "lunar" },
-  { date: "01/04/2026", lunarDate: "14/02/2026", name: "Lễ hội chùa Vĩnh Nghiêm (Bắc Giang) năm 2026", type: "lunar" },
-  { date: "06/04/2026", lunarDate: "19/02/2026", name: "Lễ hội Quan Thế Âm (Đà Nẵng) năm 2026", type: "lunar" },
-  { date: "09/04/2026", lunarDate: "22/02/2026", name: "Hội đình Trúc Tay (Bắc Giang) năm 2026", type: "lunar" },
-  { date: "14/04/2026", lunarDate: "27/02/2026", name: "Hội chùa Sàn (Lục Nam, Bắc Giang) năm 2026", type: "lunar" },
-  { date: "19/04/2026", lunarDate: "03/03/2026", name: "Tết Hàn thực năm 2026", type: "lunar" },
-  { date: "22/04/2026", lunarDate: "06/03/2026", name: "Lễ hội Cố đô Hoa Lư (Ninh Bình) năm 2026", type: "lunar" },
-  { date: "23/04/2026", lunarDate: "07/03/2026", name: "Lễ hội chùa Thầy (Hà Nội) năm 2026", type: "lunar" },
-  { date: "25/04/2026", lunarDate: "09/03/2026", name: "Lễ hội Nam Trì (Hưng Yên) năm 2026", type: "lunar" },
-  { date: "26/04/2026", lunarDate: "10/03/2026", name: "Giỗ tổ Hùng Vương năm 2026", type: "lunar" },
-  { date: "01/05/2026", lunarDate: "15/03/2026", name: "Hội làng Đông Hồ (Bắc Ninh) năm 2026", type: "lunar" },
-  { date: "04/05/2026", lunarDate: "18/03/2026", name: "Hội Đậu (Bắc Ninh) năm 2026", type: "lunar" },
-  { date: "09/05/2026", lunarDate: "23/03/2026", name: "Hội chùa Bút Tháp (Bắc Ninh) năm 2026", type: "lunar" },
-  { date: "13/05/2026", lunarDate: "27/03/2026", name: "Hội thả chim bồ câu (Bắc Ninh) năm 2026", type: "lunar" },
-  { date: "17/05/2026", lunarDate: "01/04/2026", name: "Lễ hội làng cá Cát Bà (Hải Phòng) năm 2026", type: "lunar" },
-  { date: "24/05/2026", lunarDate: "08/04/2026", name: "Lễ hội chùa Dâu (Bắc Ninh) năm 2026", type: "lunar" },
-  { date: "25/05/2026", lunarDate: "09/04/2026", name: "Hội Gióng Phù Đổng (Hà Nội) năm 2026", type: "lunar" },
-  { date: "26/05/2026", lunarDate: "10/04/2026", name: "Hội làng Cựu Ấp (Vĩnh Phúc) năm 2026", type: "lunar" },
-  { date: "30/05/2026", lunarDate: "14/04/2026", name: "Tết Dân tộc Khmer năm 2026", type: "lunar" },
-  { date: "31/05/2026", lunarDate: "15/04/2026", name: "Lễ Phật Đản năm 2026", type: "lunar" },
-  { date: "19/06/2026", lunarDate: "05/05/2026", name: "Tết Đoan Ngọ năm 2026", type: "lunar" },
-  { date: "23/06/2026", lunarDate: "09/05/2026", name: "Lễ hội đình Châu Phú (An Giang) năm 2026", type: "lunar" },
-  { date: "24/06/2026", lunarDate: "10/05/2026", name: "Lễ hội cúng biển Mỹ Long (Trà Vinh) năm 2026", type: "lunar" },
-  { date: "28/06/2026", lunarDate: "14/05/2026", name: "Lễ hội đình – đền Chèm (Hà Nội) năm 2026", type: "lunar" },
-  { date: "14/07/2026", lunarDate: "01/06/2026", name: "Lễ hội đình Trà Cổ (Quảng Ninh) năm 2026", type: "lunar" },
-  { date: "23/07/2026", lunarDate: "10/06/2026", name: "Hội kéo ngựa gỗ (Hải Phòng) năm 2026", type: "lunar" },
-  { date: "19/08/2026", lunarDate: "07/07/2026", name: "Lễ Thất Tịch năm 2026", type: "lunar" },
-  { date: "27/08/2026", lunarDate: "15/07/2026", name: "Lễ Vu Lan, Tết Trung nguyên năm 2026", type: "lunar" },
-  { date: "11/09/2026", lunarDate: "01/08/2026", name: "Tết Katê năm 2026", type: "lunar" },
-  { date: "14/09/2026", lunarDate: "04/08/2026", name: "Lễ hội Đình Châm Khê (Bắc Ninh) năm 2026", type: "lunar" },
-  { date: "19/09/2026", lunarDate: "09/08/2026", name: "Lễ hội chọi trâu (Đồ Sơn, Hải Phòng) năm 2026", type: "lunar" },
-  { date: "20/09/2026", lunarDate: "10/08/2026", name: "Hội Thị Cầu (Bắc Ninh) năm 2026", type: "lunar" },
-  { date: "25/09/2026", lunarDate: "15/08/2026", name: "Tết Trung Thu năm 2026", type: "lunar" },
-  { date: "18/10/2026", lunarDate: "09/09/2026", name: "Tết Trùng Cửu năm 2026", type: "lunar" },
-  { date: "22/10/2026", lunarDate: "13/09/2026", name: "Lễ hội chùa Keo (Thái Bình) năm 2026", type: "lunar" },
-  { date: "29/10/2026", lunarDate: "20/09/2026", name: "Hội đền Bắc Lệ (Lạng Sơn) năm 2026", type: "lunar" },
-  { date: "07/11/2026", lunarDate: "29/09/2026", name: "Hội Đại Bái (Bắc Ninh) năm 2026", type: "lunar" },
-  { date: "18/11/2026", lunarDate: "10/10/2026", name: "Tết Trùng Thập năm 2026", type: "lunar" },
-  { date: "23/11/2026", lunarDate: "15/10/2026", name: "Tết Hạ Nguyên (Tết cơm mới) năm 2026", type: "lunar" },
-  { date: "16/12/2026", lunarDate: "08/11/2026", name: "Hội chùa Canh Bầu (Bắc Giang) năm 2026", type: "lunar" },
-  { date: "18/12/2026", lunarDate: "10/11/2026", name: "Tết cơm mới của người La Hủ (Lai Châu) năm 2026", type: "lunar" },
-  { date: "22/12/2026", lunarDate: "14/11/2026", name: "Lễ hội đền Nguyễn Công Trứ (Ninh Bình) năm 2026", type: "lunar" },
-  { date: "23/12/2026", lunarDate: "15/11/2026", name: "Hội Đình Phường Bông (Nam Định) năm 2026", type: "lunar" },
-  { date: "02/01/2027", lunarDate: "25/11/2026", name: "Hội Vân Lệ (Thanh Hóa) năm 2026", type: "lunar" },
-  { date: "19/01/2027", lunarDate: "12/12/2026", name: "Hội Mậu Lân (Vĩnh Phúc) năm 2026", type: "lunar" },
-  { date: "30/01/2027", lunarDate: "23/12/2026", name: "Ông Táo chầu trời năm 2026", type: "lunar" },
-  { date: "04/02/2027", lunarDate: "28/12/2026", name: "Hội Bạch Lưu (Vĩnh Phúc) năm 2026", type: "lunar" },
-];
+  // Skip header row
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) continue;
 
-const allHolidays = [...solarHolidays2026, ...lunarHolidays2026];
+    // Parse CSV line, handling quoted fields
+    const fields: string[] = [];
+    let currentField = "";
+    let inQuotes = false;
+
+    for (let j = 0; j < line.length; j++) {
+      const char = line[j];
+
+      if (char === '"') {
+        inQuotes = !inQuotes;
+      } else if (char === "," && !inQuotes) {
+        fields.push(currentField);
+        currentField = "";
+      } else {
+        currentField += char;
+      }
+    }
+    fields.push(currentField); // Add last field
+
+    if (fields.length >= 4) {
+      holidays.push({
+        date: fields[0].trim(),
+        lunarDate: fields[1].trim(),
+        name: fields[2].trim(),
+        type: fields[3].trim() as "solar" | "lunar",
+      });
+    }
+  }
+
+  return holidays;
+}
 
 export async function loader() {
-  return Response.json({ holidays: allHolidays });
+  try {
+    // Read CSV file from public directory
+    const csvPath = new URL("../../public/data/holidays-2026.csv", import.meta.url);
+    const csvText = await Bun.file(csvPath.pathname).text();
+    const holidays = parseCSV(csvText);
+
+    return Response.json({ holidays });
+  } catch (error) {
+    console.error("Error loading holidays:", error);
+    return Response.json({ holidays: [], error: "Failed to load holidays" }, { status: 500 });
+  }
 }
