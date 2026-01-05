@@ -1,21 +1,29 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { 
-  format, 
-  addMonths, 
-  subMonths, 
-  startOfMonth, 
-  endOfMonth, 
-  startOfWeek, 
-  endOfWeek, 
-  eachDayOfInterval, 
-  isSameMonth, 
-  isSameDay, 
-  isToday 
+import {
+  format,
+  addMonths,
+  subMonths,
+  startOfMonth,
+  endOfMonth,
+  startOfWeek,
+  endOfWeek,
+  eachDayOfInterval,
+  isSameMonth,
+  isSameDay,
+  isToday,
+  parse
 } from "date-fns";
 import { Solar } from "lunar-javascript";
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from "lucide-react";
 import type { MetaFunction } from "react-router";
+
+interface Holiday {
+  date: string; // DD/MM/YYYY
+  lunarDate?: string;
+  name: string;
+  type: "solar" | "lunar";
+}
 
 export const meta: MetaFunction = () => {
   return [
@@ -27,6 +35,22 @@ export const meta: MetaFunction = () => {
 export default function Calendar() {
   const { t } = useTranslation();
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [holidays, setHolidays] = useState<Holiday[]>([]);
+
+  useEffect(() => {
+    fetch("/api/holidays")
+      .then((res) => res.json())
+      .then((data) => {
+        const typedData = data as { holidays: Holiday[] };
+        setHolidays(typedData.holidays);
+      })
+      .catch((err) => console.error("Failed to fetch holidays:", err));
+  }, []);
+
+  const getHolidayForDate = (date: Date) => {
+    const dateStr = format(date, "dd/MM/yyyy");
+    return holidays.find((h) => h.date === dateStr);
+  };
 
   const nextMonth = () => setCurrentDate(addMonths(currentDate, 1));
   const prevMonth = () => setCurrentDate(subMonths(currentDate, 1));
@@ -121,6 +145,7 @@ export default function Calendar() {
               const isCurrentMonth = isSameMonth(date, currentDate);
               const isTodayDate = isToday(date);
               const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+              const holiday = getHolidayForDate(date);
 
               return (
                 <div
@@ -134,7 +159,7 @@ export default function Calendar() {
                       className={`text-lg font-semibold ${
                         isTodayDate
                           ? "w-8 h-8 flex items-center justify-center bg-indigo-600 text-white rounded-full -ml-1 -mt-1 shadow-sm"
-                          : isWeekend
+                          : isWeekend || holiday
                           ? "text-red-500 dark:text-red-400"
                           : "text-gray-900 dark:text-gray-100"
                       }`}
@@ -147,13 +172,18 @@ export default function Calendar() {
                       </span>
                     )}
                   </div>
-                  
-                  <div className="mt-2 text-right">
-                    <div className={`text-xs ${
+
+                  <div className="mt-2 space-y-1">
+                    <div className={`text-xs text-right ${
                         lunar.day === 1 || lunar.day === 15 ? "text-indigo-600 dark:text-indigo-400 font-bold" : "text-gray-500 dark:text-gray-400"
                       }`}>
                       <span>{lunar.day}/{lunar.month}</span>
                     </div>
+                    {holiday && (
+                      <div className="text-[10px] text-red-600 dark:text-red-400 font-medium leading-tight line-clamp-2" title={holiday.name}>
+                        {holiday.name.replace(" năm 2026", "")}
+                      </div>
+                    )}
                   </div>
                 </div>
               );

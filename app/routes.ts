@@ -8,6 +8,7 @@ export default [
   route("api/loto/create-room", "routes/api.loto.create-room.tsx"),
   route("api/loto/room/:roomId/ws", "routes/api.loto.room.$roomId.ws.tsx"),
   route("api/online-counter/ws", "routes/api.online-counter.ws.tsx"),
+  route("api/holidays", "routes/api.holidays.tsx"),
   // UI Routes
   route("it", "routes/it.tsx", [
     index("routes/it-home.tsx"),
