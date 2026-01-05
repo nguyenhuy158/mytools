@@ -374,6 +374,8 @@
     "solar": "Solar",
     "lunar": "Lunar",
     "holidays": "Vietnamese Holidays",
+    "upcoming_events": "Upcoming Events",
+    "no_upcoming_events": "No upcoming events",
     "weekdays": {
       "mon": "Mon",
       "tue": "Tue",

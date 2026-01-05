@@ -1,3 +1,5 @@
+import csvData from "../../public/data/holidays-2026.csv?raw";
+
 export interface Holiday {
   date: string; // DD/MM/YYYY
   lunarDate?: string; // DD/MM/YYYY
@@ -48,11 +50,7 @@ function parseCSV(csvText: string): Holiday[] {
 
 export async function loader() {
   try {
-    // Read CSV file from public directory
-    const csvPath = new URL("../../public/data/holidays-2026.csv", import.meta.url);
-    const csvText = await Bun.file(csvPath.pathname).text();
-    const holidays = parseCSV(csvText);
-
+    const holidays = parseCSV(csvData);
     return Response.json({ holidays });
   } catch (error) {
     console.error("Error loading holidays:", error);

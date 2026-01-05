@@ -374,6 +374,8 @@
     "solar": "Dương lịch",
     "lunar": "Âm lịch",
     "holidays": "Ngày lễ Việt Nam",
+    "upcoming_events": "Sự Kiện Sắp Tới",
+    "no_upcoming_events": "Không có sự kiện sắp tới",
     "weekdays": {
       "mon": "T2",
       "tue": "T3",
