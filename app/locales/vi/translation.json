@@ -495,7 +495,10 @@
      "roadmap_description": "Hành trình phát triển và các tính năng sắp tới",
      "new_idea_title": "Bạn có ý tưởng mới?",
      "new_idea_description": "Chúng tôi luôn lắng nghe ý kiến đóng góp để phát triển bộ công cụ hữu ích hơn.",
-     "open_link": "(Mở)"
+     "open_link": "(Mở)",
+     "location_title": "Vị trí",
+     "location_description": "Tìm chúng tôi tại tọa độ",
+     "location_note": "Thành phố Hồ Chí Minh, Việt Nam"
    },
     "countdown": {
       "day": "Ngày",

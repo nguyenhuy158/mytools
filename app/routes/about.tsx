@@ -1,8 +1,9 @@
 import { useTranslation } from "react-i18next";
+import { useState, useEffect } from "react";
 import {
   Shield, Zap, Globe,
   Check, Type, ArrowRightLeft, CaseSensitive, FileType, AlignLeft, Code, Braces, Copy, ClipboardPaste, Download, Upload, History, Trash2, Settings, MoveRight, FileDiff,
-  Construction
+  Construction, MapPin
 } from "lucide-react";
 import { MermaidTimeline } from "../components/MermaidTimeline";
 import type { Route } from "./+types/about";
@@ -16,6 +17,14 @@ export function meta({}: Route.MetaArgs) {
 
 export default function About() {
   const { t } = useTranslation();
+  const [LocationMap, setLocationMap] = useState<any>(null);
+
+  // Dynamically import LocationMap only on client side
+  useEffect(() => {
+    import("../components/LocationMap").then((mod) => {
+      setLocationMap(() => mod.LocationMap);
+    });
+  }, []);
 
   const features = [
     { key: "sentence_case", icon: AlignLeft },
@@ -128,6 +137,48 @@ export default function About() {
                  <h3 className="font-semibold text-slate-900 dark:text-white">{t("about.accessible")}</h3>
                  <p className="text-sm text-slate-500 dark:text-gray-400">{t("about.works_everywhere")}</p>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Location Section */}
+        <section className="max-w-4xl mx-auto">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-8">
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <div className="w-12 h-12 bg-blue-50 dark:bg-blue-900/20 rounded-full flex items-center justify-center text-blue-600 dark:text-blue-400">
+                <MapPin className="w-6 h-6" />
+              </div>
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+                {t("about.location_title")}
+              </h2>
+            </div>
+
+            <div className="space-y-6">
+              <div className="text-center space-y-4">
+                <p className="text-lg text-slate-700 dark:text-gray-300">
+                  {t("about.location_description")}
+                </p>
+                <div className="inline-flex items-center gap-2 px-6 py-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                  <MapPin className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                  <code className="text-lg font-mono text-slate-900 dark:text-white">
+                    10°47'54.9"N 106°43'37.3"E
+                  </code>
+                </div>
+                <p className="text-sm text-slate-500 dark:text-gray-400">
+                  {t("about.location_note")}
+                </p>
+              </div>
+
+              {/* Interactive Map */}
+              {LocationMap && (
+                <div className="mt-6">
+                  <LocationMap
+                    lat={10.798583}
+                    lng={106.727028}
+                    locationName={t("about.location_note")}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </section>

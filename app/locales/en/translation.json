@@ -495,7 +495,10 @@
      "roadmap_description": "Development journey and upcoming features",
      "new_idea_title": "Have a new idea?",
      "new_idea_description": "We always listen to contributions to develop more useful tools.",
-     "open_link": "(Open)"
+     "open_link": "(Open)",
+     "location_title": "Location",
+     "location_description": "Find us at these coordinates",
+     "location_note": "Ho Chi Minh City, Vietnam"
    },
     "countdown": {
       "day": "Days",
