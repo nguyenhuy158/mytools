@@ -14,6 +14,8 @@ import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import "./app.css";
 
+import { CommandMenu } from "./components/CommandMenu";
+
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
@@ -29,7 +31,7 @@ export const links: Route.LinksFunction = () => [
     rel: "stylesheet",
     href: "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
     integrity: "sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=",
-    crossOrigin: "",
+    crossOrigin: "anonymous",
   },
   { rel: "icon", type: "image/png", href: "/favicon.png" },
 ];
@@ -62,16 +64,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
         />
       </head>
       <body className="flex flex-col min-h-screen">
-        <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200" />}>
-          <Navbar />
-        </Suspense>
-        <div className="flex-1">
-          {children}
-        </div>
-        <Footer />
-        <Toaster position="bottom-right" richColors />
-        <ScrollRestoration />
-        <Scripts />
+        <CommandMenu>
+          <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200" />}>
+            <Navbar />
+          </Suspense>
+          <div className="flex-1">
+            {children}
+          </div>
+          <Footer />
+          <Toaster position="bottom-right" richColors />
+          <ScrollRestoration />
+          <Scripts />
+        </CommandMenu>
       </body>
     </html>
   );
