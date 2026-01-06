@@ -39,7 +39,7 @@ Bản lộ trình nâng cấp và tích hợp các công cụ mới vào hệ si
 
 | Công cụ | Mô tả | Độ ưu tiên | Trạng thái |
 | :--- | :--- | :--- | :--- |
-| **Transformers.js** | Tích hợp AI chạy 100% tại trình duyệt cho các tool Word/Image processing mà không vi phạm chính sách "Privacy-first". | ⭐⭐ | 📋 Chờ thực hiện |
+| **Transformers.js** | Tích hợp AI chạy 100% tại trình duyệt cho các tool Word/Image processing mà không vi phạm chính sách "Privacy-first". | ⭐⭐ | ✅ Đã hoàn thành |
 | **Cloudflare Workers AI** | Sử dụng sức mạnh Edge Computing cho các tác vụ AI nặng hơn (Llama 3, Image Gen). | ⭐ | 📋 Chờ thực hiện |
 | **AI Note Assistant** | Tự động tóm tắt, sửa lỗi chính tả và suggest tags cho ghi chú (Notes) sử dụng Gemini Flash/Gemma. | ⭐⭐ | 📋 Chờ thực hiện |
 | **Smart SQL Formatter** | Format SQL query phức tạp và giải thích ý nghĩa query bằng AI. | ⭐ | 📋 Chờ thực hiện |

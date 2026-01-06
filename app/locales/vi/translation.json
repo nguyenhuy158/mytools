@@ -62,6 +62,10 @@
       "notes": {
         "name": "Ghi chú",
         "description": "Tạo và quản lý ghi chú với định dạng văn bản phong phú và lưu trữ đám mây."
+      },
+      "transformers": {
+        "name": "AI Playground",
+        "description": "Chạy mô hình AI trực tiếp trên trình duyệt với Transformers.js."
       }
       },
     "api_tester": {
@@ -542,5 +546,17 @@
      "description": "Cảm hứng hàng ngày từ những câu danh ngôn",
      "button_next": "Lấy câu danh ngôn ngẫu nhiên",
      "source": "Nguồn"
-   }
+   },
+    "transformers": {
+      "title": "AI Playground",
+      "description": "Chạy mô hình AI trực tiếp trên trình duyệt.",
+      "sentiment": "Phân tích cảm xúc",
+      "input_placeholder": "Nhập văn bản tiếng Anh để phân tích...",
+      "analyze": "Phân tích",
+      "loading_model": "Đang tải mô hình...",
+      "result": "Kết quả",
+      "positive": "Tích cực",
+      "negative": "Tiêu cực",
+      "score": "Độ tin cậy"
+    }
 }

@@ -62,7 +62,11 @@
       "notes": {
         "name": "Notes",
         "description": "Create and manage notes with rich text formatting and cloud storage."
-        }
+        },
+      "transformers": {
+        "name": "AI Playground",
+        "description": "Run AI models directly in your browser with Transformers.js."
+      }
       },
     "api_tester": {
       "title": "API Tester",
@@ -542,5 +546,18 @@
      "description": "Get inspired with daily quotes",
      "button_next": "Get Random Quote",
      "source": "Source"
-   }
+   },
+    "transformers": {
+      "title": "AI Playground",
+      "description": "Run AI models directly in your browser.",
+      "sentiment": "Sentiment Analysis",
+      "input_placeholder": "Enter English text to analyze...",
+      "analyze": "Analyze",
+      "loading_model": "Loading model...",
+      "result": "Result",
+      "positive": "Positive",
+      "negative": "Negative",
+      "score": "Score"
+    }
 }
+

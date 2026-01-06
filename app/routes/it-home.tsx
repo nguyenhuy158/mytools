@@ -1,4 +1,4 @@
-import { FileJson, FileDiff, Image, Network, Hash, Database, FileText, StickyNote } from "lucide-react";
+import { FileJson, FileDiff, Image, Network, Hash, Database, FileText, StickyNote, Brain } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PageHeader } from "../components/PageHeader";
 import { ToolGrid } from "../components/ToolGrid";
@@ -64,14 +64,21 @@ export default function ITToolsLanding() {
       icon: StickyNote,
       color: "bg-yellow-600",
     },
+    {
+      name: t("it_tools.transformers.name"),
+      description: t("it_tools.transformers.description"),
+      href: "/it/transformers",
+      icon: Brain,
+      color: "bg-fuchsia-600",
+    },
   ];
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-slate-900 dark:text-gray-100 p-4 md:p-8 font-sans">
       <div className="max-w-7xl mx-auto space-y-8">
-        <PageHeader 
-          title={t("it_tools.title")} 
-          description={t("it_tools.description")} 
+        <PageHeader
+          title={t("it_tools.title")}
+          description={t("it_tools.description")}
         />
 
         <ToolGrid>

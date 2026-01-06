@@ -197,7 +197,12 @@ toolhub/
 
 - **Number Reading** (`/it/number-reading`)
   - Convert numbers to words
-  - English and Vietnamese support
+    - English and Vietnamese support
+
+- **AI Playground** (`/it/transformers`)
+  - Run AI models locally in browser
+  - Sentiment Analysis using Transformers.js
+  - Privacy-first (no server processing)
 
 ### Lifestyle Section (`/lifestyle`)
 - **Pomodoro Timer** (`/lifestyle/pomodoro`)

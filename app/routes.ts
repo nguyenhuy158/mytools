@@ -20,6 +20,7 @@ export default [
     route("number-reading", "routes/it/number-reading.tsx"),
     route("odoo-inspector", "routes/it/odoo-inspector.tsx"),
     route("notes", "routes/it/notes.tsx"),
+    route("transformers", "routes/it/transformers.tsx"),
   ]),
   route("lifestyle", "routes/lifestyle.tsx", [
     index("routes/lifestyle-home.tsx"),
