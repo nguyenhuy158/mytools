@@ -25,20 +25,33 @@ Bản lộ trình nâng cấp và tích hợp các công cụ mới vào hệ si
 
 ---
 
+## 🛠️ Tool Expansion (Mở rộng công cụ)
+
+| Công cụ | Mô tả | Độ ưu tiên | Trạng thái |
+| :--- | :--- | :--- | :--- |
+| **JWT Debugger** | Giải mã, verify và debug JWT Token trực quan. Hỗ trợ highlight màu sắc từng phần (Header/Payload). | ⭐⭐ | 📋 Chờ thực hiện |
+| **Cron Visualizer** | Tạo và giải thích biểu thức Cron (Cron expressions) bằng giao diện đồ họa dễ hiểu. | ⭐⭐ | 📋 Chờ thực hiện |
+| **UUID/ID Generator** | Tạo nhanh UUID v4, v7, NanoID, CUID... hỗ trợ copy hàng loạt. | ⭐ | 📋 Chờ thực hiện |
+
+---
+
 ## 🤖 Smart Tools & AI (Trí tuệ nhân tạo)
 
 | Công cụ | Mô tả | Độ ưu tiên | Trạng thái |
 | :--- | :--- | :--- | :--- |
 | **Transformers.js** | Tích hợp AI chạy 100% tại trình duyệt cho các tool Word/Image processing mà không vi phạm chính sách "Privacy-first". | ⭐⭐ | 📋 Chờ thực hiện |
 | **Cloudflare Workers AI** | Sử dụng sức mạnh Edge Computing cho các tác vụ AI nặng hơn (Llama 3, Image Gen). | ⭐ | 📋 Chờ thực hiện |
+| **AI Note Assistant** | Tự động tóm tắt, sửa lỗi chính tả và suggest tags cho ghi chú (Notes) sử dụng Gemini Flash/Gemma. | ⭐⭐ | 📋 Chờ thực hiện |
+| **Smart SQL Formatter** | Format SQL query phức tạp và giải thích ý nghĩa query bằng AI. | ⭐ | 📋 Chờ thực hiện |
 
 ---
 
 ## 📅 Timeline Dự kiến
 
-1. **Giai đoạn 1 (Quick Wins):** Tích hợp `kBar` và `Vite PWA`.
-2. **Giai đoạn 2 (Polish):** Chuyển đổi qua `Biome` và thêm `Nuqs` cho `JSON Tools`.
-3. **Giai đoạn 3 (Premium):** Animation với `Framer Motion` và thử nghiệm `Transformers.js`.
+1. **Giai đoạn 1 (Quick Wins):** Tích hợp `kBar`, `Vite PWA` và `Sonner` (Done).
+2. **Giai đoạn 2 (Polish):** Chuyển đổi qua `Biome`, thêm `Nuqs` và triển khai bộ công cụ `Dev Utils` (JWT, Cron).
+3. **Giai đoạn 3 (Intelligence):** Tích hợp `Cloudflare AI` cho Notes và Image Tools.
+4. **Giai đoạn 4 (Visuals):** Nâng cấp UI với `Framer Motion` và `Rough.js`.
 
 ---
 *Ghi chú: Độ ưu tiên ⭐⭐⭐ (Bắt buộc), ⭐⭐ (Nên có), ⭐ (Khuyến khích).*
