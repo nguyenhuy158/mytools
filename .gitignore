@@ -18,3 +18,5 @@ worker-configuration.d.ts
 !.env.example
 
 openspec/changes/archive
+
+dist
