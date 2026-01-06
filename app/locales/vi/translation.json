@@ -125,7 +125,16 @@
        "description": "Viết Markdown và xem trước kết quả HTML ngay lập tức.",
        "editor": "Trình soạn thảo Markdown",
        "preview": "Xem trước",
-       "placeholder": "Nhập Markdown của bạn vào đây..."
+       "placeholder": "Nhập Markdown của bạn vào đây...",
+       "actions": {
+           "copy_markdown": "Sao chép Markdown",
+           "copy_html": "Sao chép HTML",
+           "clear": "Xóa"
+       },
+       "toast": {
+           "copied": "Đã sao chép vào clipboard",
+           "cleared": "Đã xóa"
+       }
      },
     "notes": {
       "title": "Ghi chú",
@@ -161,7 +170,8 @@
         "try_again": "Thử lại",
         "new_game": "Trò chơi mới",
         "leaderboard": "Bảng xếp hạng",
-        "no_scores": "Chưa có điểm nào. Hãy là người đầu tiên!"
+        "no_scores": "Chưa có điểm nào. Hãy là người đầu tiên!",
+        "saved": "Đã lưu điểm thành công!"
       },
       "snake": {
         "name": "Rắn Săn Mồi",
@@ -169,7 +179,9 @@
       },
       "minesweeper": {
         "name": "Dò Mìn",
-        "description": "Dọn sạch bãi mìn mà không kích nổ quả bom nào!"
+        "description": "Dọn sạch bãi mìn mà không kích nổ quả bom nào!",
+        "won": "Bạn đã thắng! 🎉",
+        "game_over": "Thua rồi! 💥"
       },
       "tetris": {
         "name": "Xếp Gạch",

@@ -125,7 +125,16 @@
         "description": "Write Markdown and preview it instantly in HTML.",
         "editor": "Markdown Editor",
         "preview": "Preview",
-        "placeholder": "Type your Markdown here..."
+        "placeholder": "Type your Markdown here...",
+        "actions": {
+            "copy_markdown": "Copy Markdown",
+            "copy_html": "Copy HTML",
+            "clear": "Clear"
+        },
+        "toast": {
+            "copied": "Copied to clipboard",
+            "cleared": "Cleared"
+        }
       },
     "notes": {
       "title": "Notes",
@@ -161,7 +170,8 @@
         "try_again": "Try Again",
         "new_game": "New Game",
         "leaderboard": "Leaderboard",
-        "no_scores": "No scores yet. Be the first!"
+        "no_scores": "No scores yet. Be the first!",
+        "saved": "Score saved successfully!"
       },
       "snake": {
         "name": "Snake",
@@ -169,7 +179,9 @@
       },
       "minesweeper": {
         "name": "Minesweeper",
-        "description": "Clear the minefield without detonating any bombs!"
+        "description": "Clear the minefield without detonating any bombs!",
+        "won": "You Won! 🎉",
+        "game_over": "Game Over! 💥"
       },
       "tetris": {
         "name": "Tetris",

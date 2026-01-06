@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Flag, Bomb } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import { GameScore } from "../components/GameScore";
 import { GameOverlay } from "../components/GameOverlay";
 import { GameGrid } from "../components/GameGrid";
@@ -45,7 +46,7 @@ export default function MinesweeperGame() {
 
     for (let i = 0; i < newGrid.length; i++) {
       if (newGrid[i].isMine) continue;
-      
+
       const x = i % GRID_SIZE;
       const y = Math.floor(i / GRID_SIZE);
       let neighbors = 0;
@@ -55,7 +56,7 @@ export default function MinesweeperGame() {
           if (dx === 0 && dy === 0) continue;
           const nx = x + dx;
           const ny = y + dy;
-          
+
           if (nx >= 0 && nx < GRID_SIZE && ny >= 0 && ny < GRID_SIZE) {
             const nIdx = ny * GRID_SIZE + nx;
             if (newGrid[nIdx].isMine) neighbors++;
@@ -91,13 +92,14 @@ export default function MinesweeperGame() {
     if (gameState !== 'PLAYING' || grid[idx].isFlagged || grid[idx].isRevealed) return;
 
     const newGrid = [...grid];
-    
+
     if (newGrid[idx].isMine) {
       newGrid.forEach(cell => {
         if (cell.isMine) cell.isRevealed = true;
       });
       setGrid(newGrid);
       setGameState('LOST');
+      toast.error(t("games.minesweeper.game_over"));
       return;
     }
 
@@ -105,7 +107,7 @@ export default function MinesweeperGame() {
     while (queue.length > 0) {
       const currentIdx = queue.shift()!;
       if (newGrid[currentIdx].isRevealed) continue;
-      
+
       newGrid[currentIdx].isRevealed = true;
 
       if (newGrid[currentIdx].neighborMines === 0) {
@@ -117,7 +119,7 @@ export default function MinesweeperGame() {
             if (dx === 0 && dy === 0) continue;
             const nx = x + dx;
             const ny = y + dy;
-            
+
             if (nx >= 0 && nx < GRID_SIZE && ny >= 0 && ny < GRID_SIZE) {
               const nIdx = ny * GRID_SIZE + nx;
               if (!newGrid[nIdx].isRevealed && !newGrid[nIdx].isFlagged) {
@@ -134,6 +136,7 @@ export default function MinesweeperGame() {
     const unrevealedSafeCells = newGrid.filter(cell => !cell.isMine && !cell.isRevealed).length;
     if (unrevealedSafeCells === 0) {
       setGameState('WON');
+      toast.success(t("games.minesweeper.won"));
     }
   };
 
@@ -208,17 +211,17 @@ export default function MinesweeperGame() {
     <div className="flex flex-col items-center justify-center p-4">
       <div className="flex-1 max-w-md w-full mx-auto space-y-6">
         <div className="flex justify-between items-center">
-           <div>
-             <h1 className="text-4xl font-bold text-gray-800 dark:text-white">{t("games.minesweeper.name")}</h1>
-             <p className="text-gray-600 dark:text-gray-400">{t("games.minesweeper.description")}</p>
-           </div>
+          <div>
+            <h1 className="text-4xl font-bold text-gray-800 dark:text-white">{t("games.minesweeper.name")}</h1>
+            <p className="text-gray-600 dark:text-gray-400">{t("games.minesweeper.description")}</p>
+          </div>
         </div>
 
         {/* HUD */}
         <div className="flex justify-between items-center gap-4">
           <GameScore score={mineCount} label="Mines" />
-          
-          <button 
+
+          <button
             onClick={initGame}
             className="p-4 rounded-xl bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-sm border border-gray-200 dark:border-gray-700"
             title="Reset Game"
@@ -232,14 +235,14 @@ export default function MinesweeperGame() {
         </div>
 
         <GameGrid className="bg-gray-200 dark:bg-gray-700 p-2">
-          <GameOverlay 
+          <GameOverlay
             isVisible={gameState === 'WON' || gameState === 'LOST'}
             title={gameState === 'WON' ? 'YOU WON!' : 'GAME OVER!'}
             onRestart={initGame}
             restartLabel={t("games.2048.try_again")}
           />
 
-          <div 
+          <div
             className="grid gap-1"
             style={{
               gridTemplateColumns: `repeat(${GRID_SIZE}, minmax(0, 1fr))`,
@@ -247,36 +250,36 @@ export default function MinesweeperGame() {
             onContextMenu={(e) => e.preventDefault()}
           >
             {grid.map((cell, i) => (
-               <button
-                 key={i}
-                 onClick={() => revealCell(i)}
-                 onContextMenu={(e) => toggleFlag(e, i)}
-                 onTouchStart={(e) => handleTouchStart(e, i)}
-                 onTouchEnd={(e) => handleTouchEnd(e, i)}
-                 onTouchCancel={handleTouchCancel}
-                 disabled={gameState === 'WON' || gameState === 'LOST'}
-                 className={`
+              <button
+                key={i}
+                onClick={() => revealCell(i)}
+                onContextMenu={(e) => toggleFlag(e, i)}
+                onTouchStart={(e) => handleTouchStart(e, i)}
+                onTouchEnd={(e) => handleTouchEnd(e, i)}
+                onTouchCancel={handleTouchCancel}
+                disabled={gameState === 'WON' || gameState === 'LOST'}
+                className={`
                    aspect-square flex items-center justify-center font-bold text-lg rounded-sm transition-all duration-75 select-none touch-none
                    ${cell.isRevealed
-                     ? 'bg-gray-50 dark:bg-gray-800 shadow-inner'
-                     : 'bg-gray-300 dark:bg-gray-600 hover:brightness-110 shadow-[inset_-2px_-2px_0_0_rgba(0,0,0,0.1),inset_2px_2px_0_0_rgba(255,255,255,0.4)] active:shadow-inner active:scale-95'
-                   }
+                    ? 'bg-gray-50 dark:bg-gray-800 shadow-inner'
+                    : 'bg-gray-300 dark:bg-gray-600 hover:brightness-110 shadow-[inset_-2px_-2px_0_0_rgba(0,0,0,0.1),inset_2px_2px_0_0_rgba(255,255,255,0.4)] active:shadow-inner active:scale-95'
+                  }
                    ${cell.isMine && cell.isRevealed ? 'bg-red-500 dark:bg-red-600' : ''}
                  `}
-               >
-                 {cell.isRevealed ? (
-                   cell.isMine ? <Bomb size={20} className="text-white fill-white" /> :
-                   cell.neighborMines > 0 ? (
-                     <span className={getNumberColor(cell.neighborMines)}>{cell.neighborMines}</span>
-                   ) : ''
-                 ) : (
-                   cell.isFlagged ? <Flag size={18} className="text-red-600 dark:text-red-400 fill-red-600 dark:fill-red-400" /> : ''
-                 )}
-               </button>
+              >
+                {cell.isRevealed ? (
+                  cell.isMine ? <Bomb size={20} className="text-white fill-white" /> :
+                    cell.neighborMines > 0 ? (
+                      <span className={getNumberColor(cell.neighborMines)}>{cell.neighborMines}</span>
+                    ) : ''
+                ) : (
+                  cell.isFlagged ? <Flag size={18} className="text-red-600 dark:text-red-400 fill-red-600 dark:fill-red-400" /> : ''
+                )}
+              </button>
             ))}
           </div>
         </GameGrid>
-        
+
         <div className="text-sm text-center text-gray-500 dark:text-gray-400">
           Left click to reveal • Right click to flag<br className="md:hidden" />
           <span className="md:hidden"> • Tap to reveal • Long press to flag</span>

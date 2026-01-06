@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { Form, useLoaderData, useSubmit, useNavigation } from "react-router";
+import { Form, useLoaderData, useSubmit, useNavigation, useActionData } from "react-router";
+import { toast } from "sonner";
 import { Save, RefreshCcw } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { LoaderFunctionArgs, ActionFunctionArgs } from "react-router";
@@ -84,7 +85,7 @@ function processMove(grid: number[], direction: "LEFT" | "RIGHT" | "UP" | "DOWN"
     let nonZero = line.filter(x => x !== 0);
     let newLine: number[] = [];
     let gain = 0;
-    
+
     for (let i = 0; i < nonZero.length; i++) {
       if (i < nonZero.length - 1 && nonZero[i] === nonZero[i + 1]) {
         const mergedVal = nonZero[i] * 2;
@@ -95,7 +96,7 @@ function processMove(grid: number[], direction: "LEFT" | "RIGHT" | "UP" | "DOWN"
         newLine.push(nonZero[i]);
       }
     }
-    
+
     while (newLine.length < SIZE) newLine.push(0);
     return { line: newLine, gain };
   };
@@ -141,15 +142,27 @@ function isGameOver(grid: number[]) {
 
 export default function Game2048() {
   const { scores } = useLoaderData() as { scores: Score[] };
+  const actionData = useActionData<typeof action>();
   const submit = useSubmit();
   const navigation = useNavigation();
   const { t } = useTranslation();
-  
+
+  useEffect(() => {
+    if (actionData?.success) {
+      toast.success(t("games.2048.saved"));
+      // Close overlay or reset game state? Maybe just toast is enough.
+      // Actually, if saved, maybe we should close the overlay or show "Saved" state?
+      // The overlay contains the form. If saved, duplicate submission prevention?
+    } else if (actionData?.error) {
+      toast.error(actionData.error);
+    }
+  }, [actionData, t]);
+
   const [grid, setGrid] = useState<number[]>(Array(16).fill(0));
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [name, setName] = useState("");
-  
+
   const initGame = useCallback(() => {
     let newGrid = Array(16).fill(0);
     newGrid = addRandomTile(newGrid);
@@ -229,11 +242,11 @@ export default function Game2048() {
     <div className="flex flex-col lg:flex-row gap-8 items-start justify-center">
       <div className="flex-1 max-w-md w-full mx-auto">
         <div className="flex justify-between items-center mb-6">
-           <div>
-             <h1 className="text-4xl font-bold text-gray-800 dark:text-white">{t("games.2048.title")}</h1>
-             <p className="text-gray-600 dark:text-gray-400">{t("games.2048.subtitle")}</p>
-           </div>
-           <GameScore score={score} label={t("games.2048.score")} />
+          <div>
+            <h1 className="text-4xl font-bold text-gray-800 dark:text-white">{t("games.2048.title")}</h1>
+            <p className="text-gray-600 dark:text-gray-400">{t("games.2048.subtitle")}</p>
+          </div>
+          <GameScore score={score} label={t("games.2048.score")} />
         </div>
 
         <SwipeDetector
@@ -248,34 +261,33 @@ export default function Game2048() {
               onRestart={initGame}
               restartLabel={t("games.2048.try_again")}
             >
-               <Form method="post" onSubmit={saveScore} className="w-full space-y-4 mb-6">
-                   <input
-                     type="text"
-                     name="name"
-                     value={name}
-                     onChange={(e) => setName(e.target.value)}
-                     placeholder={t("games.2048.enter_name")}
-                     className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                     required
-                   />
-                  <input type="hidden" name="score" value={score} />
-                   <button
-                     type="submit"
-                     disabled={navigation.state === "submitting"}
-                     className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg font-medium transition-colors"
-                   >
-                     <Save className="w-4 h-4" /> {t("games.2048.save_score")}
-                   </button>
-                </Form>
+              <Form method="post" onSubmit={saveScore} className="w-full space-y-4 mb-6">
+                <input
+                  type="text"
+                  name="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder={t("games.2048.enter_name")}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                  required
+                />
+                <input type="hidden" name="score" value={score} />
+                <button
+                  type="submit"
+                  disabled={navigation.state === "submitting"}
+                  className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg font-medium transition-colors"
+                >
+                  <Save className="w-4 h-4" /> {t("games.2048.save_score")}
+                </button>
+              </Form>
             </GameOverlay>
 
             <div className="grid grid-cols-4 gap-3">
               {grid.map((cell, idx) => (
                 <div
                   key={idx}
-                  className={`aspect-square rounded-lg flex items-center justify-center text-2xl font-bold transition-all duration-200 ${
-                    cell === 0 ? "bg-gray-200 dark:bg-gray-600" : getTileColor(cell)
-                  }`}
+                  className={`aspect-square rounded-lg flex items-center justify-center text-2xl font-bold transition-all duration-200 ${cell === 0 ? "bg-gray-200 dark:bg-gray-600" : getTileColor(cell)
+                    }`}
                 >
                   {cell !== 0 && cell}
                 </div>
@@ -299,9 +311,9 @@ export default function Game2048() {
         </div>
       </div>
 
-      <Leaderboard 
-        scores={scores} 
-        title={t("games.2048.leaderboard")} 
+      <Leaderboard
+        scores={scores}
+        title={t("games.2048.leaderboard")}
         emptyMessage={t("games.2048.no_scores")}
       />
     </div>
