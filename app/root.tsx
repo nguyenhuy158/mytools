@@ -87,8 +87,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+import { NuqsAdapter } from 'nuqs/adapters/react-router/v7';
+
 export default function App() {
-  return <Outlet />;
+  return (
+    <NuqsAdapter>
+      <Outlet />
+    </NuqsAdapter>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

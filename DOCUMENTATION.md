@@ -47,6 +47,7 @@ A comprehensive collection of essential online tools built with modern web techn
 - **diff** - Text comparison library
 - **json5** - Enhanced JSON parsing
 - **lunar-javascript** - Lunar calendar calculations
+- **nuqs** - Type-safe search params state management
 
 ## 🚀 Getting Started
 

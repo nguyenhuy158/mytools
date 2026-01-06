@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { useSearchParams, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
+import { useQueryState, parseAsString } from "nuqs";
 import { useTranslation } from "react-i18next";
 import type { LotoCard, LotoServerMessage, LotoGameRoomState } from "../../types.d";
 import { LotoCard as LotoCardComponent } from "../../components/LotoCard";
@@ -10,13 +11,12 @@ import { PageHeader } from "../../components/PageHeader";
 
 export default function LotoGame() {
   const { t } = useTranslation();
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   const [gameState, setGameState] = useState<'lobby' | 'joining' | 'playing'>('lobby');
-  const [playerName, setPlayerName] = useState("");
+  const [playerName, setPlayerName] = useQueryState('name', parseAsString.withDefault(""));
   const [roomId, setRoomId] = useState("");
-  const [joinRoomId, setJoinRoomId] = useState("");
+  const [joinRoomId, setJoinRoomId] = useQueryState('room', parseAsString.withDefault(""));
 
   // Game state
   const [playerId, setPlayerId] = useState<string | null>(null);
@@ -28,14 +28,7 @@ export default function LotoGame() {
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Check if joining via URL parameter
-  useEffect(() => {
-    const roomParam = searchParams.get('room');
-    if (roomParam) {
-      setJoinRoomId(roomParam);
-      setGameState('lobby');
-    }
-  }, [searchParams]);
+
 
   const createRoom = async () => {
     if (!playerName.trim()) {
