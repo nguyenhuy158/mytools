@@ -18,6 +18,9 @@
       "language": "Ngôn ngữ",
       "settings": "Cài đặt",
       "system": "Hệ thống",
+      "no_results": "Không tìm thấy kết quả cho",
+      "kbd_navigate": "Di chuyển",
+      "kbd_open": "để mở",
       "lifestyle_description": "Công cụ cho một cuộc sống tốt hơn.",
       "toast": {
         "language_changed": "Đã chuyển sang Tiếng Việt",

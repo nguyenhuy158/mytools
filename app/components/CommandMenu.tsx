@@ -6,6 +6,7 @@ import {
     KBarSearch,
     useMatches,
     KBarResults,
+    useKBar,
     type Action,
 } from "kbar";
 import { useNavigate } from "react-router";
@@ -262,13 +263,25 @@ export function CommandMenu({ children }: { children: React.ReactNode }) {
                 <KBarPositioner className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm p-4 flex items-start justify-center pt-[15vh]">
                     <KBarAnimator className="w-full max-w-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-2xl overflow-hidden transform transition-all">
                         <div className="flex items-center px-4 border-b border-zinc-100 dark:border-zinc-800">
-                            <Search className="w-5 h-5 text-zinc-400 mr-3" />
-                            <KBarSearch className="flex-1 py-4 bg-transparent outline-none text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 text-lg" />
-                            <div className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-xs text-zinc-500 font-medium">
+                            <Search className="w-5 h-5 text-zinc-400 mr-3 shrink-0" />
+                            <div className="flex-1 flex items-center overflow-hidden">
+                                <Breadcrumbs />
+                                <KBarSearch className="flex-1 py-4 bg-transparent outline-none text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 text-lg" />
+                            </div>
+                            <div className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-xs text-zinc-500 font-medium shrink-0">
                                 ESC
                             </div>
                         </div>
                         <RenderResults />
+                        <div className="px-4 py-2 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 text-[10px] text-zinc-400 flex justify-between items-center shrink-0">
+                            <div className="flex gap-4">
+                                <span className="flex items-center gap-1"><kbd className="px-1 py-0.5 rounded bg-zinc-200 dark:bg-zinc-800">↑↓</kbd> {t("nav.kbd_navigate")}</span>
+                                <span className="flex items-center gap-1"><kbd className="px-1 py-0.5 rounded bg-zinc-200 dark:bg-zinc-800">↵</kbd> {t("nav.kbd_open")}</span>
+                            </div>
+                            <div className="hidden sm:block font-medium">
+                                ToolHub Command Palette
+                            </div>
+                        </div>
                     </KBarAnimator>
                 </KBarPositioner>
             </KBarPortal>
@@ -277,8 +290,46 @@ export function CommandMenu({ children }: { children: React.ReactNode }) {
     );
 }
 
+function Breadcrumbs() {
+    const { query, currentRootActionId, actions } = useKBar((state) => ({
+        currentRootActionId: state.currentRootActionId,
+        actions: state.actions,
+    }));
+
+    if (!currentRootActionId) return null;
+
+    const action = actions[currentRootActionId];
+    if (!action) return null;
+
+    return (
+        <div className="flex items-center gap-1.5 mr-2 shrink-0">
+            <button
+                onClick={() => query.setCurrentRootAction(undefined)}
+                className="px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-400 text-sm font-medium transition-colors flex items-center gap-1.5"
+            >
+                {action.icon && <span className="w-3.5 h-3.5">{action.icon}</span>}
+                {action.name}
+            </button>
+            <span className="text-zinc-400 text-sm">/</span>
+        </div>
+    );
+}
+
 function RenderResults() {
     const { results } = useMatches();
+    const { t } = useTranslation();
+    const { search } = useKBar((state) => ({
+        search: state.searchQuery,
+    }));
+
+    if (results.length === 0 && search) {
+        return (
+            <div className="px-4 py-12 text-center text-zinc-500">
+                <Search className="w-8 h-8 mx-auto mb-3 text-zinc-300 dark:text-zinc-700 opacity-50" />
+                <p>{t("nav.no_results")} <span className="font-semibold text-zinc-900 dark:text-zinc-100">"{search}"</span></p>
+            </div>
+        );
+    }
 
     return (
         <div className="max-h-[60vh] overflow-y-auto py-2">

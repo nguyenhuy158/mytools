@@ -18,6 +18,9 @@
       "language": "Language",
       "settings": "Settings",
       "system": "System",
+      "no_results": "No results found for",
+      "kbd_navigate": "Navigate",
+      "kbd_open": "to open",
       "lifestyle_description": "Tools for a better life.",
       "toast": {
         "language_changed": "Language changed to English",
