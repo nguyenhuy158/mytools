@@ -16,6 +16,8 @@
       "number_reading": "Number Reading",
       "games": "Games",
       "language": "Language",
+      "settings": "Settings",
+      "system": "System",
       "lifestyle_description": "Tools for a better life.",
       "toast": {
         "language_changed": "Language changed to English",

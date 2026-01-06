@@ -24,42 +24,77 @@ import {
     Quote,
     Timer,
     Search,
+    Sun,
+    Moon,
+    Languages,
+    Settings,
+    Activity,
+    LayoutGrid,
+    Hash,
+    Lightbulb,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { useEffect, useState, useMemo } from "react";
+import { toast } from "sonner";
 
 export function CommandMenu({ children }: { children: React.ReactNode }) {
     const navigate = useNavigate();
+    const { t, i18n } = useTranslation();
+    const [theme, setTheme] = useState<"light" | "dark">("light");
 
-    const actions: Action[] = [
+    useEffect(() => {
+        const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
+        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+        const currentTheme = savedTheme || systemTheme;
+        setTheme(currentTheme);
+    }, []);
+
+    const updateTheme = (newTheme: "light" | "dark") => {
+        setTheme(newTheme);
+        localStorage.setItem("theme", newTheme);
+        if (newTheme === "dark") {
+            document.documentElement.classList.add("dark");
+            toast.success(t("nav.toast.dark_mode"));
+        } else {
+            document.documentElement.classList.remove("dark");
+            toast.success(t("nav.toast.light_mode"));
+        }
+    };
+
+    const actions: Action[] = useMemo(() => [
+        // Navigation
         {
             id: "home",
-            name: "Home",
+            name: t("nav.home"),
             shortcut: ["h"],
             keywords: "home dashboard index",
             perform: () => navigate("/"),
             icon: <Home className="w-4 h-4" />,
-            section: "Navigation",
+            section: t("nav.features"),
         },
         {
             id: "about",
-            name: "About",
+            name: t("nav.about"),
             shortcut: ["a"],
             keywords: "about info help",
             perform: () => navigate("/about"),
             icon: <Info className="w-4 h-4" />,
-            section: "Navigation",
+            section: t("nav.features"),
         },
         // IT Tools
         {
             id: "it",
-            name: "IT Tools",
+            name: t("nav.it_tools"),
             keywords: "it developer tools dev",
             perform: () => navigate("/it"),
             icon: <Terminal className="w-4 h-4" />,
-            section: "IT Tools",
+            section: t("nav.it_tools"),
         },
         {
             id: "json-tools",
-            name: "JSON Tools",
+            name: t("nav.json_tools"),
             parent: "it",
             keywords: "json format validate minify",
             perform: () => navigate("/it/json-tools"),
@@ -67,20 +102,28 @@ export function CommandMenu({ children }: { children: React.ReactNode }) {
         },
         {
             id: "text-diff",
-            name: "Text Diff",
+            name: t("nav.text_diff"),
             parent: "it",
             keywords: "diff compare text",
             perform: () => navigate("/it/text-diff"),
             icon: <FileDiff className="w-4 h-4" />,
         },
+        {
+            id: "number-reading",
+            name: t("nav.number_reading"),
+            parent: "it",
+            keywords: "number read text",
+            perform: () => navigate("/it/number-reading"),
+            icon: <Hash className="w-4 h-4" />,
+        },
         // Games
         {
             id: "games",
-            name: "Games",
+            name: t("nav.games"),
             keywords: "games play fun",
             perform: () => navigate("/games"),
             icon: <Gamepad2 className="w-4 h-4" />,
-            section: "Games",
+            section: t("nav.games"),
         },
         {
             id: "2048",
@@ -88,6 +131,14 @@ export function CommandMenu({ children }: { children: React.ReactNode }) {
             parent: "games",
             keywords: "2048 puzzle number",
             perform: () => navigate("/games/2048"),
+            icon: <Grid3X3 className="w-4 h-4" />,
+        },
+        {
+            id: "sudoku",
+            name: "Sudoku",
+            parent: "games",
+            keywords: "sudoku puzzle number",
+            perform: () => navigate("/games/sudoku"),
             icon: <Grid3X3 className="w-4 h-4" />,
         },
         {
@@ -104,20 +155,28 @@ export function CommandMenu({ children }: { children: React.ReactNode }) {
             parent: "games",
             keywords: "snake classic game",
             perform: () => navigate("/games/snake"),
-            icon: <Ghost className="w-4 h-4" />,
+            icon: <Activity className="w-4 h-4" />,
+        },
+        {
+            id: "tetris",
+            name: "Tetris",
+            parent: "games",
+            keywords: "tetris block game",
+            perform: () => navigate("/games/tetris"),
+            icon: <LayoutGrid className="w-4 h-4" />,
         },
         // Lifestyle
         {
             id: "lifestyle",
-            name: "Lifestyle",
+            name: t("nav.lifestyle"),
             keywords: "lifestyle productivity tools",
             perform: () => navigate("/lifestyle"),
             icon: <Coffee className="w-4 h-4" />,
-            section: "Lifestyle",
+            section: t("nav.lifestyle"),
         },
         {
             id: "pomodoro",
-            name: "Pomodoro",
+            name: t("nav.pomodoro"),
             parent: "lifestyle",
             keywords: "pomodoro timer focus work",
             perform: () => navigate("/lifestyle/pomodoro"),
@@ -125,7 +184,7 @@ export function CommandMenu({ children }: { children: React.ReactNode }) {
         },
         {
             id: "calendar",
-            name: "Calendar",
+            name: t("nav.calendar"),
             parent: "lifestyle",
             keywords: "calendar date event",
             perform: () => navigate("/calendar"),
@@ -133,13 +192,69 @@ export function CommandMenu({ children }: { children: React.ReactNode }) {
         },
         {
             id: "quotes",
-            name: "Quotes",
+            name: t("nav.quotes"),
             parent: "lifestyle",
             keywords: "quotes motivation daily",
             perform: () => navigate("/lifestyle/quotes"),
-            icon: <Quote className="w-4 h-4" />,
+            icon: <Lightbulb className="w-4 h-4" />,
         },
-    ];
+        // Settings / Customization
+        {
+            id: "settings",
+            name: t("nav.settings"),
+            keywords: "settings theme language config",
+            icon: <Settings className="w-4 h-4" />,
+            section: t("nav.system"),
+        },
+        {
+            id: "theme",
+            name: "Theme",
+            parent: "settings",
+            keywords: "dark light mode theme",
+            icon: theme === "dark" ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />,
+        },
+        {
+            id: "theme-light",
+            name: "Light Mode",
+            parent: "theme",
+            perform: () => updateTheme("light"),
+            icon: <Sun className="w-4 h-4" />,
+        },
+        {
+            id: "theme-dark",
+            name: "Dark Mode",
+            parent: "theme",
+            perform: () => updateTheme("dark"),
+            icon: <Moon className="w-4 h-4" />,
+        },
+        {
+            id: "language",
+            name: t("nav.language"),
+            parent: "settings",
+            keywords: "language lang translate vi en",
+            icon: <Languages className="w-4 h-4" />,
+        },
+        {
+            id: "lang-en",
+            name: "English (US)",
+            parent: "language",
+            perform: () => {
+                i18n.changeLanguage("en");
+                toast.success(t("nav.toast.language_changed"));
+            },
+            icon: <span className="text-xs">🇺🇸</span>,
+        },
+        {
+            id: "lang-vi",
+            name: "Tiếng Việt",
+            parent: "language",
+            perform: () => {
+                i18n.changeLanguage("vi");
+                toast.success(t("nav.toast.language_changed"));
+            },
+            icon: <span className="text-xs">🇻🇳</span>,
+        },
+    ], [navigate, t, i18n, theme]);
 
     return (
         <KBarProvider actions={actions}>
@@ -176,9 +291,9 @@ function RenderResults() {
                         </div>
                     ) : (
                         <div
-                            className={`px-4 py-3 flex items-center justify-between cursor-pointer transition-colors ${active
-                                ? "bg-zinc-100 dark:bg-zinc-800 border-l-4 border-black dark:border-white"
-                                : "border-l-4 border-transparent"
+                            className={`px-4 py-4 flex items-center justify-between cursor-pointer transition-all ${active
+                                ? "bg-zinc-100 dark:bg-zinc-800 border-l-4 border-black dark:border-white pl-3"
+                                : "border-l-4 border-transparent ml-0"
                                 }`}
                         >
                             <div className="flex items-center gap-3">
@@ -209,7 +324,7 @@ function RenderResults() {
                                     {item.shortcut.map((sc) => (
                                         <kbd
                                             key={sc}
-                                            className="px-2 py-0.5 rounded bg-zinc-200 dark:bg-zinc-700 text-xs text-zinc-600 dark:text-zinc-400 font-mono"
+                                            className="px-2 py-0.5 rounded bg-zinc-200 dark:bg-zinc-700 text-xs text-zinc-600 dark:text-zinc-400 font-mono shadow-sm"
                                         >
                                             {sc}
                                         </kbd>
