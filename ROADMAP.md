@@ -21,7 +21,7 @@ Bản lộ trình nâng cấp và tích hợp các công cụ mới vào hệ si
 | :--- | :--- | :--- | :--- |
 | **Framer Motion** | Thêm các hiệu ứng chuyển trang mượt mà và animation cho các mini-games (Snake, 2048). | ⭐⭐ | 📋 Chờ thực hiện |
 | **Rough.js** | Tạo "Sketchy Mode" (giao diện vẽ tay) cho các công cụ, mang tới sự thú vị và khác biệt so với các web tool phổ thông. | ⭐ | 📋 Chờ thực hiện |
-| **Sonner (Updated)** | Tối ưu hóa hệ thống thông báo (Toasts) để phản hồi người dùng tốt hơn khi copy/paste dữ liệu. | ⭐ | ✅ Đã có (Cần tối ưu) |
+| **Sonner (Updated)** | Thay thế toast cũ bằng **Sonner**: Hỗ trợ stacking (xếp chồng), vuốt để đóng, rich colors và promise API. Mang lại cảm giác mượt mà ("Premium feel") vượt trội so với các thư viện toast truyền thống. | ⭐ | ✅ Đã có (Cần tối ưu) |
 
 ---
 
