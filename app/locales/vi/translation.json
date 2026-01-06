@@ -366,7 +366,8 @@
       "fixed": "Đã sửa lỗi JSON",
       "minified": "Đã tối thiểu hóa JSON",
       "copied": "Đã sao chép vào clipboard",
-      "history_restored": "Đã khôi phục từ lịch sử!"
+      "history_restored": "Đã khôi phục từ lịch sử!",
+      "loading_example": "Đang tải mẫu..."
     },
     "history": "Lịch sử",
     "clear_all": "Xóa tất cả"

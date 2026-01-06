@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { useQueryState, parseAsString } from "nuqs";
 import { useTranslation } from "react-i18next";
@@ -146,9 +147,15 @@ export default function LotoGame() {
           setRoomState({ ...roomState, status: 'completed', winner: message.playerId });
         }
         if (message.playerId === playerId) {
-          alert(t('loto.you_won'));
+          toast.success(t('loto.you_won'), {
+            duration: 5000,
+            icon: '🎉'
+          });
         } else {
-          alert(t('loto.player_won_message', { name: message.playerName }));
+          toast.info(t('loto.player_won_message', { name: message.playerName }), {
+            duration: 5000,
+            icon: '👑'
+          });
         }
         break;
 

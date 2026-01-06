@@ -137,23 +137,30 @@ export default function NotesPage() {
 
   // Delete note
   const handleDeleteNote = useCallback(
-    async (id: string) => {
-      if (!confirm(t("notes.dialogs.confirm_delete") || "Delete this note?")) {
-        return;
-      }
-
-      try {
-        await notesApi.deleteNote(id);
-        toast.success(t("notes.toast.deleted") || "Note deleted");
-        if (selectedNoteId === id) {
-          setCurrentNote(null);
-          setSelectedNoteId(null);
-        }
-        await loadNotes();
-      } catch (error) {
-        console.error("Failed to delete note:", error);
-        toast.error(t("notes.toast.delete_error") || "Failed to delete note");
-      }
+    (id: string) => {
+      toast(t("notes.dialogs.confirm_delete") || "Delete this note?", {
+        action: {
+          label: "Delete",
+          onClick: async () => {
+            try {
+              await notesApi.deleteNote(id);
+              toast.success(t("notes.toast.deleted") || "Note deleted");
+              if (selectedNoteId === id) {
+                setCurrentNote(null);
+                setSelectedNoteId(null);
+              }
+              await loadNotes();
+            } catch (error) {
+              console.error("Failed to delete note:", error);
+              toast.error(t("notes.toast.delete_error") || "Failed to delete note");
+            }
+          },
+        },
+        cancel: {
+          label: "Cancel",
+          onClick: () => { },
+        },
+      });
     },
     [selectedNoteId, t, loadNotes]
   );
@@ -198,7 +205,7 @@ export default function NotesPage() {
       try {
         const text = await file.text();
         const note = JSON.parse(text) as Note;
-        
+
         // Validate note structure
         if (!note.title || !note.content) {
           throw new Error("Invalid note format");

@@ -366,7 +366,8 @@
       "fixed": "JSON Fixed",
       "minified": "JSON Minified",
       "copied": "Copied to clipboard",
-      "history_restored": "Restored from history!"
+      "history_restored": "Restored from history!",
+      "loading_example": "Loading example..."
     },
     "history": "History",
     "clear_all": "Clear All"

@@ -165,17 +165,22 @@ export default function JsonTools() {
     }
   };
 
-  const handleExample = async () => {
-    try {
+  const handleExample = () => {
+    const loadExample = async () => {
       const response = await fetch('https://jsonplaceholder.typicode.com/todos/1');
+      if (!response.ok) throw new Error("Failed to fetch");
       const json = await response.json();
       const text = JSON.stringify(json, null, tabSize);
       setInput(text);
       validate(text, false);
-      toast.success(t("json_tools.toast.valid"));
-    } catch (e) {
-      toast.error(t("json_tools.toast.invalid"));
-    }
+      return t("json_tools.toast.valid");
+    };
+
+    toast.promise(loadExample(), {
+      loading: t("json_tools.toast.loading_example"),
+      success: (msg) => msg,
+      error: t("json_tools.toast.invalid"),
+    });
   };
 
   const handleMoveToInput = () => {
