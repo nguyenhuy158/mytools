@@ -503,6 +503,7 @@ graph TB
 - 📝 Text Case Converter
 - 🛠️ JSON Tools (Format, Validate, Minify, Fix, History, Clipboard, File Operations, Tab Size)
 - 🗓️ Solar & Lunar Calendar
+- 📱 PWA Support (Offline ready & Installable)
 - 📖 [React Router docs](https://reactrouter.com/)
 
 ## Getting Started

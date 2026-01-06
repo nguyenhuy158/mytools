@@ -8,7 +8,7 @@ Bản lộ trình nâng cấp và tích hợp các công cụ mới vào hệ si
 
 | Công cụ | Mô tả | Độ ưu tiên | Trạng thái |
 | :--- | :--- | :--- | :--- |
-| **Vite PWA Plugin** | Biến ToolHub thành ứng dụng cài đặt được, hỗ trợ chạy **Offline**. Đây là tính năng sống còn cho một bộ công cụ tiện ích. | ⭐⭐⭐ | 📋 Chờ thực hiện |
+| **Vite PWA Plugin** | Biến ToolHub thành ứng dụng cài đặt được, hỗ trợ chạy **Offline**. Đây là tính năng sống còn cho một bộ công cụ tiện ích. | ⭐⭐⭐ | ✅ Đã hoàn thành |
 | **kBar (Command Palette)** | Thanh lệnh `Cmd + K` giúp tìm kiếm và chuyển đổi giữa các công cụ (JSON, 2048, Snake) ngay lập tức. | ⭐⭐⭐ | 📋 Chờ thực hiện |
 | **Biome** | Thay thế ESLint/Prettier bằng Rust tool cực nhanh, giúp giữ code sạch và nhất quán. | ⭐⭐ | 📋 Chờ thực hiện |
 | **Nuqs** | Quản lý state của công cụ qua URL một cách an toàn (Type-safe), giúp chia sẻ link cấu hình công cụ dễ dàng. | ⭐⭐ | 📋 Chờ thực hiện |
