@@ -1,4 +1,4 @@
-import { FileJson, FileDiff, Image, Network, Hash, Database, FileText, StickyNote, Brain } from "lucide-react";
+import { FileJson, FileDiff, Image, Network, Hash, Database, FileText, StickyNote, Brain, Layers } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PageHeader } from "../components/PageHeader";
 import { ToolGrid } from "../components/ToolGrid";
@@ -70,6 +70,13 @@ export default function ITToolsLanding() {
       href: "/it/transformers",
       icon: Brain,
       color: "bg-fuchsia-600",
+    },
+    {
+      name: t("it_tools.pdf_tools.name"),
+      description: t("it_tools.pdf_tools.description"),
+      href: "/it/pdf-tools",
+      icon: Layers,
+      color: "bg-red-600",
     },
   ];
 

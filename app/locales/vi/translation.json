@@ -66,6 +66,10 @@
       "transformers": {
         "name": "AI Playground",
         "description": "Chạy mô hình AI trực tiếp trên trình duyệt với Transformers.js."
+      },
+      "pdf_tools": {
+        "name": "Công cụ PDF",
+        "description": "Ghép và Tách tệp PDF hoàn toàn trên trình duyệt của bạn."
       }
       },
     "api_tester": {
@@ -140,6 +144,42 @@
            "cleared": "Đã xóa"
        }
      },
+    "pdf_tools": {
+      "title": "Công cụ PDF",
+      "description": "Ghép và Tách tệp PDF. Bảo mật tuyệt đối, xử lý 100% phía client.",
+      "actions": {
+        "upload": "Tải PDF",
+        "merge": "Ghép PDF",
+        "split": "Tách PDF",
+        "download": "Tải xuống",
+        "clear": "Xóa",
+        "remove": "Xóa",
+        "move_up": "Di chuyển lên",
+        "move_down": "Di chuyển xuống"
+      },
+      "tabs": {
+        "merge": "Ghép",
+        "split": "Tách"
+      },
+      "split_options": {
+        "all_pages": "Tách tất cả các trang",
+        "extract_pages": "Trích xuất trang (VD: 1, 3-5)"
+      },
+      "placeholders": {
+        "empty_merge": "Tải lên các tệp PDF để ghép",
+        "empty_split": "Tải lên tệp PDF để tách",
+        "page_range": "VD: 1, 3-5, 8"
+      },
+      "toast": {
+        "merged": "Đã ghép PDF thành công",
+        "split": "Đã tách PDF thành công",
+        "invalid_file": "Tệp không hợp lệ. Vui lòng chọn tệp PDF.",
+        "merge_error": "Lỗi khi ghép PDF",
+        "split_error": "Lỗi khi tách PDF",
+        "no_files": "Chưa chọn tệp",
+        "no_range": "Vui lòng nhập phạm vi trang"
+      }
+    },
     "notes": {
       "title": "Ghi chú",
       "description": "Tạo và quản lý ghi chú với định dạng văn bản phong phú và lưu trữ đám mây.",

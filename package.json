@@ -34,6 +34,7 @@
 		"lunar-javascript": "^1.7.7",
 		"mermaid": "^11.12.2",
 		"nuqs": "^2.8.6",
+		"pdf-lib": "^1.17.1",
 		"react": "^19.1.1",
 		"react-dom": "^19.1.1",
 		"react-i18next": "^16.4.1",
