@@ -127,27 +127,27 @@ export function Navbar() {
                     </div>
                   </div>
                 ) : (
-                   <Link
-                     key={item.href}
-                     to={item.href}
-                     className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-all duration-200"
-                   >
-                     {item.name}
-                   </Link>
-                 )
-                ))}
-                </div>
-                </div>
-                <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
-                <div className="hidden xl:block">
-                <TetCountdown variant="compact" />
-                </div>
+                  <Link
+                    key={item.href}
+                    to={item.href}
+                    className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-all duration-200"
+                  >
+                    {item.name}
+                  </Link>
+                )
+              ))}
+            </div>
+          </div>
+          <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
+            <div className="hidden xl:block">
+              <TetCountdown variant="compact" />
+            </div>
 
-                {/* Language Switcher */}
-                <div
-                onClick={toggleLanguage}
-                className="bg-gray-100 dark:bg-white/10 dark:backdrop-blur-md p-1 rounded-lg flex items-center relative h-9 w-28 cursor-pointer border border-gray-300 dark:border-white/20"
-                >
+            {/* Language Switcher */}
+            <div
+              onClick={toggleLanguage}
+              className="bg-gray-100 dark:bg-white/10 dark:backdrop-blur-md p-1 rounded-lg flex items-center relative h-9 w-28 cursor-pointer border border-gray-300 dark:border-white/20"
+            >
               <div
                 className={`absolute w-[calc(50%-4px)] h-[calc(100%-8px)] top-1 bg-white/30 dark:bg-white/20 rounded-md shadow-lg transition-transform duration-200 ease-in-out ${
                   i18n.language === 'en' ? 'translate-x-[calc(100%+4px)]' : 'translate-x-1'

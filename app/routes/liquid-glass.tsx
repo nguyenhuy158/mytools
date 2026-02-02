@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from "react";
-import { useTranslation } from "react-i18next";
 
 interface DataPoint {
   label: string;
@@ -8,7 +7,6 @@ interface DataPoint {
 }
 
 const LiquidGlass: React.FC = () => {
-  const { t } = useTranslation();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const chartData: DataPoint[] = useMemo(
