@@ -81,9 +81,9 @@ export const RichEditor: React.FC<RichEditorProps> = ({
   );
 
   return (
-    <div className="border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden">
+    <div className="border border-white/20 dark:border-white/10 rounded-lg overflow-hidden backdrop-blur-sm bg-white/10 dark:bg-white/5">
       {/* Toolbar */}
-      <div className="bg-gray-100 dark:bg-gray-900 border-b border-gray-300 dark:border-gray-700 p-2 flex flex-wrap gap-1">
+      <div className="bg-white/15 dark:bg-white/10 border-b border-white/20 dark:border-white/10 p-2 flex flex-wrap gap-1">
         <ToolbarButton
           icon={Bold}
           onClick={() => editor.chain().focus().toggleBold().run()}

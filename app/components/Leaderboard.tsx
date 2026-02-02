@@ -18,7 +18,7 @@ export function Leaderboard({
   emptyMessage = "No scores yet. Be the first!" 
 }: LeaderboardProps) {
   return (
-    <div className="w-full lg:w-80 bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-800">
+    <div className="w-full lg:w-80 bg-white/15 dark:bg-white/5 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/20 dark:border-white/10">
       <div className="flex items-center gap-2 mb-6">
         <Trophy className="w-5 h-5 text-yellow-500" />
         <h2 className="text-xl font-bold text-gray-900 dark:text-white">{title}</h2>
@@ -29,7 +29,7 @@ export function Leaderboard({
           <p className="text-center text-gray-500 py-4">{emptyMessage}</p>
         ) : (
           scores.map((s, idx) => (
-            <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
+            <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-white/10 dark:bg-white/5 backdrop-blur-sm border border-white/10 dark:border-white/5">
               <div className="flex items-center gap-3">
                 <span className={`w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold ${
                   idx === 0 ? "bg-yellow-100 text-yellow-700" : 

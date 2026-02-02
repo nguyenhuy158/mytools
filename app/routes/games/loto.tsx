@@ -249,33 +249,33 @@ export default function LotoGame() {
 
               <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
                 <button
-                  onClick={createRoom}
-                  disabled={!playerName.trim()}
-                  className="w-full px-6 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white rounded-lg font-semibold text-lg transition-colors disabled:cursor-not-allowed"
-                >
-                  {t('loto.create_room')}
-                </button>
-              </div>
+                   onClick={createRoom}
+                   disabled={!playerName.trim()}
+                   className="btn btn-success btn-block btn-lg"
+                 >
+                   {t('loto.create_room')}
+                 </button>
+                </div>
 
-              <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  {t('loto.room_code')}
-                </label>
-                <input
-                  type="text"
-                  value={joinRoomId}
-                  onChange={(e) => setJoinRoomId(e.target.value)}
-                  placeholder={t('loto.enter_room_code')}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 mb-4"
-                />
-                <button
-                  onClick={joinRoom}
-                  disabled={!playerName.trim() || !joinRoomId.trim()}
-                  className="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg font-semibold text-lg transition-colors disabled:cursor-not-allowed"
-                >
-                  {t('loto.join_room')}
-                </button>
-              </div>
+                <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                   {t('loto.room_code')}
+                 </label>
+                 <input
+                   type="text"
+                   value={joinRoomId}
+                   onChange={(e) => setJoinRoomId(e.target.value)}
+                   placeholder={t('loto.enter_room_code')}
+                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 mb-4"
+                 />
+                 <button
+                   onClick={joinRoom}
+                   disabled={!playerName.trim() || !joinRoomId.trim()}
+                   className="btn btn-primary btn-block btn-lg"
+                 >
+                   {t('loto.join_room')}
+                 </button>
+                </div>
             </div>
           </div>
         </div>
@@ -308,7 +308,7 @@ export default function LotoGame() {
             </h1>
             <button
               onClick={leaveRoom}
-              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition-colors"
+              className="btn btn-danger btn-sm"
             >
               {t('loto.leave_room')}
             </button>

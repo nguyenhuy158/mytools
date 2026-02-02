@@ -30,7 +30,7 @@ export function SoundControls<T extends string>({
   description = "Play ambient noise",
 }: SoundControlsProps<T>) {
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-6 space-y-6">
+    <div className="bg-white/15 dark:bg-white/5 backdrop-blur-lg rounded-2xl shadow-lg border border-white/20 dark:border-white/10 p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className={`p-2 rounded-lg ${isPlaying ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400' : 'bg-gray-100 text-gray-400 dark:bg-gray-800'}`}>
@@ -56,7 +56,7 @@ export function SoundControls<T extends string>({
       </div>
 
       {isPlaying && (
-        <div className="space-y-4 pt-2 border-t border-gray-100 dark:border-gray-800 animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="space-y-4 pt-2 border-t border-white/10 dark:border-white/5 animate-in fade-in slide-in-from-top-2 duration-200">
           <div className="grid grid-cols-2 gap-2">
             {(Object.entries(sounds) as [T, SoundConfig][]).map(([key, config]) => {
               const Icon = config.icon;

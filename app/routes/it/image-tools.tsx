@@ -372,10 +372,10 @@ export default function ImageTools() {
             {/* Crop Actions Overlay */}
             {selection && selection.w > 0 && mode === "crop" && (
                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white dark:bg-gray-800 p-2 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 flex gap-2 animate-in fade-in slide-in-from-bottom-2">
-                 <button onClick={handleCrop} className="px-3 py-1 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700 transition-colors">
+                 <button onClick={handleCrop} className="btn btn-primary btn-sm">
                    {t("image_tools.actions.apply_crop")}
                  </button>
-                 <button onClick={() => setSelection(null)} className="px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded text-sm font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                 <button onClick={() => setSelection(null)} className="btn btn-secondary btn-sm">
                    {t("image_tools.actions.cancel")}
                  </button>
                </div>

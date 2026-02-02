@@ -184,7 +184,7 @@ export default function SnakeGame() {
                {!gameOver && !isPlaying && score === 0 && (
                  <button
                    onClick={resetGame}
-                   className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-6 rounded-lg font-medium transition-colors mt-4"
+                   className="btn btn-primary mt-4"
                  >
                    <Play className="w-4 h-4" /> Start Game
                  </button>

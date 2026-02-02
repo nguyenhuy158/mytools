@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700&display=swap');
 @import "tailwindcss" source(".");
 @plugin "@tailwindcss/typography";
 
@@ -11,9 +11,248 @@
 
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
+  @apply bg-white dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 text-gray-900 dark:text-gray-50;
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
+}
+
+/* Liquid Glass Background - Subtle animated gradient for dark mode */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  body::before {
+    background-image:
+      radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(34, 211, 238, 0.06) 0%, transparent 50%);
+    animation: gradient-shift 8s ease-in-out infinite;
+  }
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Ensure content is above background */
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+/* Smooth scrollbar for glass aesthetic */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Glass Card Utility */
+.glass-card {
+  @apply bg-white dark:bg-white/8 rounded-[20px] border border-gray-200 dark:border-white/15 shadow-sm dark:shadow-lg dark:backdrop-blur-xl transition-all duration-300;
+}
+
+.glass-card:hover {
+  @apply shadow-md dark:shadow-xl dark:border-white/25;
+}
+
+/* Light glass variant */
+.glass-light {
+  @apply bg-gray-50 dark:bg-white/6 rounded-[16px] border border-gray-200 dark:border-white/10 shadow-xs dark:shadow-md dark:backdrop-blur-lg;
+}
+
+/* Subtle glass variant */
+.glass-subtle {
+  @apply bg-white dark:bg-white/4 rounded-[12px] border border-gray-200 dark:border-white/8 dark:backdrop-blur-md;
+}
+
+/* Text styles for glass aesthetic */
+.glass-heading {
+  @apply font-semibold tracking-tight text-gray-900 dark:text-white;
+}
+
+.glass-text {
+  @apply font-normal text-gray-700 dark:text-gray-300;
+}
+
+.glass-accent {
+  @apply text-blue-600 dark:text-blue-400;
+}
+
+/* Button Styles - Liquid Glass */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  outline: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btn:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+/* Primary Button */
+.btn-primary {
+  background-color: #2563eb;
+  color: white;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.btn-primary:hover {
+  background-color: #1d4ed8;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.dark .btn-primary {
+  background-color: #2563eb;
+}
+
+.dark .btn-primary:hover {
+  background-color: #1d4ed8;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Secondary Button */
+.btn-secondary {
+  background-color: #e5e7eb;
+  color: #111827;
+  border: 1px solid #d1d5db;
+}
+
+.btn-secondary:hover {
+  background-color: #d1d5db;
+}
+
+.dark .btn-secondary {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.dark .btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Danger Button */
+.btn-danger {
+  background-color: #dc2626;
+  color: white;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.btn-danger:hover {
+  background-color: #b91c1c;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.dark .btn-danger {
+  background-color: #dc2626;
+}
+
+.dark .btn-danger:hover {
+  background-color: #b91c1c;
+}
+
+/* Success Button */
+.btn-success {
+  background-color: #16a34a;
+  color: white;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.btn-success:hover {
+  background-color: #15803d;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.dark .btn-success {
+  background-color: #16a34a;
+}
+
+.dark .btn-success:hover {
+  background-color: #15803d;
+}
+
+/* Warning Button */
+.btn-warning {
+  background-color: #d97706;
+  color: white;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.btn-warning:hover {
+  background-color: #b45309;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.dark .btn-warning {
+  background-color: #b45309;
+}
+
+.dark .btn-warning:hover {
+  background-color: #92400e;
+}
+
+/* Small Button */
+.btn-sm {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+/* Large Button */
+.btn-lg {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.125rem;
+}
+
+/* Block Button */
+.btn-block {
+  width: 100%;
+}
+
+/* Disabled State */
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn:disabled:hover {
+  box-shadow: none;
 }

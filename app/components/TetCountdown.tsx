@@ -44,7 +44,7 @@ export function TetCountdown({ variant = "default" }: { variant?: "default" | "c
 
     if (variant === "compact") {
         return (
-            <div className="flex items-center gap-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-800/50 px-3 py-1.5 rounded-full border border-gray-100 dark:border-gray-700">
+            <div className="flex items-center gap-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 bg-white/15 dark:bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/20 dark:border-white/10">
                 <span className="text-red-500 font-bold mr-1">Tết</span>
                 <span className="tabular-nums">{String(timeLeft.days ?? 0).padStart(2, '0')}d</span>
                 <span className="tabular-nums">{String(timeLeft.hours ?? 0).padStart(2, '0')}h</span>

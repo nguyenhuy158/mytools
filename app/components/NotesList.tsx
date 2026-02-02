@@ -33,9 +33,9 @@ export const NotesList: React.FC<NotesListProps> = ({
   });
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-gray-950 border-r border-gray-300 dark:border-gray-700">
+    <div className="flex flex-col h-full bg-white/10 dark:bg-white/5 backdrop-blur-lg border-r border-white/20 dark:border-white/10">
       {/* Header with create button */}
-      <div className="p-4 border-b border-gray-300 dark:border-gray-700 space-y-3">
+      <div className="p-4 border-b border-white/20 dark:border-white/10 space-y-3">
         <button
           onClick={onCreateNote}
           disabled={isLoading}
@@ -56,7 +56,7 @@ export const NotesList: React.FC<NotesListProps> = ({
             placeholder="Search notes..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full pl-9 pr-3 py-2 border border-white/20 dark:border-white/10 rounded-lg bg-white/15 dark:bg-white/5 backdrop-blur-sm text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white/25 dark:focus:bg-white/15"
           />
         </div>
       </div>

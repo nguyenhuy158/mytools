@@ -273,12 +273,12 @@ export default function Game2048() {
                 />
                 <input type="hidden" name="score" value={score} />
                 <button
-                  type="submit"
-                  disabled={navigation.state === "submitting"}
-                  className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg font-medium transition-colors"
-                >
-                  <Save className="w-4 h-4" /> {t("games.2048.save_score")}
-                </button>
+                   type="submit"
+                   disabled={navigation.state === "submitting"}
+                   className="btn btn-primary btn-block"
+                 >
+                   <Save className="w-4 h-4" /> {t("games.2048.save_score")}
+                 </button>
               </Form>
             </GameOverlay>
 

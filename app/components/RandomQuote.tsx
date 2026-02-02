@@ -23,7 +23,7 @@ export default function RandomQuote() {
 
   return (
     <div className="w-full max-w-2xl mx-auto px-4 py-8">
-      <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-8">
+      <div className="bg-white/15 dark:bg-white/5 backdrop-blur-lg rounded-3xl shadow-xl p-8 border border-white/20 dark:border-white/10">
         {/* Quote Text */}
         <blockquote className="text-xl md:text-2xl leading-relaxed text-gray-900 dark:text-gray-100 italic mb-6">
           "{quoteText}"

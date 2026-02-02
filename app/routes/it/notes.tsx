@@ -290,7 +290,7 @@ export default function NotesPage() {
                   <button
                     onClick={() => saveNote(currentNote)}
                     disabled={isSaving}
-                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium py-2 px-4 rounded-lg transition"
+                    className="btn btn-primary btn-sm"
                   >
                     <Save size={18} />
                     {isSaving ? "Saving..." : "Save"}
@@ -300,7 +300,7 @@ export default function NotesPage() {
 
                   <button
                     onClick={handleExportJSON}
-                    className="flex items-center gap-2 bg-gray-600 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-800 text-white font-medium py-2 px-4 rounded-lg transition"
+                    className="btn btn-secondary btn-sm"
                     title="Export as JSON"
                   >
                     <Download size={18} />
@@ -309,7 +309,7 @@ export default function NotesPage() {
 
                   <button
                     onClick={handleExportMarkdown}
-                    className="flex items-center gap-2 bg-gray-600 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-800 text-white font-medium py-2 px-4 rounded-lg transition"
+                    className="btn btn-secondary btn-sm"
                     title="Export as Markdown"
                   >
                     <Download size={18} />
@@ -318,7 +318,7 @@ export default function NotesPage() {
 
                   <button
                     onClick={handleImportJSON}
-                    className="flex items-center gap-2 bg-gray-600 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-800 text-white font-medium py-2 px-4 rounded-lg transition"
+                    className="btn btn-secondary btn-sm"
                     title="Import from JSON"
                   >
                     <Upload size={18} />
@@ -327,7 +327,7 @@ export default function NotesPage() {
 
                   <button
                     onClick={() => handleDeleteNote(currentNote.id)}
-                    className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition"
+                    className="btn btn-danger btn-sm"
                     title="Delete note"
                   >
                     <Trash2 size={18} />

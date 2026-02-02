@@ -27,7 +27,7 @@ export const LotoControls = memo(function LotoControls({
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 md:p-6 space-y-4">
+    <div className="glass-card p-4 md:p-6 space-y-4">
       <div>
         <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
           {t('loto.room_info')}
@@ -47,7 +47,7 @@ export const LotoControls = memo(function LotoControls({
 
       <button
         onClick={copyRoomLink}
-        className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors"
+        className="btn btn-primary btn-block"
       >
         {t('loto.copy_room_link')}
       </button>
@@ -56,7 +56,7 @@ export const LotoControls = memo(function LotoControls({
         <button
           onClick={onStartGame}
           disabled={playersCount < 2}
-          className="w-full px-4 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white rounded-lg font-semibold text-lg transition-colors disabled:cursor-not-allowed"
+          className="btn btn-success btn-block btn-lg"
         >
           {t('loto.start_game')}
         </button>
@@ -65,7 +65,7 @@ export const LotoControls = memo(function LotoControls({
       {isHost && gameStatus === 'active' && (
         <button
           onClick={onCallNextNumber}
-          className="w-full px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-semibold text-lg transition-colors"
+          className="btn btn-warning btn-block btn-lg"
         >
           {t('loto.call_next')}
         </button>

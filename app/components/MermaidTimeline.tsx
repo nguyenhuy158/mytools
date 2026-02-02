@@ -69,7 +69,7 @@ export function MermaidTimeline({ items }: MermaidTimelineProps) {
   return (
     <div
       ref={containerRef}
-      className="mermaid-wrapper w-full overflow-x-auto bg-white dark:bg-gray-900 rounded-2xl p-4 md:p-8 border border-gray-200 dark:border-gray-800"
+      className="mermaid-wrapper w-full overflow-x-auto bg-white/15 dark:bg-white/5 backdrop-blur-lg rounded-2xl p-4 md:p-8 border border-white/20 dark:border-white/10"
     />
   );
 }

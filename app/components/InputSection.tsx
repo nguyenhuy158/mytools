@@ -29,12 +29,12 @@ export function InputSection({
         {actions && <div className="flex items-center gap-2">{actions}</div>}
       </div>
       <textarea
-        className={`w-full flex-1 p-4 border rounded-xl font-mono text-sm resize-none focus:outline-none ${
+        className={`w-full flex-1 p-4 border rounded-xl font-mono text-sm resize-none focus:outline-none backdrop-blur-sm ${
           readOnly 
-            ? "bg-gray-50 dark:bg-gray-950 border-gray-200 dark:border-gray-800 cursor-text" 
-            : "bg-white dark:bg-gray-900 focus:ring-2 focus:ring-blue-500"
+            ? "bg-white/10 dark:bg-white/5 border-white/20 dark:border-white/10 cursor-text" 
+            : "bg-white/20 dark:bg-white/10 border-white/30 dark:border-white/20 focus:ring-2 focus:ring-blue-400 focus:bg-white/30 dark:focus:bg-white/20"
         } ${
-          error ? 'border-red-500 focus:ring-red-500' : 'border-gray-200 dark:border-gray-800'
+          error ? 'border-red-400 focus:ring-red-400' : ''
         }`}
         placeholder={placeholder}
         value={value}
@@ -43,7 +43,7 @@ export function InputSection({
         readOnly={readOnly}
       />
       {error && (
-        <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg text-sm flex items-start gap-2">
+        <div className="bg-red-500/20 dark:bg-red-500/15 backdrop-blur-sm text-red-700 dark:text-red-300 p-3 rounded-lg text-sm flex items-start gap-2 border border-red-300/50 dark:border-red-400/30">
           <XCircle className="w-4 h-4 mt-0.5 shrink-0" />
           <span className="font-mono break-all">{error}</span>
         </div>

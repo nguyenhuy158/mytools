@@ -69,12 +69,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
           }}
         />
       </head>
-      <body className="flex flex-col min-h-screen">
+      <body className="flex flex-col min-h-screen overflow-x-hidden bg-white dark:bg-slate-800">
         <CommandMenu>
-          <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200" />}>
+          <Suspense fallback={<div className="h-16 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-white/10" />}>
             <Navbar />
           </Suspense>
-          <div className="flex-1">
+          <div className="flex-1 relative">
             {children}
           </div>
           <Footer />
