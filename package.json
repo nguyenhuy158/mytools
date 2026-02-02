@@ -9,7 +9,11 @@
 		"dev": "react-router dev",
 		"postinstall": "pnpm cf-typegen",
 		"preview": "pnpm build && vite preview",
-		"typecheck": "pnpm cf-typegen && react-router typegen && tsc -b"
+		"typecheck": "pnpm cf-typegen && react-router typegen && tsc -b",
+		"test": "vitest",
+		"test:ui": "vitest --ui",
+		"test:run": "vitest run",
+		"test:coverage": "vitest run --coverage"
 	},
 	"dependencies": {
 		"@tailwindcss/typography": "^0.5.19",
