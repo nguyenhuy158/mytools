@@ -56,7 +56,11 @@
 	],
 	"routes": [
 		{
-			"pattern": "huycode.click",
+			"pattern": "huyab.click",
+			"custom_domain": true
+		},
+		{
+			"pattern": "case.huyab.click",
 			"custom_domain": true
 		}
 	]

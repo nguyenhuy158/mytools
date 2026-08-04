@@ -130,7 +130,7 @@ npx wrangler versions deploy
 ```
 
 ### Custom Domain
-The project is configured to deploy to `huycode.click` domain via Cloudflare routes.
+The project is configured to deploy to `huyab.click` (apex) and `case.huyab.click` via Cloudflare routes.
 
 ## 📁 Project Structure
 
