@@ -25,7 +25,7 @@ Keep this managed block so 'openspec update' can refresh the instructions.
 - **Build**: `pnpm build` (Production build)
 - **Type Check**: `pnpm typecheck` (TypeScript validation)
 - **Dev Server**: `pnpm dev` (HMR development)
-- **Tests**: No test runner. Verify manually via build or browser testing. No single test commands available.
+- **Tests**: Vitest. `pnpm test` (watch), `pnpm test:run` (once), `pnpm test:coverage`, `pnpm test:ui`. Note these do **not** gate deploys — see Deploy & CI.
 
 ## Code Style Guidelines
 - **Stack**: React Router v7, Tailwind CSS v4, TypeScript, i18next for localization.
@@ -37,6 +37,59 @@ Keep this managed block so 'openspec update' can refresh the instructions.
 - **Localization**: Use `useTranslation` hook. Add keys to `public/locales/{en,vi}/translation.json`.
 - **Error Handling**: Use try/catch for async ops, toast notifications for user feedback.
 - **AI Guidelines**: Follow STYLE_GUIDE.md AI_GUIDELINES: Tailwind-only, dark mode compliance, mobile-first, simplicity (avoid arbitrary values).
+
+## Deploy & CI
+
+Deploys are automatic. Pushing to `main` is the whole release process — never run
+`wrangler deploy` by hand unless CI is broken and you have said so out loud.
+
+- **Trigger**: push to `main` → Cloudflare Workers Builds → live in ~2.5 min.
+  Only `main` deploys (`branch_includes: ["main"]`); previews are disabled, so
+  feature branches and PRs build nothing.
+- **Pipeline**: `pnpm install --frozen-lockfile` → `pnpm run build` →
+  `npx wrangler deploy --config build/server/wrangler.json`
+- **Worker name is `case-converter`** — a legacy name from when this was only a
+  case converter. Do **not** rename it. Renaming creates a *new* Worker and
+  orphans the Durable Object state in `LOTO_ROOMS` and `ONLINE_COUNTER`.
+- **Rollback**: `npx wrangler rollback --name case-converter`. Cloudflare retains
+  every version, so rollback never needs a local checkout.
+
+### Traps that have already caused outages
+
+**Commit `pnpm-lock.yaml` with every `package.json` change.** CI installs with
+`--frozen-lockfile`; local `pnpm install` does not. A lockfile that drifts from
+`package.json` fails in CI while working perfectly on your machine. This exact
+mistake silently broke production for six months (2026-02-02 → 2026-08-04):
+every push failed with `ERR_PNPM_OUTDATED_LOCKFILE` while prod sat on stale code.
+
+**Do not remove `packages: [.]` from `pnpm-workspace.yaml`.** CI runs pnpm 10.11,
+which treats the file as a workspace root and aborts with
+`ERROR packages field missing or empty`. Local pnpm 11 does not need it, so
+deleting it looks harmless and breaks only CI.
+
+**Keep both build-allowlist keys in `pnpm-workspace.yaml`.** pnpm 10 reads
+`onlyBuiltDependencies`, pnpm 11 reads `allowBuilds`. Both must list `esbuild`,
+`protobufjs`, `sharp`, `workerd` — these fetch platform binaries in postinstall,
+and without them `pnpm build` dies on `ERR_PNPM_IGNORED_BUILDS`.
+
+**Keep `routes` in `wrangler.jsonc` matching the real custom domains**, currently
+`huyab.click` (apex) and `case.huyab.click`. A route pointing at a zone outside
+the `nguyenhuy158` account fails the deploy. The config referenced the long-dead
+`huycode.click` for months.
+
+**Verify a version change with asset hashes, not HTTP 200.** Diff the
+`/assets/*` filenames in the served HTML, or md5 a changed file against
+`build/client/assets/`. A 200 only proves the old version is still serving.
+
+### Two known gaps
+
+- **Build failures are silent** — no email, no notification. A failed build leaves
+  production on the previous version (safe) but you will not be told. Check
+  Deployments in the dashboard after pushing, or query
+  `GET /accounts/{account_id}/builds/workers/{script_tag}/builds`.
+- **Tests do not gate deploys.** `build_command` is `pnpm run build` only. A build
+  error (TypeScript, bad import) blocks the deploy; logic that compiles but is
+  wrong ships straight to production. Run `pnpm test:run` before pushing.
 
 ## Additional Rules
 - Always run `pnpm typecheck` and `pnpm build` after changes.
