@@ -1,6 +1,20 @@
+# CI (Cloudflare Workers Builds) chạy pnpm 10.11, máy local chạy pnpm 11.
+# pnpm 10 coi file này là workspace root nên bắt buộc có `packages`, thiếu là
+# "ERROR packages field missing or empty" ngay bước install.
+packages:
+  - .
+
+# esbuild/workerd tải binary theo nền tảng, sharp là thư viện ảnh native — cả ba
+# đều cần postinstall, không có thì react-router build và wrangler deploy đều fail.
+# pnpm 10 đọc `onlyBuiltDependencies`, pnpm 11 đổi sang `allowBuilds`; khai cả hai
+# để cùng một file chạy được ở CI lẫn local.
+onlyBuiltDependencies:
+  - esbuild
+  - protobufjs
+  - sharp
+  - workerd
+
 allowBuilds:
-  # esbuild/workerd tải binary theo nền tảng, sharp là thư viện ảnh native —
-  # cả ba đều cần postinstall, không có thì react-router build và wrangler deploy đều fail.
   esbuild: true
   protobufjs: true
   sharp: true
