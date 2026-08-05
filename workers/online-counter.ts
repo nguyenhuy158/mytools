@@ -36,15 +36,17 @@ export class OnlineCounter extends DurableObject {
   }
 
   async webSocketClose(ws: WebSocket, code: number, reason: string, wasClean: boolean): Promise<void> {
-    this.broadcastCount();
+    this.broadcastCount(ws);
   }
 
   async webSocketError(ws: WebSocket, error: unknown): Promise<void> {
-    this.broadcastCount();
+    this.broadcastCount(ws);
   }
 
-  private broadcastCount(): void {
-    const sockets = this.ctx.getWebSockets();
+  // `closing` excludes the socket that just closed/errored — measured live,
+  // ctx.getWebSockets() still includes it for the duration of this handler.
+  private broadcastCount(closing?: WebSocket): void {
+    const sockets = this.ctx.getWebSockets().filter((ws) => ws !== closing);
     const message = JSON.stringify({ type: "count", count: sockets.length });
 
     for (const ws of sockets) {
