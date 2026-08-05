@@ -1,6 +1,8 @@
 import type { MetaFunction } from "react-router";
 import { useState, useRef } from "react";
 import ReactMarkdown from "react-markdown";
+import rehypeHighlight from "rehype-highlight";
+import "highlight.js/styles/github-dark.css";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { PageHeader } from "~/components/PageHeader";
@@ -23,7 +25,7 @@ Type your **Markdown** here to see the live preview.
 ## Features
 - Live rendering
 - GitHub flavored markdown support
-- Syntax highlighting (coming soon)
+- Syntax highlighting
 
 ### Code Example
 \`\`\`javascript
@@ -110,7 +112,7 @@ console.log("Hello World");
               ref={previewRef}
               className="flex-1 w-full p-4 overflow-auto prose dark:prose-invert max-w-none"
             >
-              <ReactMarkdown>{markdown}</ReactMarkdown>
+              <ReactMarkdown rehypePlugins={[rehypeHighlight]}>{markdown}</ReactMarkdown>
             </div>
           </div>
         </div>

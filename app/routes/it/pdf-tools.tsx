@@ -31,7 +31,6 @@ export default function PDFTools() {
 
     // Split State
     const [splitFile, setSplitFile] = useState<PDFFile | null>(null);
-    const [splitMode, setSplitMode] = useState<"all" | "range">("all");
     const [pageRange, setPageRange] = useState("");
 
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -118,29 +117,6 @@ export default function PDFTools() {
             const fileBuffer = await splitFile.file.arrayBuffer();
             const pdf = await PDFDocument.load(fileBuffer);
             const totalPages = pdf.getPageCount();
-
-            if (splitMode === "all") {
-                // Split into individual files (zip would be better but let's download one by one or create a zip?
-                // Downloading too many files is blocked by browsers.
-                // Ideally we should zip them. But for now maybe just split into ONE specific PDF?
-                // Actually "Split all pages" usually means ONE file per page.
-                // Browsers might block multiple downloads.
-                // Let's implement extracting to a new PDF for now (extract mode) or zip if I had JSZip.
-                // I don't see JSZip. I'll stick to extracting specific pages to a SINGLE new PDF for "extract" mode.
-                // For "all pages", I might need to clarify component capabilities.
-                // Let's just implement Extract Range for now as the primary "Split" feature.
-                // Or if "all" is selected, creating a ZIP requires a library.
-                // Let's refine the "Split" to "Extract Pages" mainly.
-                // If user wants to split into individual files, I'll add that later with JSZip.
-                // For now, I'll interpret "Split all pages" as "Not supported yet" or just remove it?
-                // No, let's just do Extract Pages first.
-
-                // Wait, I can implement "Split" as "Save specific range as new PDF".
-                // "All pages" doesn't make sense unless we zip.
-
-                toast.info("Splitting to ZIP not yet supported. Please use Extract Range.");
-                return;
-            }
 
             // Parse range
             const pagesToKeep = new Set<number>();
@@ -339,35 +315,16 @@ export default function PDFTools() {
 
                                     <div className="space-y-4">
                                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                            {t("pdf_tools.message", "Split Options")}
+                                            {t("pdf_tools.split_options.extract_pages")}
                                         </label>
 
-                                        <div className="space-y-3">
-                                            <label className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer transition-colors">
-                                                <input
-                                                    type="radio"
-                                                    name="splitMode"
-                                                    checked={splitMode === "range"}
-                                                    onChange={() => setSplitMode("range")}
-                                                    className="text-indigo-600"
-                                                />
-                                                <div className="flex-1">
-                                                    <span className="block font-medium text-sm">{t("pdf_tools.split_options.extract_pages")}</span>
-                                                </div>
-                                            </label>
-
-                                            {splitMode === "range" && (
-                                                <div className="ml-7">
-                                                    <input
-                                                        type="text"
-                                                        value={pageRange}
-                                                        onChange={(e) => setPageRange(e.target.value)}
-                                                        placeholder={t("pdf_tools.placeholders.page_range")}
-                                                        className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow outline-none"
-                                                    />
-                                                </div>
-                                            )}
-                                        </div>
+                                        <input
+                                            type="text"
+                                            value={pageRange}
+                                            onChange={(e) => setPageRange(e.target.value)}
+                                            placeholder={t("pdf_tools.placeholders.page_range")}
+                                            className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow outline-none"
+                                        />
                                     </div>
 
                                     <div className="flex justify-end pt-4 border-t border-gray-100 dark:border-gray-800 mt-auto">
