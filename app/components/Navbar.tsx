@@ -177,6 +177,11 @@ export function Navbar() {
               })}
             </div>
           </div>
+          <div className="flex items-center gap-2">
+            {/* Mounted once, outside both conditional blocks below, so it
+                shows at every breakpoint without opening a second WebSocket. */}
+            <OnlineUsers />
+
           <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
             <div className="hidden xl:block">
               <TetCountdown variant="compact" />
@@ -216,8 +221,6 @@ export function Navbar() {
             >
               {theme === "dark" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
             </button>
-
-            <OnlineUsers />
           </div>
 
           <div className="-mr-2 flex items-center sm:hidden gap-2">
@@ -238,6 +241,7 @@ export function Navbar() {
                 <Menu className="block h-6 w-6" aria-hidden="true" />
               )}
             </button>
+          </div>
           </div>
         </div>
       </div>
