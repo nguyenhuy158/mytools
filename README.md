@@ -517,7 +517,7 @@ instead of HTML.
 curl huyab.click                          # banner + case list
 curl huyab.click/-h                       # full help
 curl huyab.click/upper -d 'đường phố'     # ĐƯỜNG PHỐ
-curl 'huyab.click/title/hà nội mùa thu'   # Hà Nội Mùa Thu
+curl 'huyab.click/title/tỉnh ninh thuận'  # Tỉnh Ninh Thuận
 cat notes.txt | curl huyab.click/lower --data-binary @-
 curl 'huyab.click/capitalized?text=ăn ở ưu đãi&json'
 ```
@@ -528,7 +528,7 @@ quoting entirely, install the `tc` shell function:
 
 ```sh
 eval "$(curl -s huyab.click/sh)"   # add to ~/.zshrc to keep it
-tc t xin chao viet nam             # Xin Chao Viet Nam
+tc t tinh ninh thuan              # Tinh Ninh Thuan
 tc upper đường phố                 # ĐƯỜNG PHỐ
 cat notes.txt | tc title           # reads stdin when given no words
 tc -h                              # help

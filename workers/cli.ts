@@ -6,8 +6,8 @@
  * WebSocket upgrades fall through untouched.
  *
  *   curl huyab.click                       banner + usage
- *   curl huyab.click/upper -d 'đường phố'  convert stdin/body
- *   curl huyab.click/title/hà nội          convert a path argument
+ *   curl huyab.click/upper -d 'ninh thuận'  convert stdin/body
+ *   curl huyab.click/title/ninh thuận          convert a path argument
  *   curl huyab.click/-h                    usage
  */
 import * as textCase from "../app/utils/text-case";
@@ -55,14 +55,14 @@ USAGE
   echo '<text>' | curl huyab.click/<case> --data-binary @-
   cat file.txt | curl huyab.click/<case> --data-binary @-
 
-CASES  — shown as applied to: đường phố hà nội
-  upper         ĐƯỜNG PHỐ HÀ NỘI      (aliases: u, uc)
-  lower         đường phố hà nội      (aliases: l, lc)
-  sentence      Đường phố hà nội      (alias: s)
-  capitalized   Đường Phố Hà Nội      (aliases: c, cap)
-  title         Đường Phố Hà Nội      (alias: t)
-  alternating   đƯờNg pHố hÀ NộI      (aliases: a, alt)
-  inverse       ĐƯỜNG PHỐ HÀ NỘI      (aliases: i, inv)
+CASES  — shown as applied to: tỉnh ninh thuận
+  upper         TỈNH NINH THUẬN       (aliases: u, uc)
+  lower         tỉnh ninh thuận       (aliases: l, lc)
+  sentence      Tỉnh ninh thuận       (alias: s)
+  capitalized   Tỉnh Ninh Thuận       (aliases: c, cap)
+  title         Tỉnh Ninh Thuận       (alias: t)
+  alternating   tỈnH NiNh tHuẬn       (aliases: a, alt)
+  inverse       TỈNH NINH THUẬN       (aliases: i, inv)
 
   alternating counts spaces too, so the rhythm carries across words.
   inverse swaps each letter's case, so lowercase input comes back uppercase.
@@ -77,7 +77,8 @@ SHELL HELPER
   Tired of quoting? Install a 'tc' function once:
 
     eval "$(curl -s huyab.click/sh)"      # add to ~/.zshrc to keep it
-    tc t xin chao viet nam                # Xin Chao Viet Nam
+    tc t tinh ninh thuan                  # Tinh Ninh Thuan
+    tc upper tỉnh ninh thuận              # TỈNH NINH THUẬN
     cat notes.txt | tc upper
 
 NOTES
@@ -85,15 +86,15 @@ NOTES
   Trailing newlines in the input are preserved; curl -d strips them for you.
   Quote the whole URL if the text has spaces — curl treats a bare second
   word as another URL and tries to resolve it as a hostname:
-    curl huyab.click/t xin chao      ✗  "Could not resolve host: xin"
-    curl 'huyab.click/t/xin chao'    ✓
-    curl huyab.click/t -d 'xin chao' ✓
+    curl huyab.click/t ninh thuan      ✗  "Could not resolve host: ninh"
+    curl 'huyab.click/t/ninh thuan'    ✓
+    curl huyab.click/t -d 'ninh thuan' ✓
 
 EXAMPLES
-  curl huyab.click/upper -d 'đường phố'
-  curl 'huyab.click/title/hà nội mùa thu'
-  curl 'huyab.click/capitalized?text=ăn ở ưu đãi&json'
-  curl -s huyab.click/lower -d 'HÀ NỘI' | tee out.txt
+  curl huyab.click/upper -d 'tỉnh ninh thuận'
+  curl 'huyab.click/title/tỉnh ninh thuận'
+  curl 'huyab.click/capitalized?text=phan rang tháp chàm&json'
+  curl -s huyab.click/lower -d 'NINH THUẬN' | tee out.txt
 `;
 
 const BANNER = `ToolHub — text case converter
@@ -106,7 +107,7 @@ The full site (JSON tools, diff, calendar, games) is at https://huyab.click
 
 /**
  * Shell function served at /sh, so text with spaces needs no quoting:
- *   eval "$(curl -s huyab.click/sh)" && tc t xin chao viet nam
+ *   eval "$(curl -s huyab.click/sh)" && tc t tinh ninh thuan
  */
 const SHELL_HELPER = `# ToolHub case converter — eval "$(curl -s huyab.click/sh)"
 tc() {
@@ -163,7 +164,7 @@ function wantsJson(request: Request, url: URL): boolean {
 
 /**
  * Resolve the text to convert: request body first, then ?text=, then any extra
- * path segments (so `/title/hà nội mùa thu` works).
+ * path segments (so `/title/tỉnh ninh thuận` works).
  */
 async function readInput(
   request: Request,
@@ -232,17 +233,17 @@ export async function handleCliRequest(
   const input = await readInput(request, url, rest);
 
   if (!input) {
-    // Spell out the quoting, because `curl host/t xin chao` sends no body at
+    // Spell out the quoting, because `curl host/t ninh thuan` sends no body at
     // all — curl treats each extra word as another URL to fetch.
     const message =
       `error: no input for '${mode}'\n\n` +
       `  curl huyab.click/${mode} -d '<text>'\n` +
       `  curl 'huyab.click/${mode}/<text>'      # quote the whole URL\n\n` +
       `if you typed the text as bare words, curl read them as extra URLs:\n` +
-      `  curl huyab.click/${mode} xin chao      ✗\n` +
-      `  curl 'huyab.click/${mode}/xin chao'    ✓\n\n` +
+      `  curl huyab.click/${mode} ninh thuan      ✗\n` +
+      `  curl 'huyab.click/${mode}/ninh thuan'    ✓\n\n` +
       `no quoting at all:\n` +
-      `  eval "$(curl -s huyab.click/sh)" && tc ${mode} xin chao\n\n` +
+      `  eval "$(curl -s huyab.click/sh)" && tc ${mode} ninh thuan\n\n` +
       `run 'curl huyab.click/-h' for help\n`;
     return wantsJson(request, url)
       ? json({ error: "no input", mode }, 400)

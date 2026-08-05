@@ -116,7 +116,7 @@ describe("CLI worker interface", () => {
 
     it("shows examples that match what the converters actually return", async () => {
       // Guards against the help text drifting from the implementation.
-      const sample = "đường phố hà nội";
+      const sample = "tỉnh ninh thuận";
       const help = await body(await get("/--help"));
       for (const mode of [
         "upper",
@@ -222,11 +222,11 @@ describe("CLI worker interface", () => {
     });
 
     it("explains the bare-words mistake in the no-input error", async () => {
-      // `curl huyab.click/t xin chao` sends no body; the error must say why.
+      // `curl huyab.click/t ninh thuan` sends no body; the error must say why.
       const out = await body(await post("/t", ""));
       expect(out).toContain("extra URLs");
-      expect(out).toContain("'huyab.click/title/xin chao'");
-      expect(out).toContain("tc title xin chao");
+      expect(out).toContain("'huyab.click/title/ninh thuan'");
+      expect(out).toContain("tc title ninh thuan");
     });
 
     it("returns a 400 JSON error when there is no input", async () => {
