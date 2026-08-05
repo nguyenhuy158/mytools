@@ -9,6 +9,7 @@ export default [
   route("api/loto/room/:roomId/ws", "routes/api.loto.room.$roomId.ws.tsx"),
   route("api/online-counter/ws", "routes/api.online-counter.ws.tsx"),
   route("api/holidays", "routes/api.holidays.tsx"),
+  route("api/projects-status", "routes/api.projects-status.tsx"),
   // UI Routes
   route("it", "routes/it.tsx", [
     index("routes/it-home.tsx"),
@@ -29,6 +30,7 @@ export default [
     route("quotes", "routes/quotes.tsx"),
   ]),
   route("calendar", "routes/calendar.tsx"),
+  route("projects", "routes/projects.tsx"),
   route("about", "routes/about.tsx"),
   route("liquid-glass", "routes/liquid-glass.tsx"),
   route("games", "routes/games.tsx", [

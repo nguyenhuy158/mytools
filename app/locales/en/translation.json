@@ -1,316 +1,317 @@
 {
   "app_name": "ToolHub",
   "slogan": "Your Hub for Essential Tools",
-    "nav": {
-      "home": "Home",
-      "features": "Features",
-      "json_tools": "JSON",
-      "text_diff": "Text",
-      "pomodoro": "Pomodoro",
-      "quotes": "Quotes",
-      "calendar": "Calendar",
-      "roadmap": "Roadmap",
-      "about": "About",
-      "it_tools": "IT Tools",
-      "lifestyle": "Lifestyle",
-      "number_reading": "Number Reading",
-      "games": "Games",
-      "language": "Language",
-      "settings": "Settings",
-      "system": "System",
-      "no_results": "No results found for",
-      "kbd_navigate": "Navigate",
-      "kbd_open": "to open",
-      "lifestyle_description": "Tools for a better life.",
-      "toast": {
-        "language_changed": "Language changed to English",
-        "dark_mode": "Switched to Dark Mode",
-        "light_mode": "Switched to Light Mode"
-      }
+  "nav": {
+    "home": "Home",
+    "features": "Features",
+    "json_tools": "JSON",
+    "text_diff": "Text",
+    "pomodoro": "Pomodoro",
+    "quotes": "Quotes",
+    "calendar": "Calendar",
+    "roadmap": "Roadmap",
+    "about": "About",
+    "it_tools": "IT Tools",
+    "lifestyle": "Lifestyle",
+    "number_reading": "Number Reading",
+    "games": "Games",
+    "language": "Language",
+    "settings": "Settings",
+    "system": "System",
+    "no_results": "No results found for",
+    "kbd_navigate": "Navigate",
+    "kbd_open": "to open",
+    "lifestyle_description": "Tools for a better life.",
+    "toast": {
+      "language_changed": "Language changed to English",
+      "dark_mode": "Switched to Dark Mode",
+      "light_mode": "Switched to Light Mode"
     },
-    "it_tools": {
-      "title": "IT Tools",
-      "description": "Essential tools for developers and IT professionals.",
-      "json_tools": {
-        "name": "JSON Tools",
-        "description": "Format, minify, and validate JSON data."
-      },
-      "text_diff": {
-        "name": "Text Diff",
-        "description": "Compare text differences side by side."
-      },
-      "image_tools": {
-        "name": "Image Tools",
-        "description": "Upload, crop, pick colors, and manipulate images directly in your browser."
-      },
-      "api_tester": {
-        "name": "API Tester",
-        "description": "Test HTTP requests and view responses."
-      },
-      "number_reading": {
-        "name": "Number Reading",
-        "description": "Learn to read large numbers in English and Vietnamese."
-      },
-      "odoo_inspector": {
-        "name": "Odoo Field Inspector",
-        "description": "Inspect Odoo model fields via JSON-RPC."
-      },
-      "markdown_preview": {
-        "name": "Markdown Preview",
-        "description": "Write Markdown and preview it instantly in HTML."
-        },
-      "notes": {
-        "name": "Notes",
-        "description": "Create and manage notes with rich text formatting and cloud storage."
-        },
-      "transformers": {
-        "name": "AI Playground",
-        "description": "Run AI models directly in your browser with Transformers.js."
-      },
-      "pdf_tools": {
-        "name": "PDF Tools",
-        "description": "Merge and Split PDF files entirely in your browser."
-      }
-      },
-    "api_tester": {
-      "title": "API Tester",
-      "description": "Test API endpoints with a simple, client-side HTTP client.",
-      "labels": {
-        "headers": "Headers",
-        "body": "Body",
-        "response": "Response",
-        "response_headers": "Response Headers",
-        "response_body": "Response Body"
-      },
-      "actions": {
-        "send": "Send",
-        "copy": "Copy",
-        "clear_all": "Clear All"
-      },
-      "toast": {
-        "url_required": "Please enter a URL",
-        "history_cleared": "History cleared",
-        "copied": "Copied to clipboard"
-      },
-      "history": {
-        "title": "Request History"
-      }
+    "projects": "Projects"
+  },
+  "it_tools": {
+    "title": "IT Tools",
+    "description": "Essential tools for developers and IT professionals.",
+    "json_tools": {
+      "name": "JSON Tools",
+      "description": "Format, minify, and validate JSON data."
+    },
+    "text_diff": {
+      "name": "Text Diff",
+      "description": "Compare text differences side by side."
     },
     "image_tools": {
-      "title": "Image Tools",
-      "description": "Upload, crop, pick colors, and manipulate images directly in your browser.",
-      "actions": {
-        "upload": "Upload",
-        "paste": "Paste",
-        "view": "View",
-        "crop": "Crop",
-        "color_picker": "Color Picker",
-        "copy": "Copy",
-        "download": "Download",
-        "clear": "Clear",
-        "apply_crop": "Apply Crop",
-        "cancel": "Cancel",
-        "clear_all": "Clear All"
-      },
-      "color_history": "Color History",
-      "placeholders": {
-        "empty": "Upload an image or paste from clipboard to start"
-      },
-      "toast": {
-        "invalid_file": "Invalid file type. Please upload an image.",
-        "pasted": "Image pasted from clipboard",
-        "no_image_clipboard": "No image found in clipboard",
-        "clipboard_error": "Failed to read clipboard",
-        "copied": "Image copied to clipboard",
-        "copy_error": "Failed to copy to clipboard",
-        "cropped": "Image cropped",
-        "color_copied": "Color copied: {{hex}}",
-        "history_cleared": "History cleared"
-      }
+      "name": "Image Tools",
+      "description": "Upload, crop, pick colors, and manipulate images directly in your browser."
+    },
+    "api_tester": {
+      "name": "API Tester",
+      "description": "Test HTTP requests and view responses."
+    },
+    "number_reading": {
+      "name": "Number Reading",
+      "description": "Learn to read large numbers in English and Vietnamese."
+    },
+    "odoo_inspector": {
+      "name": "Odoo Field Inspector",
+      "description": "Inspect Odoo model fields via JSON-RPC."
     },
     "markdown_preview": {
-        "title": "Markdown Preview",
-        "description": "Write Markdown and preview it instantly in HTML.",
-        "editor": "Markdown Editor",
-        "preview": "Preview",
-        "placeholder": "Type your Markdown here...",
-        "actions": {
-            "copy_markdown": "Copy Markdown",
-            "copy_html": "Copy HTML",
-            "clear": "Clear"
-        },
-        "toast": {
-            "copied": "Copied to clipboard",
-            "cleared": "Cleared"
-        }
-      },
-    "pdf_tools": {
-      "title": "PDF Tools",
-      "description": "Merge and Split PDF files. Privacy-first, 100% client-side processing.",
-      "actions": {
-        "upload": "Upload PDF(s)",
-        "merge": "Merge PDFs",
-        "split": "Split PDF",
-        "download": "Download",
-        "clear": "Clear",
-        "remove": "Remove",
-        "move_up": "Move Up",
-        "move_down": "Move Down"
-      },
-      "tabs": {
-        "merge": "Merge",
-        "split": "Split"
-      },
-      "split_options": {
-        "all_pages": "Split all pages",
-        "extract_pages": "Extract pages (e.g., 1, 3-5)"
-      },
-      "placeholders": {
-        "empty_merge": "Upload PDF files to merge",
-        "empty_split": "Upload a PDF file to split",
-        "page_range": "e.g., 1, 3-5, 8"
-      },
-      "toast": {
-        "merged": "PDFs merged successfully",
-        "split": "PDF split successfully",
-        "invalid_file": "Invalid file type. Please upload PDF files.",
-        "merge_error": "Failed to merge PDFs",
-        "split_error": "Failed to split PDF",
-        "no_files": "No files selected",
-        "no_range": "Please specify page range"
-      }
+      "name": "Markdown Preview",
+      "description": "Write Markdown and preview it instantly in HTML."
     },
     "notes": {
-      "title": "Notes",
-      "description": "Create and manage notes with rich text formatting and cloud storage.",
-      "toast": {
-        "saved": "Note saved",
-        "save_error": "Failed to save note",
-        "created": "New note created",
-        "create_error": "Failed to create note",
-        "deleted": "Note deleted",
-        "delete_error": "Failed to delete note",
-        "load_error": "Failed to load notes",
-        "exported": "Note exported",
-        "imported": "Note imported",
-        "import_error": "Failed to import note"
-      },
-      "dialogs": {
-        "confirm_delete": "Delete this note?"
-      }
+      "name": "Notes",
+      "description": "Create and manage notes with rich text formatting and cloud storage."
     },
-    "games": {
-      "description": "Play fun games directly in your browser.",
-      "2048": {
-        "name": "2048",
-        "description": "Join the numbers and get to the 2048 tile!",
-        "title": "2048",
-        "subtitle": "Join the numbers to get 2048!",
-        "score": "Score",
-        "game_over": "Game Over!",
-        "final_score": "Final Score",
-        "enter_name": "Enter your name",
-        "save_score": "Save Score",
-        "try_again": "Try Again",
-        "new_game": "New Game",
-        "leaderboard": "Leaderboard",
-        "no_scores": "No scores yet. Be the first!",
-        "saved": "Score saved successfully!"
-      },
-      "snake": {
-        "name": "Snake",
-        "description": "The classic Nokia snake game."
-      },
-      "minesweeper": {
-        "name": "Minesweeper",
-        "description": "Clear the minefield without detonating any bombs!",
-        "won": "You Won! 🎉",
-        "game_over": "Game Over! 💥"
-      },
-      "tetris": {
-        "name": "Tetris",
-        "description": "Classic block stacking game."
-      },
-      "sudoku": {
-        "name": "Sudoku",
-        "description": "Classic number puzzle."
-      },
-      "loto": {
-        "name": "Lô Tô",
-        "description": "Vietnamese Bingo - multiplayer lottery game."
-      }
+    "transformers": {
+      "name": "AI Playground",
+      "description": "Run AI models directly in your browser with Transformers.js."
+    },
+    "pdf_tools": {
+      "name": "PDF Tools",
+      "description": "Merge and Split PDF files entirely in your browser."
+    }
+  },
+  "api_tester": {
+    "title": "API Tester",
+    "description": "Test API endpoints with a simple, client-side HTTP client.",
+    "labels": {
+      "headers": "Headers",
+      "body": "Body",
+      "response": "Response",
+      "response_headers": "Response Headers",
+      "response_body": "Response Body"
+    },
+    "actions": {
+      "send": "Send",
+      "copy": "Copy",
+      "clear_all": "Clear All"
+    },
+    "toast": {
+      "url_required": "Please enter a URL",
+      "history_cleared": "History cleared",
+      "copied": "Copied to clipboard"
+    },
+    "history": {
+      "title": "Request History"
+    }
+  },
+  "image_tools": {
+    "title": "Image Tools",
+    "description": "Upload, crop, pick colors, and manipulate images directly in your browser.",
+    "actions": {
+      "upload": "Upload",
+      "paste": "Paste",
+      "view": "View",
+      "crop": "Crop",
+      "color_picker": "Color Picker",
+      "copy": "Copy",
+      "download": "Download",
+      "clear": "Clear",
+      "apply_crop": "Apply Crop",
+      "cancel": "Cancel",
+      "clear_all": "Clear All"
+    },
+    "color_history": "Color History",
+    "placeholders": {
+      "empty": "Upload an image or paste from clipboard to start"
+    },
+    "toast": {
+      "invalid_file": "Invalid file type. Please upload an image.",
+      "pasted": "Image pasted from clipboard",
+      "no_image_clipboard": "No image found in clipboard",
+      "clipboard_error": "Failed to read clipboard",
+      "copied": "Image copied to clipboard",
+      "copy_error": "Failed to copy to clipboard",
+      "cropped": "Image cropped",
+      "color_copied": "Color copied: {{hex}}",
+      "history_cleared": "History cleared"
+    }
+  },
+  "markdown_preview": {
+    "title": "Markdown Preview",
+    "description": "Write Markdown and preview it instantly in HTML.",
+    "editor": "Markdown Editor",
+    "preview": "Preview",
+    "placeholder": "Type your Markdown here...",
+    "actions": {
+      "copy_markdown": "Copy Markdown",
+      "copy_html": "Copy HTML",
+      "clear": "Clear"
+    },
+    "toast": {
+      "copied": "Copied to clipboard",
+      "cleared": "Cleared"
+    }
+  },
+  "pdf_tools": {
+    "title": "PDF Tools",
+    "description": "Merge and Split PDF files. Privacy-first, 100% client-side processing.",
+    "actions": {
+      "upload": "Upload PDF(s)",
+      "merge": "Merge PDFs",
+      "split": "Split PDF",
+      "download": "Download",
+      "clear": "Clear",
+      "remove": "Remove",
+      "move_up": "Move Up",
+      "move_down": "Move Down"
+    },
+    "tabs": {
+      "merge": "Merge",
+      "split": "Split"
+    },
+    "split_options": {
+      "all_pages": "Split all pages",
+      "extract_pages": "Extract pages (e.g., 1, 3-5)"
+    },
+    "placeholders": {
+      "empty_merge": "Upload PDF files to merge",
+      "empty_split": "Upload a PDF file to split",
+      "page_range": "e.g., 1, 3-5, 8"
+    },
+    "toast": {
+      "merged": "PDFs merged successfully",
+      "split": "PDF split successfully",
+      "invalid_file": "Invalid file type. Please upload PDF files.",
+      "merge_error": "Failed to merge PDFs",
+      "split_error": "Failed to split PDF",
+      "no_files": "No files selected",
+      "no_range": "Please specify page range"
+    }
+  },
+  "notes": {
+    "title": "Notes",
+    "description": "Create and manage notes with rich text formatting and cloud storage.",
+    "toast": {
+      "saved": "Note saved",
+      "save_error": "Failed to save note",
+      "created": "New note created",
+      "create_error": "Failed to create note",
+      "deleted": "Note deleted",
+      "delete_error": "Failed to delete note",
+      "load_error": "Failed to load notes",
+      "exported": "Note exported",
+      "imported": "Note imported",
+      "import_error": "Failed to import note"
+    },
+    "dialogs": {
+      "confirm_delete": "Delete this note?"
+    }
+  },
+  "games": {
+    "description": "Play fun games directly in your browser.",
+    "2048": {
+      "name": "2048",
+      "description": "Join the numbers and get to the 2048 tile!",
+      "title": "2048",
+      "subtitle": "Join the numbers to get 2048!",
+      "score": "Score",
+      "game_over": "Game Over!",
+      "final_score": "Final Score",
+      "enter_name": "Enter your name",
+      "save_score": "Save Score",
+      "try_again": "Try Again",
+      "new_game": "New Game",
+      "leaderboard": "Leaderboard",
+      "no_scores": "No scores yet. Be the first!",
+      "saved": "Score saved successfully!"
+    },
+    "snake": {
+      "name": "Snake",
+      "description": "The classic Nokia snake game."
+    },
+    "minesweeper": {
+      "name": "Minesweeper",
+      "description": "Clear the minefield without detonating any bombs!",
+      "won": "You Won! 🎉",
+      "game_over": "Game Over! 💥"
+    },
+    "tetris": {
+      "name": "Tetris",
+      "description": "Classic block stacking game."
+    },
+    "sudoku": {
+      "name": "Sudoku",
+      "description": "Classic number puzzle."
     },
     "loto": {
-      "title": "Lô Tô",
-      "description": "Vietnamese Bingo multiplayer game",
-      "join_or_create": "Join or Create a Room",
-      "your_name": "Your Name",
-      "enter_your_name": "Enter your name",
-      "enter_name": "Please enter your name",
-      "room_code": "Room Code",
-      "enter_room_code": "Enter room code",
-      "create_room": "Create New Room",
-      "join_room": "Join Room",
-      "your_cards": "Your Cards",
-      "current_number": "Current Number",
-      "call_next": "Call Next Number",
-      "called_numbers": "Called Numbers",
-      "no_numbers_yet": "No numbers called yet",
-      "winner": "Winner",
-      "kinh": "KINH!",
-      "waiting_players": "Waiting for players...",
-      "players_count": "{{count}} players",
-      "room_info": "Room Info",
-      "you_are_host": "You are the host",
-      "copy_room_link": "Copy Room Link",
-      "start_game": "Start Game",
-      "waiting_for_host": "Waiting for host to start...",
-      "game_completed": "Game Completed",
-      "players": "Players",
-      "host": "Host",
-      "you": "You",
-      "marked": "marked",
-      "leave_room": "Leave Room",
-      "connecting": "Connecting...",
-      "disconnected": "Disconnected from server",
-      "you_won": "🎉 Congratulations! You won! KINH!",
-      "player_won_message": "{{name}} won the game!",
-      "failed_create_room": "Failed to create room",
-      "connection_error": "Connection error",
-      "connection_closed": "Connection closed"
+      "name": "Lô Tô",
+      "description": "Vietnamese Bingo - multiplayer lottery game."
+    }
+  },
+  "loto": {
+    "title": "Lô Tô",
+    "description": "Vietnamese Bingo multiplayer game",
+    "join_or_create": "Join or Create a Room",
+    "your_name": "Your Name",
+    "enter_your_name": "Enter your name",
+    "enter_name": "Please enter your name",
+    "room_code": "Room Code",
+    "enter_room_code": "Enter room code",
+    "create_room": "Create New Room",
+    "join_room": "Join Room",
+    "your_cards": "Your Cards",
+    "current_number": "Current Number",
+    "call_next": "Call Next Number",
+    "called_numbers": "Called Numbers",
+    "no_numbers_yet": "No numbers called yet",
+    "winner": "Winner",
+    "kinh": "KINH!",
+    "waiting_players": "Waiting for players...",
+    "players_count": "{{count}} players",
+    "room_info": "Room Info",
+    "you_are_host": "You are the host",
+    "copy_room_link": "Copy Room Link",
+    "start_game": "Start Game",
+    "waiting_for_host": "Waiting for host to start...",
+    "game_completed": "Game Completed",
+    "players": "Players",
+    "host": "Host",
+    "you": "You",
+    "marked": "marked",
+    "leave_room": "Leave Room",
+    "connecting": "Connecting...",
+    "disconnected": "Disconnected from server",
+    "you_won": "🎉 Congratulations! You won! KINH!",
+    "player_won_message": "{{name}} won the game!",
+    "failed_create_room": "Failed to create room",
+    "connection_error": "Connection error",
+    "connection_closed": "Connection closed"
+  },
+  "home": {
+    "title": "Case Converter",
+    "description": "Accidentally left the caps lock on? Simply enter your text and choose the case you want to convert it to.",
+    "placeholder": "Type or paste your content here...",
+    "stats": {
+      "characters": "Characters",
+      "words": "Words",
+      "sentences": "Sentences",
+      "lines": "Lines"
     },
-   "home": {
-     "title": "Case Converter",
-     "description": "Accidentally left the caps lock on? Simply enter your text and choose the case you want to convert it to.",
-     "placeholder": "Type or paste your content here...",
-     "stats": {
-       "characters": "Characters",
-       "words": "Words",
-       "sentences": "Sentences",
-       "lines": "Lines"
-     },
-     "history": "History",
-     "clear_all": "Clear All",
-     "buttons": {
-       "sentence_case": "Sentence case",
-       "lower_case": "lower case",
-       "upper_case": "UPPER CASE",
-       "capitalized_case": "Capitalized Case",
-       "alternating_case": "aLtErNaTiNg cAsE",
-       "title_case": "Title Case",
-       "inverse_case": "InVeRsE CaSe",
-       "copy": "Copy",
-       "download": "Download",
-       "clear": "Clear"
-     },
-     "toast": {
-       "copy_success": "Text copied to clipboard!",
-       "download_success": "Download started!",
-       "clear_success": "Content cleared!",
-       "clear_history_success": "History cleared!",
-       "history_restored": "Restored from history!"
-     }
-   },
+    "history": "History",
+    "clear_all": "Clear All",
+    "buttons": {
+      "sentence_case": "Sentence case",
+      "lower_case": "lower case",
+      "upper_case": "UPPER CASE",
+      "capitalized_case": "Capitalized Case",
+      "alternating_case": "aLtErNaTiNg cAsE",
+      "title_case": "Title Case",
+      "inverse_case": "InVeRsE CaSe",
+      "copy": "Copy",
+      "download": "Download",
+      "clear": "Clear"
+    },
+    "toast": {
+      "copy_success": "Text copied to clipboard!",
+      "download_success": "Download started!",
+      "clear_success": "Content cleared!",
+      "clear_history_success": "History cleared!",
+      "history_restored": "Restored from history!"
+    }
+  },
   "features": {
     "title": "Key Features",
     "description": "Explore our powerful text conversion tools.",
@@ -448,49 +449,49 @@
       "sun": "Sun"
     }
   },
-    "pomodoro": {
-      "title": "Pomodoro Timer",
-      "description": "Focus timer with ambient background sounds.",
-      "meta_title": "Pomodoro Timer - MyTools",
-      "meta_description": "Focus timer with ambient background sounds.",
-      "header_title": "Pomodoro Timer",
-      "header_description": "Stay focused and productive.",
-      "custom_minutes_label": "Minutes:",
-      "background_sound_title": "Background Sound",
-      "background_sound_description": "Play ambient noise",
-      "modes": {
-        "pomodoro": "Pomodoro",
-        "short_break": "Short Break",
-        "long_break": "Long Break",
-        "custom": "Custom"
-      },
-      "sounds": {
-        "rain": "Rain",
-        "wind": "Wind",
-        "fire": "Fire",
-        "water": "Water"
-      },
-      "buttons": {
-        "start": "Start",
-        "pause": "Pause",
-        "reset": "Reset",
-        "settings": "Settings"
-      },
-      "settings": {
-        "title": "Timer Settings",
-        "pomodoro_duration": "Pomodoro Duration (minutes)",
-        "short_break_duration": "Short Break Duration (minutes)",
-        "long_break_duration": "Long Break Duration (minutes)",
-        "auto_start_breaks": "Auto-start breaks",
-        "auto_start_pomodoros": "Auto-start pomodoros",
-        "long_break_interval": "Long break after X pomodoros",
-        "save": "Save Settings"
-      }
+  "pomodoro": {
+    "title": "Pomodoro Timer",
+    "description": "Focus timer with ambient background sounds.",
+    "meta_title": "Pomodoro Timer - MyTools",
+    "meta_description": "Focus timer with ambient background sounds.",
+    "header_title": "Pomodoro Timer",
+    "header_description": "Stay focused and productive.",
+    "custom_minutes_label": "Minutes:",
+    "background_sound_title": "Background Sound",
+    "background_sound_description": "Play ambient noise",
+    "modes": {
+      "pomodoro": "Pomodoro",
+      "short_break": "Short Break",
+      "long_break": "Long Break",
+      "custom": "Custom"
     },
-    "number_reading": {
-      "title": "Number Reading",
-      "description": "Learn to read large numbers in English and Vietnamese.",
-      "input_label": "Enter a number",
+    "sounds": {
+      "rain": "Rain",
+      "wind": "Wind",
+      "fire": "Fire",
+      "water": "Water"
+    },
+    "buttons": {
+      "start": "Start",
+      "pause": "Pause",
+      "reset": "Reset",
+      "settings": "Settings"
+    },
+    "settings": {
+      "title": "Timer Settings",
+      "pomodoro_duration": "Pomodoro Duration (minutes)",
+      "short_break_duration": "Short Break Duration (minutes)",
+      "long_break_duration": "Long Break Duration (minutes)",
+      "auto_start_breaks": "Auto-start breaks",
+      "auto_start_pomodoros": "Auto-start pomodoros",
+      "long_break_interval": "Long break after X pomodoros",
+      "save": "Save Settings"
+    }
+  },
+  "number_reading": {
+    "title": "Number Reading",
+    "description": "Learn to read large numbers in English and Vietnamese.",
+    "input_label": "Enter a number",
     "toast_copied": "Copied to clipboard"
   },
   "odoo_inspector": {
@@ -541,63 +542,83 @@
     "save": "Save",
     "history": "History",
     "toast": {
-        "saved": "Comparison saved to history",
-        "restored": "Comparison restored from history",
-        "cleared": "History cleared"
+      "saved": "Comparison saved to history",
+      "restored": "Comparison restored from history",
+      "cleared": "History cleared"
     }
   },
-   "about": {
-     "title": "About Us",
-     "description": "Learn more about this text conversion tool.",
-     "content": "Case Converter is a simple, free online tool that helps you convert text between different formats. Whether you accidentally left Caps Lock on or want to style text for social media, we've got you covered. All processing happens right in your browser, ensuring maximum privacy and speed.",
-     "privacy_first": "Privacy First",
-     "client_side_processing": "Client-side processing only",
-     "lightning_fast": "Lightning Fast",
-     "instant_conversion": "Instant conversion",
-     "accessible": "Accessible",
-     "works_everywhere": "Works everywhere",
-     "roadmap": "Roadmap",
-     "roadmap_description": "Development journey and upcoming features",
-     "new_idea_title": "Have a new idea?",
-     "new_idea_description": "We always listen to contributions to develop more useful tools.",
-     "open_link": "(Open)",
-     "location_title": "Location",
-     "location_description": "Find us at these coordinates",
-     "location_note": "Ho Chi Minh City, Vietnam"
-   },
-    "countdown": {
-      "day": "Days",
-      "hour": "Hours",
-      "minute": "Minutes",
-      "second": "Seconds"
+  "about": {
+    "title": "About Us",
+    "description": "Learn more about this text conversion tool.",
+    "content": "Case Converter is a simple, free online tool that helps you convert text between different formats. Whether you accidentally left Caps Lock on or want to style text for social media, we've got you covered. All processing happens right in your browser, ensuring maximum privacy and speed.",
+    "privacy_first": "Privacy First",
+    "client_side_processing": "Client-side processing only",
+    "lightning_fast": "Lightning Fast",
+    "instant_conversion": "Instant conversion",
+    "accessible": "Accessible",
+    "works_everywhere": "Works everywhere",
+    "roadmap": "Roadmap",
+    "roadmap_description": "Development journey and upcoming features",
+    "new_idea_title": "Have a new idea?",
+    "new_idea_description": "We always listen to contributions to develop more useful tools.",
+    "open_link": "(Open)",
+    "location_title": "Location",
+    "location_description": "Find us at these coordinates",
+    "location_note": "Ho Chi Minh City, Vietnam"
+  },
+  "countdown": {
+    "day": "Days",
+    "hour": "Hours",
+    "minute": "Minutes",
+    "second": "Seconds"
+  },
+  "newsletter": {
+    "title": "Subscribe to our Newsletter",
+    "description": "Stay updated with the latest tools and features. No spam, unsubscribe anytime.",
+    "placeholder": "Enter your email",
+    "button": "Subscribe",
+    "button_success": "Subscribed!",
+    "success": "Thanks for subscribing!",
+    "error_invalid": "Please enter a valid email address.",
+    "all_rights_reserved": "All rights reserved."
+  },
+  "quotes": {
+    "title": "Random Quotes",
+    "description": "Get inspired with daily quotes",
+    "button_next": "Get Random Quote",
+    "source": "Source"
+  },
+  "transformers": {
+    "title": "AI Playground",
+    "description": "Run AI models directly in your browser.",
+    "sentiment": "Sentiment Analysis",
+    "input_placeholder": "Enter English text to analyze...",
+    "analyze": "Analyze",
+    "loading_model": "Loading model...",
+    "result": "Result",
+    "positive": "Positive",
+    "negative": "Negative",
+    "score": "Score"
+  },
+  "projects": {
+    "title": "Projects",
+    "description": "Websites I am building, with their real uptime.",
+    "empty": "No projects listed yet.",
+    "checking": "Checking status...",
+    "checking_short": "checking",
+    "checked_at": "Checked at {{time}}",
+    "check_failed": "Could not check status right now.",
+    "since": "since {{year}}",
+    "stats": {
+      "projects": "Projects",
+      "online": "Online",
+      "median": "Response (median)"
     },
-    "newsletter": {
-     "title": "Subscribe to our Newsletter",
-     "description": "Stay updated with the latest tools and features. No spam, unsubscribe anytime.",
-     "placeholder": "Enter your email",
-     "button": "Subscribe",
-     "button_success": "Subscribed!",
-     "success": "Thanks for subscribing!",
-     "error_invalid": "Please enter a valid email address.",
-     "all_rights_reserved": "All rights reserved."
-   },
-   "quotes": {
-     "title": "Random Quotes",
-     "description": "Get inspired with daily quotes",
-     "button_next": "Get Random Quote",
-     "source": "Source"
-   },
-    "transformers": {
-      "title": "AI Playground",
-      "description": "Run AI models directly in your browser.",
-      "sentiment": "Sentiment Analysis",
-      "input_placeholder": "Enter English text to analyze...",
-      "analyze": "Analyze",
-      "loading_model": "Loading model...",
-      "result": "Result",
-      "positive": "Positive",
-      "negative": "Negative",
-      "score": "Score"
+    "state": {
+      "online": "Online",
+      "offline": "Offline",
+      "wip": "In progress",
+      "archived": "Archived"
     }
+  }
 }
-
