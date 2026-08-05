@@ -1,4 +1,5 @@
 import { createRequestHandler } from "react-router";
+import { handleCliRequest } from "./cli";
 
 // Export Durable Object classes
 export { LotoGameRoom } from "./loto-room";
@@ -20,6 +21,11 @@ const requestHandler = createRequestHandler(
 
 export default {
   async fetch(request, env, ctx) {
+    // Terminal clients (curl/wget) get plain text; returns null for everything
+    // else so the app, /api routes and WebSocket upgrades are unaffected.
+    const cliResponse = await handleCliRequest(request);
+    if (cliResponse) return cliResponse;
+
     return requestHandler(request, {
       cloudflare: { env, ctx },
     });

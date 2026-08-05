@@ -504,7 +504,31 @@ graph TB
 - 🛠️ JSON Tools (Format, Validate, Minify, Fix, History, Clipboard, File Operations, Tab Size)
 - 🗓️ Solar & Lunar Calendar
 - 📱 PWA Support (Offline ready & Installable)
+- 🖥️ CLI-friendly (`curl huyab.click/upper -d 'đường phố'`)
 - 📖 [React Router docs](https://reactrouter.com/)
+
+## CLI Usage
+
+The case converter works from a terminal — no install, just `curl`. Requests
+from curl/wget (or any client without a browser `User-Agent`) get plain text
+instead of HTML.
+
+```sh
+curl huyab.click                          # banner + case list
+curl huyab.click/-h                       # full help
+curl huyab.click/upper -d 'đường phố'     # ĐƯỜNG PHỐ
+curl huyab.click/title/hà nội mùa thu     # Hà Nội Mùa Thu
+cat notes.txt | curl huyab.click/lower --data-binary @-
+curl 'huyab.click/capitalized?text=ăn ở ưu đãi&json'
+```
+
+Cases: `upper` `lower` `sentence` `capitalized` `title` `alternating`
+`inverse` — each with short aliases (`u`, `l`, `s`, `cap`, `t`, `alt`, `inv`).
+Add `?json` or `Accept: application/json` for a JSON reply.
+
+Implemented in `workers/cli.ts`, which runs ahead of the React Router handler
+in `workers/app.ts` and returns `null` for anything it does not own, so the
+site, the `/api` routes and the WebSocket upgrades are unaffected.
 
 ## Getting Started
 
