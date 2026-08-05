@@ -34,11 +34,22 @@ function readProjects() {
     src.indexOf("export const PROJECT_TEMPLATE"),
   );
   const projects = [];
-  const re = /id:\s*"([^"]+)"[\s\S]*?url:\s*"([^"]+)"/g;
-  let m;
-  while ((m = re.exec(body)) !== null) projects.push({ id: m[1], url: m[2] });
+  // Split on entry boundaries so an optional shotUrl is read from the right
+  // project rather than bleeding in from the next one.
+  for (const chunk of body.split(/\n  \{\n/).slice(1)) {
+    const id = chunk.match(/id:\s*"([^"]+)"/)?.[1];
+    const url = chunk.match(/\n\s*url:\s*"([^"]+)"/)?.[1];
+    const shotUrl = chunk.match(/shotUrl:\s*"([^"]+)"/)?.[1];
+    if (id && url) projects.push({ id, url: shotUrl ?? url, linked: url });
+  }
   return projects;
 }
+
+/**
+ * A blank capture still decodes as a valid PNG, so size is the cheap tell: a
+ * near-empty 1200x750 screenshot compresses far smaller than a real one.
+ */
+const BLANK_KB = 25;
 
 function pngSize(buf) {
   return { width: buf.readUInt32BE(16), height: buf.readUInt32BE(20) };
@@ -66,11 +77,18 @@ async function shoot({ id, url }) {
     }
 
     const { width, height } = pngSize(buf);
+    const kb = Math.round(buf.length / 1024);
     const out = join(OUT_DIR, `${id}.png`);
     writeFileSync(out, buf);
     console.log(
-      `  ${id}: ${width}x${height}, ${Math.round(buf.length / 1024)} KB -> public/projects/${id}.png`,
+      `  ${id}: ${width}x${height}, ${kb} KB -> public/projects/${id}.png`,
     );
+    if (kb < BLANK_KB) {
+      console.log(
+        `    ⚠ only ${kb} KB — likely a blank or loading page. Open ${url} ` +
+          `and set shotUrl in app/data/projects.ts if it redirects.`,
+      );
+    }
     return true;
   }
 
