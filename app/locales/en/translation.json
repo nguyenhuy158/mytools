@@ -1,6 +1,17 @@
 {
   "app_name": "ToolHub",
   "slogan": "Your Hub for Essential Tools",
+  "not_found": {
+    "title": "Page not found",
+    "description": "The page you're looking for doesn't exist or has moved.",
+    "home": "Back to home",
+    "projects": "Browse projects"
+  },
+  "error_boundary": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred. Try reloading the page.",
+    "home": "Back to home"
+  },
   "nav": {
     "home": "Home",
     "features": "Features",

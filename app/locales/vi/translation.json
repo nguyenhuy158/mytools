@@ -1,6 +1,17 @@
 {
   "app_name": "ToolHub",
   "slogan": "Trung tâm công cụ thiết yếu của bạn",
+  "not_found": {
+    "title": "Không tìm thấy trang",
+    "description": "Trang bạn tìm không tồn tại hoặc đã được chuyển đi.",
+    "home": "Về trang chủ",
+    "projects": "Xem các dự án"
+  },
+  "error_boundary": {
+    "title": "Đã có lỗi xảy ra",
+    "description": "Có lỗi không mong muốn xảy ra. Thử tải lại trang.",
+    "home": "Về trang chủ"
+  },
   "nav": {
     "home": "Trang chủ",
     "features": "Tính năng",
