@@ -6,6 +6,16 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
+  // react-router's vite plugin builds into build/client and build/server via
+  // Vite's per-environment Environment API, not this top-level option. But
+  // vite-plugin-pwa isn't environment-aware — it reads this field directly to
+  // decide where to emit sw.js and to glob the precache list. Left unset, it
+  // defaulted to Vite's "dist", so the service worker was built into a
+  // directory that is both gitignored and never deployed: /sw.js was a 404 in
+  // production and the PWA had no offline support at all.
+  build: {
+    outDir: "build/client",
+  },
   plugins: [
     cloudflare({ viteEnvironment: { name: "ssr" } }),
     tailwindcss(),
@@ -13,7 +23,12 @@ export default defineConfig({
     tsconfigPaths(),
     VitePWA({
       registerType: "autoUpdate",
-      injectRegister: "auto",
+      // "auto" injects a <script> into a built index.html — this app is SSR
+      // with no static HTML entrypoint, so that injection had nothing to
+      // attach to and registerSW.js was never referenced anywhere. The
+      // service worker is registered explicitly instead, from
+      // app/entry.client.tsx via the `virtual:pwa-register` module.
+      injectRegister: false,
       manifest: {
         name: "ToolHub",
         short_name: "ToolHub",
@@ -42,7 +57,34 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
+        // vite-plugin-pwa defaults this to "index.html", which is the SPA
+        // app-shell pattern: one static HTML file precached and served for
+        // every navigation. This app is SSR — every route is its own
+        // server-rendered document and no index.html is ever built — so that
+        // default silently pointed the navigation handler at a file that does
+        // not exist in the precache manifest. Cleared here; the NetworkFirst
+        // rule below caches actual page responses instead, so a page already
+        // visited stays reachable offline without pretending an unvisited one
+        // will.
+        navigateFallback: undefined,
+        // Without this, an updated worker activates but keeps waiting for
+        // every open tab to close before it starts controlling anything —
+        // so the first reload after a fresh install still fetches over the
+        // network uncontrolled, and "offline ready" would only be true from
+        // the *second* browser session onward.
+        clientsClaim: true,
         runtimeCaching: [
+          {
+            urlPattern: ({ request }) => request.mode === "navigate",
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "pages-cache",
+              networkTimeoutSeconds: 3,
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
             handler: "CacheFirst",

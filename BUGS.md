@@ -61,7 +61,7 @@ deleting someone's note — and assert the note survives.
 
 ---
 
-## [ ] S2 — PWA is broken: no service worker is deployed, so there is no offline support
+## [x] S2 — PWA is broken: no service worker is deployed, so there is no offline support — fixed
 
 **Verified on prod**
 
@@ -93,9 +93,56 @@ it), so registration never even starts.
 `README.md` currently claims "PWA Support (Offline ready & Installable)".
 Installable is true — the manifest and icons are fine. Offline is not.
 
-**Fix** — point the plugin at the real output directory, confirm `sw.js` is
-emitted into `build/client/` with a non-empty precache list, and make sure the
-registration script is actually included in the document.
+**Fixed** — three separate config mistakes, all in `vite.config.ts`:
+
+1. `build.outDir` was never set, so Vite defaulted to `dist` and
+   vite-plugin-pwa (which is not environment-aware and just reads that field)
+   emitted there. Set explicitly to `build/client`, matching where React
+   Router's own per-environment build already lands. Precache went from 0
+   entries to 180.
+2. `injectRegister: "auto"` injects a `<script>` into a built `index.html`,
+   which never existed (SSR, no static shell). Set `injectRegister: false` and
+   call `registerSW()` from `virtual:pwa-register` explicitly in
+   `app/entry.client.tsx` instead.
+3. The plugin's default `navigateFallback: "index.html"` produced a
+   `NavigationRoute` bound to a precache entry that does not exist for the
+   same reason. Set `navigateFallback: undefined` and added a `NetworkFirst`
+   runtime-caching rule for `request.mode === "navigate"` instead — so a page
+   already visited is cached as itself and stays reachable offline, rather
+   than everything falling back to one static shell that was never real.
+   `clientsClaim: true` was added alongside so a freshly installed worker
+   starts controlling the current tab instead of waiting for a future reload.
+
+Also required `workbox-window` as an explicit dependency (`virtual:pwa-register`
+needs it at build time; it isn't hoisted by pnpm otherwise) and added
+`"vite-plugin-pwa/client"` to `tsconfig.cloudflare.json`'s `types`, since
+without it `import { registerSW } from "virtual:pwa-register"` doesn't
+typecheck.
+
+**Verified with a real browser, not just build output** — headless Chrome
+driven directly over the DevTools Protocol (no Puppeteer/Playwright
+installed, so a small script talked to the CDP WebSocket directly):
+
+- Service worker installs and reaches `activated` within ~2s of first load.
+- `caches.keys()` shows `workbox-precache-v2-...` (177 entries) plus
+  `pages-cache` after a second navigation.
+- Killed the wrangler dev server outright (not CDP's network-conditions
+  emulation — see the note below on why) and reloaded: a previously visited
+  page (`/calendar`) rendered its real content from cache with zero backend
+  running. A never-visited page (`/games/sudoku`) correctly showed the
+  browser's own "can't be reached" error — no crash, no false promise of
+  full-site offline support, exactly the honest behavior for an SSR app with
+  no static app shell.
+
+One dead end worth recording: the first pass tested "offline" using CDP's
+`Network.emulateNetworkConditions({ offline: true })`, and a page that had
+never been visited before *still* rendered correctly. That looked like a
+bug in the fix — until re-checking with the dev server actually killed
+reproduced the correct (failing) behavior instead. CDP's network emulation
+is scoped to the page's own target; a service worker runs on a separate
+target and its own `fetch()` calls were not affected by that flag, so that
+first result was a false positive from the test method, not from the code.
+Actually cutting the network is what caught it.
 
 ---
 
