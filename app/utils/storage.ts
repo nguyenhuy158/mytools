@@ -10,7 +10,9 @@ export function safeJsonParse<T>(value: string | null, fallback: T): T {
 
 export function safeJsonStringify(value: unknown): string {
   try {
-    return JSON.stringify(value);
+    // JSON.stringify returns undefined — not a string — for undefined,
+    // functions and symbols, so normalize those to "" as well.
+    return JSON.stringify(value) ?? "";
   } catch {
     return "";
   }
