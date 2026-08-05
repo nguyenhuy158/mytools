@@ -48,6 +48,24 @@ export const PROJECTS: Project[] = [
     highlights: ["21 trang", "CLI qua curl", "EN/VI"],
   },
   {
+    id: "chiakeo",
+    name: "Chia kèo",
+    url: "https://chiakeo.huyab.click",
+    tagline: "Tính tiền nhóm: ai ứng, ai chịu, ai chuyển cho ai",
+    description:
+      "Ghi khoản chi và khoản thu của một cuộc đi chơi, chia đều hoặc chỉ " +
+      "định người chịu, rồi gợi ý cách chuyển tiền ít giao dịch nhất. Xuất " +
+      "ảnh tổng kết PNG hoặc bản chữ để dán vào Zalo/Messenger, kèm QR " +
+      "VietQR để cả nhóm quét một lần. Có danh bạ người hay đi chung, đính " +
+      "kèm ảnh hóa đơn, thùng rác phục hồi được, và MCP token để trợ lý AI " +
+      "đọc lại các cuộc chia.",
+    tech: ["React + Vite", "PWA", "VietQR", "Google OAuth", "MCP"],
+    accent: "from-amber-500 to-orange-600",
+    status: "live",
+    since: "2026",
+    highlights: ["Ảnh tổng kết PNG", "QR chuyển khoản", "MCP token"],
+  },
+  {
     id: "techcoop-status",
     name: "TechCoop Service Status",
     url: "https://tc.huyab.click",
