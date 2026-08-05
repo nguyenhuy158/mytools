@@ -1,3 +1,4 @@
+import type { MetaFunction } from "react-router";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Play } from "lucide-react";
 import { GameScore } from "../components/GameScore";
@@ -13,6 +14,13 @@ const INITIAL_SPEED = 150;
 
 type Point = { x: number; y: number };
 type Direction = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT';
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Snake - Play Online | ToolHub" },
+    { name: "description", content: "The classic snake game, playable with keys or swipes." },
+  ];
+};
 
 export default function SnakeGame() {
   const [snake, setSnake] = useState<Point[]>([{ x: 10, y: 10 }]);

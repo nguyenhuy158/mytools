@@ -1,3 +1,4 @@
+import type { MetaFunction } from "react-router";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Flag, Bomb } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -18,6 +19,13 @@ type CellState = {
 };
 
 type GameState = 'IDLE' | 'PLAYING' | 'WON' | 'LOST';
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Minesweeper - Play Online | ToolHub" },
+    { name: "description", content: "Clear the board without hitting a mine." },
+  ];
+};
 
 export default function MinesweeperGame() {
   const { t } = useTranslation();

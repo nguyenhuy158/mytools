@@ -1,3 +1,4 @@
+import type { MetaFunction } from "react-router";
 import { useState, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import { useTranslation } from "react-i18next";
@@ -5,6 +6,13 @@ import { toast } from "sonner";
 import { PageHeader } from "~/components/PageHeader";
 import { ButtonGroup } from "~/components/ButtonGroup";
 import { FileText, Eye, Copy, Trash2, Code } from "lucide-react";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Markdown Preview - ToolHub" },
+    { name: "description", content: "Write markdown and see the rendered result side by side." },
+  ];
+};
 
 export default function MarkdownPreview() {
   const { t } = useTranslation();

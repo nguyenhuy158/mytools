@@ -1,3 +1,4 @@
+import type { MetaFunction } from "react-router";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Play, RotateCcw, Trophy, Pause, ArrowDown, ArrowLeft, ArrowRight } from "lucide-react";
 import { SwipeDetector } from "../../components/SwipeDetector";
@@ -29,6 +30,13 @@ const getRandomTetromino = () => {
     shape: TETROMINOES[type].shape,
     color: TETROMINOES[type].color,
   };
+};
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Tetris - Play Online | ToolHub" },
+    { name: "description", content: "Stack the falling blocks and clear lines." },
+  ];
 };
 
 export default function TetrisGame() {

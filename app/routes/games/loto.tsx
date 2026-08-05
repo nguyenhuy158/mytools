@@ -1,3 +1,4 @@
+import type { MetaFunction } from "react-router";
 import { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
@@ -9,6 +10,13 @@ import { CalledNumbersDisplay } from "../../components/CalledNumbersDisplay";
 import { LotoControls } from "../../components/LotoControls";
 import { LotoPlayerList } from "../../components/LotoPlayerList";
 import { PageHeader } from "../../components/PageHeader";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Loto - Play With Friends | ToolHub" },
+    { name: "description", content: "Vietnamese loto with realtime rooms you can share." },
+  ];
+};
 
 export default function LotoGame() {
   const { t } = useTranslation();

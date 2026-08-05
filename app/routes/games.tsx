@@ -1,4 +1,12 @@
+import type { MetaFunction } from "react-router";
 import { Outlet } from "react-router";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Games - ToolHub" },
+    { name: "description", content: "Play 2048, Snake, Minesweeper, Tetris, Sudoku and Loto in your browser." },
+  ];
+};
 
 export default function GamesLayout() {
   return (

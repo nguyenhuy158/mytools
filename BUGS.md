@@ -85,7 +85,7 @@ registration script is actually included in the document.
 
 ---
 
-## [ ] S3 — Ten pages have no `<title>`
+## [x] S3 — Ten pages have no `<title>` — fixed
 
 The browser tab shows the URL, and search results have no title. Every one of
 these route modules is missing an `export function meta`.
@@ -105,6 +105,13 @@ these route modules is missing an `export function meta`.
 
 **Verified on prod** by fetching all 26 routes with a browser User-Agent and
 extracting `<title>`; the other 16 routes have one.
+
+**Fixed** — each of the ten got its own `meta` export with a distinct title and
+description. `__tests__/routes/meta.test.ts` now walks `app/routes.ts` and
+requires every page route to export its own `meta`; only an `index()` route may
+inherit its layout's, since it renders at the same URL. A leaf inheriting would
+give `/games/snake` and `/games/tetris` the same title, which is not a fix.
+Confirmed the test fails when a meta export is removed.
 
 ---
 

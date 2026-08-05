@@ -1,3 +1,4 @@
+import type { MetaFunction } from "react-router";
 import { useState, useEffect, useCallback } from "react";
 import { Form, useLoaderData, useSubmit, useNavigation, useActionData } from "react-router";
 import { toast } from "sonner";
@@ -139,6 +140,13 @@ function isGameOver(grid: number[]) {
   }
   return true;
 }
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "2048 - Play Online | ToolHub" },
+    { name: "description", content: "Slide the tiles and combine them to reach 2048." },
+  ];
+};
 
 export default function Game2048() {
   const { scores } = useLoaderData() as { scores: Score[] };

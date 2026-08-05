@@ -1,3 +1,4 @@
+import type { MetaFunction } from "react-router";
 import React, { useState, useMemo } from "react";
 
 interface DataPoint {
@@ -5,6 +6,13 @@ interface DataPoint {
   value: number;
   color: string;
 }
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Liquid Glass - ToolHub" },
+    { name: "description", content: "Liquid glass UI effects built with CSS and SVG filters." },
+  ];
+};
 
 const LiquidGlass: React.FC = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
