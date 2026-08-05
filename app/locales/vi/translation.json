@@ -618,7 +618,8 @@
       "online": "Online",
       "offline": "Offline",
       "wip": "Đang làm",
-      "archived": "Đã dừng"
+      "archived": "Đã dừng",
+      "unknown": "chưa kiểm tra được"
     }
   }
 }

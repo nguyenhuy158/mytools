@@ -273,11 +273,26 @@ function StatusDot({
     );
   }
 
-  if (!status || status.online === null) {
+  // No result yet: the check is still in flight.
+  if (!status) {
     return (
       <span className="text-xs text-gray-400 flex items-center gap-1.5">
         <span className="w-2 h-2 rounded-full bg-gray-300 animate-pulse" />
         {t("projects.checking_short")}
+      </span>
+    );
+  }
+
+  // A result that says nothing — skipped, or a same-zone loopback that cannot
+  // be trusted. Saying "checking" forever would be a lie.
+  if (status.online === null) {
+    return (
+      <span
+        className="text-xs text-gray-400 flex items-center gap-1.5"
+        title={status.error ?? undefined}
+      >
+        <span className="w-2 h-2 rounded-full bg-gray-300" />
+        {t("projects.state.unknown")}
       </span>
     );
   }

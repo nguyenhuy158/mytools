@@ -618,7 +618,8 @@
       "online": "Online",
       "offline": "Offline",
       "wip": "In progress",
-      "archived": "Archived"
+      "archived": "Archived",
+      "unknown": "not checked"
     }
   }
 }

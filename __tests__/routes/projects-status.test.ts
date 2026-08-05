@@ -1,5 +1,11 @@
 import { describe, it, expect, vi } from "vitest";
-import { check, isSameHost, loader } from "~/routes/api.projects-status";
+import {
+  check,
+  isSameHost,
+  isSameZone,
+  loader,
+  reconcileSameZone,
+} from "~/routes/api.projects-status";
 import { PROJECTS } from "~/data/projects";
 
 const ok = (status = 200) =>
@@ -181,5 +187,89 @@ describe("loader", () => {
     } finally {
       globalThis.fetch = original;
     }
+  });
+});
+
+describe("isSameZone", () => {
+  it("matches a sibling subdomain on the same apex", () => {
+    expect(
+      isSameZone("https://chat.huyab.click", "https://huyab.click/api/x"),
+    ).toBe(true);
+  });
+
+  it("matches the apex itself", () => {
+    expect(isSameZone("https://huyab.click", "https://huyab.click/api/x")).toBe(
+      true,
+    );
+  });
+
+  it("does not match another domain", () => {
+    expect(
+      isSameZone("https://example.com", "https://huyab.click/api/x"),
+    ).toBe(false);
+  });
+
+  it("returns false for a malformed URL", () => {
+    expect(isSameZone("nope", "https://huyab.click")).toBe(false);
+  });
+});
+
+describe("reconcileSameZone", () => {
+  const req = "https://huyab.click/api/projects-status";
+
+  it("turns a same-zone 522 into unknown rather than offline", () => {
+    // chat.huyab.click answers 200 outside but 522 to a Worker on its zone.
+    const out = reconcileSameZone(
+      { id: "chatroom", online: false, ms: 256, httpStatus: 522 },
+      "https://chat.huyab.click",
+      req,
+    );
+    expect(out.online).toBe(null);
+    expect(out.error).toContain("same-zone loopback");
+    expect(out.error).toContain("522");
+  });
+
+  it.each([520, 521, 523, 524, 525, 526, 527])(
+    "treats a same-zone %i the same way",
+    (code) => {
+      const out = reconcileSameZone(
+        { id: "x", online: false, ms: 1, httpStatus: code },
+        "https://chat.huyab.click",
+        req,
+      );
+      expect(out.online).toBe(null);
+    },
+  );
+
+  it("keeps a real 500 from a same-zone host as offline", () => {
+    // 5xx from the site itself is the site's own answer, not a loopback.
+    const out = reconcileSameZone(
+      { id: "x", online: false, ms: 10, httpStatus: 500 },
+      "https://chat.huyab.click",
+      req,
+    );
+    expect(out.online).toBe(false);
+    expect(out.httpStatus).toBe(500);
+  });
+
+  it("keeps a 522 from another domain as offline", () => {
+    const out = reconcileSameZone(
+      { id: "x", online: false, ms: 10, httpStatus: 522 },
+      "https://example.com",
+      req,
+    );
+    expect(out.online).toBe(false);
+  });
+
+  it("leaves a healthy status untouched", () => {
+    const ok = { id: "x", online: true, ms: 100, httpStatus: 200 };
+    expect(reconcileSameZone(ok, "https://chat.huyab.click", req)).toEqual(ok);
+  });
+
+  it("leaves a thrown-error status untouched", () => {
+    const errored = { id: "x", online: false, ms: null, error: "TypeError: x" };
+    expect(
+      reconcileSameZone(errored, "https://chat.huyab.click", req),
+    ).toEqual(errored);
   });
 });

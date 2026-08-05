@@ -76,6 +76,50 @@ export function isSameHost(target: string, requestUrl: string): boolean {
   }
 }
 
+/** Last two labels of a hostname: huyab.click for tc.huyab.click. */
+function apexOf(hostname: string): string {
+  return hostname.split(".").slice(-2).join(".");
+}
+
+/**
+ * Same Cloudflare zone as the site serving this request. Fetching a sibling
+ * hostname on the same zone can loop back and fail even while the site is
+ * perfectly reachable from outside, so such a failure proves nothing.
+ */
+export function isSameZone(target: string, requestUrl: string): boolean {
+  try {
+    return (
+      apexOf(new URL(target).hostname) === apexOf(new URL(requestUrl).hostname)
+    );
+  } catch {
+    return false;
+  }
+}
+
+/** Cloudflare's own origin-unreachable codes, not the site's own answer. */
+const LOOPBACK_CODES = new Set([520, 521, 522, 523, 524, 525, 526, 527]);
+
+/**
+ * chat.huyab.click answers 200 to the outside world but 522 to a fetch from
+ * this Worker. Reporting that as "Offline" would be a lie about someone's
+ * site, so a Cloudflare 52x from a same-zone host is recorded as unknown.
+ */
+export function reconcileSameZone(
+  status: ProjectStatus,
+  target: string,
+  requestUrl: string,
+): ProjectStatus {
+  if (status.online !== false) return status;
+  if (!status.httpStatus || !LOOPBACK_CODES.has(status.httpStatus)) return status;
+  if (!isSameZone(target, requestUrl)) return status;
+  return {
+    id: status.id,
+    online: null,
+    ms: null,
+    error: `same-zone loopback (HTTP ${status.httpStatus})`,
+  };
+}
+
 export async function loader({ request }: { request: Request }) {
   const statuses = await Promise.all(
     PROJECTS.map((p): Promise<ProjectStatus> => {
@@ -85,7 +129,9 @@ export async function loader({ request }: { request: Request }) {
       if (isSameHost(p.url, request.url)) {
         return Promise.resolve({ id: p.id, online: true, ms: null, self: true });
       }
-      return check(p.url, p.id);
+      return check(p.url, p.id).then((s) =>
+        reconcileSameZone(s, p.url, request.url),
+      );
     }),
   );
 
