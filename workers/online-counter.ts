@@ -1,17 +1,6 @@
 import { DurableObject } from "cloudflare:workers";
 
-interface CounterState {
-  userCount: number;
-}
-
 export class OnlineCounter extends DurableObject {
-  private sessions: Set<WebSocket>;
-
-  constructor(ctx: DurableObjectState, env: Env) {
-    super(ctx, env);
-    this.sessions = new Set();
-  }
-
   async fetch(request: Request): Promise<Response> {
     const upgrade = request.headers.get("Upgrade");
     if (upgrade !== "websocket") {
@@ -21,7 +10,13 @@ export class OnlineCounter extends DurableObject {
     const webSocketPair = new WebSocketPair();
     const [client, server] = Object.values(webSocketPair);
 
+    // acceptWebSocket registers the socket with the DO runtime itself, so
+    // ctx.getWebSockets() below stays correct across hibernation — a private
+    // Set field would not: it gets wiped whenever the DO hibernates and the
+    // constructor reruns, and there is no webSocketOpen hook in the
+    // Hibernatable WebSocket API to repopulate it on wake.
     this.ctx.acceptWebSocket(server);
+    this.broadcastCount();
 
     return new Response(null, {
       status: 101,
@@ -30,51 +25,34 @@ export class OnlineCounter extends DurableObject {
   }
 
   async webSocketMessage(ws: WebSocket, message: string | ArrayBuffer): Promise<void> {
-    // Optional: handle ping/pong or other messages
     try {
       const data = JSON.parse(message as string);
       if (data.type === "ping") {
-        this.sendToWebSocket(ws, { type: "pong" });
+        ws.send(JSON.stringify({ type: "pong" }));
       }
     } catch {
       // Ignore invalid messages
     }
   }
 
-  async webSocketOpen(ws: WebSocket): Promise<void> {
-    this.sessions.add(ws);
-    this.broadcastCount();
-  }
-
   async webSocketClose(ws: WebSocket, code: number, reason: string, wasClean: boolean): Promise<void> {
-    this.sessions.delete(ws);
     this.broadcastCount();
   }
 
   async webSocketError(ws: WebSocket, error: unknown): Promise<void> {
-    this.sessions.delete(ws);
     this.broadcastCount();
   }
 
   private broadcastCount(): void {
-    const count = this.sessions.size;
-    const message = JSON.stringify({ type: "count", count });
+    const sockets = this.ctx.getWebSockets();
+    const message = JSON.stringify({ type: "count", count: sockets.length });
 
-    for (const session of this.sessions) {
+    for (const ws of sockets) {
       try {
-        session.send(message);
-      } catch (error) {
-        // Remove failed sessions
-        this.sessions.delete(session);
+        ws.send(message);
+      } catch {
+        // A dead socket will be cleaned up by webSocketClose/Error.
       }
-    }
-  }
-
-  private sendToWebSocket(ws: WebSocket, data: any): void {
-    try {
-      ws.send(JSON.stringify(data));
-    } catch (error) {
-      console.error("Failed to send message:", error);
     }
   }
 }
