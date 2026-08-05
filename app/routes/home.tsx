@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import type { Route } from "./+types/home";
 import { useLocalStorageHistory } from "../utils/history";
+import * as textCase from "../utils/text-case";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -37,63 +38,20 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     removeFromHistory(indexToRemove);
   };
 
-  const toSentenceCase = () => {
-    const res = text.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g, (c) => c.toUpperCase());
+  // Apply one of the pure converters from utils/text-case, then record it.
+  const applyConversion = (convert: (input: string) => string) => () => {
+    const res = convert(text);
     setText(res);
     addToHistory(res);
   };
 
-  const toLowerCase = () => {
-    const res = text.toLowerCase();
-    setText(res);
-    addToHistory(res);
-  };
-
-  const toUpperCase = () => {
-    const res = text.toUpperCase();
-    setText(res);
-    addToHistory(res);
-  };
-
-  const toCapitalizedCase = () => {
-    // Capitalize first letter of each word
-    const res = text.toLowerCase().replace(/\b\w/g, (l) => l.toUpperCase());
-    setText(res);
-    addToHistory(res);
-  };
-
-  const toAlternatingCase = () => {
-    let res = "";
-    for (let i = 0; i < text.length; i++) {
-        // Alternating based on index
-        res += i % 2 === 0 ? text[i].toLowerCase() : text[i].toUpperCase();
-    }
-    setText(res);
-    addToHistory(res);
-  };
-
-  const toTitleCase = () => {
-      // Smart title case (simple version: lowercase minor words unless first word)
-      const minorWords = new Set(['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor', 'on', 'at', 'to', 'from', 'by', 'over', 'in', 'of', 'with']);
-      const res = text.toLowerCase().split(/\s+/).map((word, index) => {
-          if (index > 0 && minorWords.has(word)) {
-              return word.toLowerCase();
-          }
-          return word.charAt(0).toUpperCase() + word.slice(1);
-      }).join(' ');
-      setText(res);
-      addToHistory(res);
-  };
-
-  const toInverseCase = () => {
-    let res = "";
-    for (let i = 0; i < text.length; i++) {
-        const c = text[i];
-        res += c === c.toUpperCase() ? c.toLowerCase() : c.toUpperCase();
-    }
-    setText(res);
-    addToHistory(res);
-  };
+  const toSentenceCase = applyConversion(textCase.toSentenceCase);
+  const toLowerCase = applyConversion(textCase.toLowerCase);
+  const toUpperCase = applyConversion(textCase.toUpperCase);
+  const toCapitalizedCase = applyConversion(textCase.toCapitalizedCase);
+  const toAlternatingCase = applyConversion(textCase.toAlternatingCase);
+  const toTitleCase = applyConversion(textCase.toTitleCase);
+  const toInverseCase = applyConversion(textCase.toInverseCase);
 
   const handleDownload = () => {
       if (!text) return;
