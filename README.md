@@ -507,6 +507,8 @@ graph TB
 - 🖥️ CLI-friendly (`curl huyab.click/upper -d 'đường phố'`)
 - 📖 [React Router docs](https://reactrouter.com/)
 
+See [ROUTES.md](./ROUTES.md) for the full list of pages and API endpoints.
+
 ## Projects Showcase
 
 `/projects` lists the products worth showing off. Everything comes from
