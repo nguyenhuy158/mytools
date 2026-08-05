@@ -297,6 +297,8 @@ export default function OdooInspector() {
               onRestore={handleRestoreHistory}
               onRemove={removeFromHistory}
               onClear={clearHistory}
+              removeLabel={t("home.remove_item")}
+              restoreLabel={t("home.restore_item")}
               title="Recent Connections"
               clearLabel="Clear All"
               renderItem={(item) => (

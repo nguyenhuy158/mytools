@@ -310,7 +310,9 @@
       "clear_success": "Đã xóa nội dung!",
       "clear_history_success": "Đã xóa lịch sử!",
       "history_restored": "Đã khôi phục từ lịch sử!"
-    }
+    },
+    "remove_item": "Xóa khỏi lịch sử",
+    "restore_item": "Dùng lại nội dung này"
   },
   "features": {
     "title": "Tính Năng Nổi Bật",

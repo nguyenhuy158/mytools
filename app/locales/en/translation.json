@@ -310,7 +310,9 @@
       "clear_success": "Content cleared!",
       "clear_history_success": "History cleared!",
       "history_restored": "Restored from history!"
-    }
+    },
+    "remove_item": "Remove from history",
+    "restore_item": "Restore this text"
   },
   "features": {
     "title": "Key Features",

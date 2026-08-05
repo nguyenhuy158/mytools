@@ -390,6 +390,8 @@ export default function ImageTools() {
             }}
             onRemove={removeFromHistory}
             onClear={handleClearHistory}
+            removeLabel={t("home.remove_item")}
+            restoreLabel={t("home.restore_item")}
             title={t("image_tools.color_history", "Color History")}
             clearLabel={t("image_tools.actions.clear_all", "Clear All")}
             renderItem={(color) => (

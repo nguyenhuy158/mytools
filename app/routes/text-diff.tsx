@@ -156,6 +156,8 @@ export default function TextDiff() {
           onRestore={handleRestore}
           onRemove={removeFromHistory}
           onClear={handleClearHistory}
+          removeLabel={t("home.remove_item")}
+          restoreLabel={t("home.restore_item")}
           title={t("text_diff.history", "History")}
           clearLabel={t("text_diff.clear", "Clear All")}
           renderItem={(item) => (

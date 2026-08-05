@@ -275,6 +275,8 @@ export default function ApiTester() {
               onRestore={loadHistoryItem}
               onRemove={removeFromHistory}
               onClear={handleClearHistory}
+              removeLabel={t("home.remove_item")}
+              restoreLabel={t("home.restore_item")}
               title={t("api_tester.history.title")}
               clearLabel={t("api_tester.actions.clear_all")}
               renderItem={(item) => (

@@ -183,20 +183,36 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                     }}
                     className="group relative bg-white dark:bg-gray-900 p-3 rounded-lg border border-gray-200 dark:border-gray-800 hover:border-blue-400 dark:hover:border-blue-500 cursor-pointer shadow-sm transition-all hover:shadow-md"
                   >
-                    <p className="text-sm text-slate-600 dark:text-gray-300 line-clamp-3 font-mono break-words pr-6">
+                    {/* Right padding clears the always-visible action bar. */}
+                    <p className="text-sm text-slate-600 dark:text-gray-300 line-clamp-3 font-mono break-words pr-24 md:pr-16">
                       {item}
                     </p>
-                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1 bg-white dark:bg-gray-800 p-1 rounded-md shadow-sm">
-                       <button 
+                    {/*
+                      Always visible up to md: a touch screen never hovers, so
+                      the reveal-on-hover version left these unreachable on a
+                      phone — with no other way to delete an entry.
+                    */}
+                    <div className="absolute top-1 right-1 md:opacity-0 md:group-hover:opacity-100 md:focus-within:opacity-100 transition-opacity flex gap-0.5 bg-white/95 dark:bg-gray-800/95 p-0.5 rounded-md shadow-sm">
+                       <button
                          onClick={(e) => handleRemoveFromHistory(e, idx)}
-                         className="p-1 hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-400 hover:text-red-500 rounded transition-colors"
-                         title={t("home.clear_all")} // Reuse clear text or add specific remove text
+                         className="w-11 h-11 md:w-8 md:h-8 flex items-center justify-center hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-400 hover:text-red-500 rounded transition-colors"
+                         title={t("home.remove_item")}
+                         aria-label={t("home.remove_item")}
                        >
-                         <X className="w-3 h-3" />
+                         <X className="w-4 h-4" />
                        </button>
-                       <div className="w-px h-3 bg-gray-200 dark:bg-gray-700 my-auto"></div>
-                       <button className="p-1 hover:bg-blue-50 dark:hover:bg-blue-900/20 text-slate-400 hover:text-blue-600 rounded transition-colors">
-                          <RotateCcw className="w-3 h-3" />
+                       <div className="w-px self-stretch my-2 bg-gray-200 dark:bg-gray-700"></div>
+                       <button
+                         onClick={(e) => {
+                           e.stopPropagation();
+                           setText(item);
+                           toast.success(t("home.toast.history_restored"));
+                         }}
+                         className="w-11 h-11 md:w-8 md:h-8 flex items-center justify-center hover:bg-blue-50 dark:hover:bg-blue-900/20 text-slate-400 hover:text-blue-600 rounded transition-colors"
+                         title={t("home.restore_item")}
+                         aria-label={t("home.restore_item")}
+                       >
+                          <RotateCcw className="w-4 h-4" />
                        </button>
                     </div>
                   </div>

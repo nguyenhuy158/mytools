@@ -341,6 +341,8 @@ export default function JsonTools() {
           onRestore={handleRestoreHistory}
           onRemove={removeFromHistory}
           onClear={handleClearHistory}
+          removeLabel={t("home.remove_item")}
+          restoreLabel={t("home.restore_item")}
           title={t("json_tools.history")}
           clearLabel={t("json_tools.clear_all")}
           renderItem={(item) => (
