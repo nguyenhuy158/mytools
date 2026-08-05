@@ -507,6 +507,28 @@ graph TB
 - 🖥️ CLI-friendly (`curl huyab.click/upper -d 'đường phố'`)
 - 📖 [React Router docs](https://reactrouter.com/)
 
+## Projects Showcase
+
+`/projects` lists the products worth showing off. Everything comes from
+`app/data/projects.ts` — add or edit an entry there and both the page and the
+uptime check follow.
+
+Status is live: `/api/projects-status` pings each listed site and the page shows
+online/offline, response time and a median. The site serving the request is
+reported up without a fetch, because a Worker cannot reach its own zone (it
+gets a 522).
+
+Card previews are real screenshots committed under `public/projects/<id>.png`,
+so visitors never wait on a screenshot service. Refresh them after a redesign:
+
+```sh
+pnpm shots            # all projects
+pnpm shots chiakeo    # just one
+```
+
+A card falls back to a gradient tile with the project's initials when it has no
+`image`, or when the file is missing.
+
 ## CLI Usage
 
 The case converter works from a terminal — no install, just `curl`. Requests

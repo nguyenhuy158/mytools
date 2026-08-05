@@ -219,26 +219,36 @@ function ProjectCard({
   );
 }
 
-/** Screenshot when provided, otherwise a gradient tile with the initials. */
+/**
+ * Screenshot when there is one, otherwise a gradient tile with the initials.
+ * The tile also covers a missing or renamed image file, so a broken snapshot
+ * never leaves a blank hole in the card.
+ */
 function Preview({ project }: { project: Project }) {
-  if (project.image) {
-    return (
-      <img
-        src={project.image}
-        alt={project.name}
-        loading="lazy"
-        className="w-full h-40 object-cover border-b border-gray-200 dark:border-gray-800"
-      />
-    );
-  }
+  const [imageBroken, setImageBroken] = useState(false);
+  const showImage = project.image && !imageBroken;
 
   return (
-    <div
-      className={`w-full h-40 bg-gradient-to-br ${project.accent} flex items-center justify-center border-b border-gray-200 dark:border-gray-800`}
-    >
-      <span className="text-4xl font-black text-white/90 tracking-tight">
-        {initials(project.name)}
-      </span>
+    <div className="relative w-full aspect-[16/10] overflow-hidden border-b border-gray-200 dark:border-gray-800 bg-gray-100 dark:bg-gray-800">
+      {showImage ? (
+        <img
+          src={project.image}
+          alt={`Ảnh chụp ${project.name}`}
+          loading="lazy"
+          width={1200}
+          height={750}
+          onError={() => setImageBroken(true)}
+          className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+        />
+      ) : (
+        <div
+          className={`w-full h-full bg-gradient-to-br ${project.accent} flex items-center justify-center`}
+        >
+          <span className="text-4xl font-black text-white/90 tracking-tight">
+            {initials(project.name)}
+          </span>
+        </div>
+      )}
     </div>
   );
 }

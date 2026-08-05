@@ -42,6 +42,7 @@ export const PROJECTS: Project[] = [
       "lịch âm dương, đọc số thành chữ, cùng vài game. Hỗ trợ tiếng Việt, " +
       "PWA dùng offline được, và dùng được trực tiếp từ terminal qua curl.",
     tech: ["React Router v7", "Cloudflare Workers", "Tailwind v4", "i18next"],
+    image: "/projects/toolhub.png",
     accent: "from-blue-500 to-indigo-600",
     status: "live",
     since: "2025",
@@ -60,6 +61,7 @@ export const PROJECTS: Project[] = [
       "kèm ảnh hóa đơn, thùng rác phục hồi được, và MCP token để trợ lý AI " +
       "đọc lại các cuộc chia.",
     tech: ["React + Vite", "PWA", "VietQR", "Google OAuth", "MCP"],
+    image: "/projects/chiakeo.png",
     accent: "from-amber-500 to-orange-600",
     status: "live",
     since: "2026",
@@ -75,6 +77,7 @@ export const PROJECTS: Project[] = [
       "dùng: farmlink, farmhub, invoices, dichvu.farmnet và sale.farmgate. " +
       "Dựng trên Better Stack, trỏ qua subdomain riêng.",
     tech: ["Better Stack", "Uptime monitoring", "Custom domain"],
+    image: "/projects/techcoop-status.png",
     accent: "from-emerald-500 to-teal-600",
     status: "live",
     since: "2026",

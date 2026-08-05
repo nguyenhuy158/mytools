@@ -1,3 +1,5 @@
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import { describe, it, expect } from "vitest";
 import {
   displayHost,
@@ -155,6 +157,33 @@ describe("Project stats", () => {
       for (const p of PROJECTS) {
         expect(() => new URL(p.url), `${p.id} has a bad url`).not.toThrow();
         expect(p.url.startsWith("https://"), `${p.id} is not https`).toBe(true);
+      }
+    });
+
+    it("points every image at a file that exists", () => {
+      // A renamed or deleted snapshot would leave the card falling back to the
+      // initials tile without anyone noticing.
+      for (const p of PROJECTS) {
+        if (!p.image) continue;
+        expect(p.image.startsWith("/"), `${p.id} image must be absolute`).toBe(
+          true,
+        );
+        const onDisk = join(process.cwd(), "public", p.image);
+        expect(existsSync(onDisk), `missing ${p.image} for ${p.id}`).toBe(true);
+      }
+    });
+
+    it("ships a PNG, not an HTML error page, for each snapshot", () => {
+      const pngMagic = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
+      for (const p of PROJECTS) {
+        if (!p.image) continue;
+        const head = readFileSync(join(process.cwd(), "public", p.image)).subarray(
+          0,
+          4,
+        );
+        expect(head.equals(pngMagic), `${p.id} snapshot is not a PNG`).toBe(
+          true,
+        );
       }
     });
 

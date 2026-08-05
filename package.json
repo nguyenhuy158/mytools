@@ -13,7 +13,8 @@
 		"test": "vitest",
 		"test:ui": "vitest --ui",
 		"test:run": "vitest run",
-		"test:coverage": "vitest run --coverage"
+		"test:coverage": "vitest run --coverage",
+		"shots": "node scripts/refresh-project-shots.mjs"
 	},
 	"dependencies": {
 		"@tailwindcss/typography": "^0.5.19",
