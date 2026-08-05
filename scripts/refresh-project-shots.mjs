@@ -64,7 +64,12 @@ function pngSize(buf) {
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function shoot({ id, url }) {
-  const endpoint = `https://image.thum.io/get/width/${WIDTH}/crop/${HEIGHT}/${url}`;
+  // thum.io caches a render per target URL for a while, so a retry against
+  // the exact same URL can silently replay yesterday's blank/loading capture.
+  // A throwaway query param busts that cache; wait/8/noanimate gives
+  // client-rendered SPAs time to paint before the shot is taken.
+  const cacheBusted = `${url}${url.includes("?") ? "&" : "?"}_shot=${Date.now()}`;
+  const endpoint = `https://image.thum.io/get/width/${WIDTH}/crop/${HEIGHT}/wait/8/noanimate/${cacheBusted}`;
 
   for (let attempt = 1; attempt <= ATTEMPTS; attempt++) {
     const res = await fetch(endpoint);
