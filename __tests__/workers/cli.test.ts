@@ -114,6 +114,30 @@ describe("CLI worker interface", () => {
       }
     });
 
+    it("shows examples that match what the converters actually return", async () => {
+      // Guards against the help text drifting from the implementation.
+      const sample = "đường phố hà nội";
+      const help = await body(await get("/--help"));
+      for (const mode of [
+        "upper",
+        "lower",
+        "sentence",
+        "capitalized",
+        "title",
+        "alternating",
+        "inverse",
+      ]) {
+        const actual = await body(await post(`/${mode}`, sample));
+        const line = help
+          .split("\n")
+          .find((l) => l.trim().startsWith(`${mode} `));
+        expect(line, `no CASES line for ${mode}`).toBeDefined();
+        expect(line, `help example for ${mode} is stale`).toContain(
+          actual.trimEnd(),
+        );
+      }
+    });
+
     it("accepts -h as a query param on a case path", async () => {
       expect(await body(await get("/upper?-h"))).toContain("USAGE");
     });

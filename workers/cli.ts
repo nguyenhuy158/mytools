@@ -55,14 +55,17 @@ USAGE
   echo '<text>' | curl huyab.click/<case> --data-binary @-
   cat file.txt | curl huyab.click/<case> --data-binary @-
 
-CASES
+CASES  — shown as applied to: đường phố hà nội
   upper         ĐƯỜNG PHỐ HÀ NỘI      (aliases: u, uc)
   lower         đường phố hà nội      (aliases: l, lc)
   sentence      Đường phố hà nội      (alias: s)
   capitalized   Đường Phố Hà Nội      (aliases: c, cap)
   title         Đường Phố Hà Nội      (alias: t)
-  alternating   đƯờNg pHố hÀ nỘi      (aliases: a, alt)
-  inverse       swap the case of every letter   (aliases: i, inv)
+  alternating   đƯờNg pHố hÀ NộI      (aliases: a, alt)
+  inverse       ĐƯỜNG PHỐ HÀ NỘI      (aliases: i, inv)
+
+  alternating counts spaces too, so the rhythm carries across words.
+  inverse swaps each letter's case, so lowercase input comes back uppercase.
 
 OPTIONS
   -h, --help    show this help
