@@ -14,6 +14,11 @@ export interface ProjectStatus {
   httpStatus?: number;
   /** Populated when the fetch failed outright. */
   error?: string;
+  /**
+   * True when this is the site serving the request, so it was reported up
+   * without a fetch (a Worker cannot reach its own zone).
+   */
+  self?: boolean;
 }
 
 export interface StatusSummary {

@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
-import { check } from "~/routes/api.projects-status";
+import { check, isSameHost, loader } from "~/routes/api.projects-status";
+import { PROJECTS } from "~/data/projects";
 
 const ok = (status = 200) =>
   (async () => new Response("body", { status })) as unknown as typeof fetch;
@@ -92,5 +93,93 @@ describe("project status check", () => {
     const headers = seen?.headers as Record<string, string>;
     expect(headers["user-agent"]).toContain("ToolHub-status-check");
     expect(seen?.signal).toBeDefined();
+  });
+});
+
+describe("isSameHost", () => {
+  it("matches the host serving the request", () => {
+    expect(isSameHost("https://huyab.click", "https://huyab.click/api/x")).toBe(
+      true,
+    );
+  });
+
+  it("does not match a different subdomain", () => {
+    // tc.huyab.click is a separate origin and must still be pinged.
+    expect(
+      isSameHost("https://tc.huyab.click", "https://huyab.click/api/x"),
+    ).toBe(false);
+  });
+
+  it("ignores path differences in the request URL", () => {
+    expect(
+      isSameHost("https://huyab.click", "https://huyab.click/a/b?c=1"),
+    ).toBe(true);
+  });
+
+  it("returns false for a malformed URL instead of throwing", () => {
+    expect(isSameHost("not a url", "https://huyab.click")).toBe(false);
+  });
+});
+
+describe("loader", () => {
+  const stubFetch = (calls: string[]) =>
+    (async (url: string) => {
+      calls.push(String(url));
+      return new Response("", { status: 200 });
+    }) as unknown as typeof fetch;
+
+  it("reports the serving host as up without fetching it", async () => {
+    // A Worker fetching its own zone gets a 522, so this must not be a fetch.
+    const calls: string[] = [];
+    const original = globalThis.fetch;
+    globalThis.fetch = stubFetch(calls);
+    try {
+      const res = await loader({
+        request: new Request("https://huyab.click/api/projects-status"),
+      });
+      const data = (await res.json()) as {
+        statuses: { id: string; online: boolean | null; self?: boolean }[];
+      };
+
+      const self = data.statuses.find((s) => s.id === "toolhub")!;
+      expect(self.online).toBe(true);
+      expect(self.self).toBe(true);
+      expect(calls.some((u) => u.includes("//huyab.click"))).toBe(false);
+
+      const others = PROJECTS.filter(
+        (p) => p.id !== "toolhub" && !p.skipStatusCheck,
+      );
+      expect(calls.length).toBe(others.length);
+    } finally {
+      globalThis.fetch = original;
+    }
+  });
+
+  it("still pings other subdomains", async () => {
+    const calls: string[] = [];
+    const original = globalThis.fetch;
+    globalThis.fetch = stubFetch(calls);
+    try {
+      await loader({
+        request: new Request("https://huyab.click/api/projects-status"),
+      });
+      expect(calls.some((u) => u.includes("tc.huyab.click"))).toBe(true);
+    } finally {
+      globalThis.fetch = original;
+    }
+  });
+
+  it("sends an edge cache header", async () => {
+    const original = globalThis.fetch;
+    globalThis.fetch = stubFetch([]);
+    try {
+      const res = await loader({
+        request: new Request("https://huyab.click/api/projects-status"),
+      });
+      expect(res.headers.get("cache-control")).toContain("s-maxage=");
+      expect(res.headers.get("content-type")).toContain("application/json");
+    } finally {
+      globalThis.fetch = original;
+    }
   });
 });

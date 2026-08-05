@@ -63,13 +63,30 @@ export async function check(
   }
 }
 
-export async function loader() {
+/**
+ * A Worker fetching its own zone loops back through Cloudflare and times out
+ * with a 522, which would report this very site as down. Serving this request
+ * already proves it is up, so answer for the same host without a fetch.
+ */
+export function isSameHost(target: string, requestUrl: string): boolean {
+  try {
+    return new URL(target).hostname === new URL(requestUrl).hostname;
+  } catch {
+    return false;
+  }
+}
+
+export async function loader({ request }: { request: Request }) {
   const statuses = await Promise.all(
-    PROJECTS.map((p) =>
-      p.skipStatusCheck
-        ? Promise.resolve<ProjectStatus>({ id: p.id, online: null, ms: null })
-        : check(p.url, p.id),
-    ),
+    PROJECTS.map((p): Promise<ProjectStatus> => {
+      if (p.skipStatusCheck) {
+        return Promise.resolve({ id: p.id, online: null, ms: null });
+      }
+      if (isSameHost(p.url, request.url)) {
+        return Promise.resolve({ id: p.id, online: true, ms: null, self: true });
+      }
+      return check(p.url, p.id);
+    }),
   );
 
   return new Response(
