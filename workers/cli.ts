@@ -73,6 +73,14 @@ OPTIONS
                 (or send: Accept: application/json)
   ?text=<text>  pass the text as a query parameter
 
+WGET
+  wget -qO- huyab.click/-h
+  wget -qO- --post-data='tỉnh ninh thuận' huyab.click/upper
+  wget -qO- 'huyab.click/title/tỉnh ninh thuận'
+
+  wget cannot read the body from a pipe: --post-file needs a seekable file,
+  so both '-' and /dev/stdin fail. Write a temp file, or use curl for pipes.
+
 SHELL HELPER
   Tired of quoting? Install a 'tc' function once:
 

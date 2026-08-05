@@ -522,6 +522,17 @@ cat notes.txt | curl huyab.click/lower --data-binary @-
 curl 'huyab.click/capitalized?text=ăn ở ưu đãi&json'
 ```
 
+`wget` works the same way:
+
+```sh
+wget -qO- huyab.click/-h
+wget -qO- --post-data='tỉnh ninh thuận' huyab.click/upper
+wget -qO- 'huyab.click/title/tỉnh ninh thuận'
+```
+
+One wget limitation: it cannot take the body from a pipe (`--post-file` needs
+a seekable file, so `-` and `/dev/stdin` both fail). Use a temp file, or curl.
+
 Quote the whole URL when the text contains spaces — `curl huyab.click/t xin
 chao` makes curl treat `xin` and `chao` as extra URLs and fail DNS. To skip
 quoting entirely, install the `tc` shell function:

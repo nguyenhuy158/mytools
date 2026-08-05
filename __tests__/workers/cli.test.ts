@@ -147,6 +147,26 @@ describe("CLI worker interface", () => {
     });
   });
 
+  describe("wget", () => {
+    const WGET = { "user-agent": "Wget/1.25.0" };
+
+    it("treats wget as a CLI client at /", async () => {
+      expect(await body(await get("/", WGET))).toContain("ToolHub");
+    });
+
+    it("converts for wget", async () => {
+      expect(await body(await post("/upper", "ninh thuận", WGET))).toBe(
+        "NINH THUẬN\n",
+      );
+    });
+
+    it("documents the wget pipe limitation in the help", async () => {
+      const out = await body(await get("/-h"));
+      expect(out).toContain("WGET");
+      expect(out).toContain("--post-file needs a seekable file");
+    });
+  });
+
   describe("banner", () => {
     it("serves a banner at / for curl", async () => {
       const out = await body(await get("/"));
