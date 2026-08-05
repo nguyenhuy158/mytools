@@ -237,6 +237,13 @@ export default function NotesPage() {
             title={t("notes.title") || "Notes"}
             description={t("notes.description") || "Create and manage notes with rich text formatting."}
           />
+          {/*
+            Notes are scoped to an anonymous cookie, not an account. Say so —
+            otherwise clearing cookies looks like data loss with no explanation.
+          */}
+          <p className="mt-3 text-center text-xs text-gray-500 dark:text-gray-400">
+            {t("notes.privacy_hint")}
+          </p>
         </div>
       </div>
 

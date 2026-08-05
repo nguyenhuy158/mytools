@@ -198,7 +198,8 @@
     },
     "dialogs": {
       "confirm_delete": "Xóa ghi chú này?"
-    }
+    },
+    "privacy_hint": "Ghi chú chỉ hiển thị trên trình duyệt này — không cần đăng nhập, nhưng xoá cookie hoặc dùng máy khác sẽ không thấy lại."
   },
   "games": {
     "description": "Chơi trò chơi vui nhộn trực tiếp trong trình duyệt của bạn.",

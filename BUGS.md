@@ -10,7 +10,7 @@ work · **S3** wrong output or visible defect · **S4** SEO/hardening.
 
 ---
 
-## [ ] S1 — Notes are shared by everyone, and anyone can edit or delete them
+## [x] S1 — Notes are shared by everyone, and anyone can edit or delete them — fixed
 
 `GET /api/notes` returns **every** note, with content, to any caller. No
 authentication anywhere.
@@ -33,17 +33,31 @@ Only two throwaway test notes exist today, so nothing real has been lost yet.
 But `/it/notes` presents itself as "Store and Manage Notes", which reads as
 private.
 
-**Needs a decision before coding** — pick one:
+**Fixed with option 1** — an anonymous owner id in an `httpOnly`, `Secure`,
+`SameSite=Lax` cookie, minted on first contact. No login, so the tool stays as
+easy to use as before.
 
-1. Scope notes to an anonymous id in an `httpOnly` cookie. No login, each
-   browser sees only its own. The two existing notes become orphaned.
-2. Real accounts. Most work; only worth it if notes should follow a person
-   across devices.
-3. Keep it a public scratchpad, but say so on the page so nobody trusts it
-   with anything private.
+- `app/utils/notes-owner.ts` holds the cookie read/write and the ownership
+  check. The cookie value must match a uuid, so a hand-written cookie cannot
+  become an owner id or smuggle a KV key.
+- Each owner has their own list key, `notes:list:<ownerId>`, and every note
+  records its `ownerId`. Listing also re-checks each note's owner, so a
+  mismatched entry can never be returned.
+- `GET`, `PUT` and `DELETE` on `/api/notes/:id` answer **404** — not 403 — for a
+  note belonging to someone else, so ids cannot be probed for existence.
+- The two pre-existing notes have no `ownerId` and are therefore unreachable
+  by design: handing them to whichever visitor asked first would have been the
+  same bug again. Their KV entries were left untouched rather than deleted.
+- `/it/notes` now states that notes live in this browser only, so clearing
+  cookies does not look like unexplained data loss.
 
-Whichever way, the write endpoints must stop accepting anonymous edits to
-arbitrary ids.
+Trade-off accepted: clearing cookies, or another browser/device, starts with an
+empty list. Real accounts (option 2) remain open if notes should follow a
+person.
+
+27 tests in `__tests__/routes/notes-ownership.test.ts` drive the endpoints
+against a fake KV, including the attack that used to work — a stranger
+deleting someone's note — and assert the note survives.
 
 ---
 

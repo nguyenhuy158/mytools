@@ -1,5 +1,11 @@
 import type { LoaderFunctionArgs, ActionFunctionArgs } from "react-router";
 import { v4 as uuidv4 } from "uuid";
+import {
+  listKeyFor,
+  ownerCookieHeader,
+  readOwnerId,
+  type OwnerNote,
+} from "../utils/notes-owner";
 
 function json(data: any, init?: ResponseInit) {
   return new Response(JSON.stringify(data), {
@@ -11,14 +17,7 @@ function json(data: any, init?: ResponseInit) {
   });
 }
 
-interface Note {
-  id: string;
-  title: string;
-  content: string;
-  plainText: string;
-  createdAt: string;
-  updatedAt: string;
-}
+type Note = OwnerNote;
 
 function getKV(context: any): KVNamespace {
   const kv = context?.cloudflare?.env?.NOTES;
@@ -41,9 +40,17 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
     const url = new URL(request.url);
     const search = url.searchParams.get("search")?.toLowerCase() || "";
 
-    // Get list of note IDs
-    const listKey = "notes:list";
-    const listValue = await kv.get(listKey, "json");
+    // No cookie yet means no notes yet: answer with an empty list and hand out
+    // an owner id, rather than showing this browser somebody else's notes.
+    const ownerId = readOwnerId(request.headers.get("cookie"));
+    if (!ownerId) {
+      return json([], {
+        headers: { "Set-Cookie": ownerCookieHeader(uuidv4()) },
+      });
+    }
+
+    // Only this owner's note ids.
+    const listValue = await kv.get(listKeyFor(ownerId), "json");
     const noteIds: string[] = (listValue as string[]) || [];
 
     // Fetch all notes and filter
@@ -52,6 +59,9 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
       const note = await kv.get(`notes:${id}`, "json");
       if (note) {
         const noteData = note as Note;
+        // Belt and braces: the list is already per-owner, but a note that
+        // somehow names another owner must never be returned.
+        if (noteData.ownerId !== ownerId) continue;
         // Filter by search query
         if (
           search === "" ||
@@ -92,6 +102,10 @@ export async function action({ request, context }: ActionFunctionArgs) {
     const formData = await request.formData();
     const title = (formData.get("title") as string) || "Untitled Note";
 
+    // First write from this browser mints the owner id and returns the cookie.
+    const existingOwner = readOwnerId(request.headers.get("cookie"));
+    const ownerId = existingOwner ?? uuidv4();
+
     const noteId = uuidv4();
     const now = new Date().toISOString();
     const note: Note = {
@@ -101,13 +115,14 @@ export async function action({ request, context }: ActionFunctionArgs) {
       plainText: "",
       createdAt: now,
       updatedAt: now,
+      ownerId,
     };
 
     // Save note
     await kv.put(`notes:${noteId}`, JSON.stringify(note));
 
-    // Update list
-    const listKey = "notes:list";
+    // Update this owner's list
+    const listKey = listKeyFor(ownerId);
     const listValue = await kv.get(listKey, "json");
     const list = (listValue as string[]) || [];
     if (!list.includes(noteId)) {
@@ -115,7 +130,12 @@ export async function action({ request, context }: ActionFunctionArgs) {
       await kv.put(listKey, JSON.stringify(list));
     }
 
-    return json(note, { status: 201 });
+    return json(note, {
+      status: 201,
+      headers: existingOwner
+        ? undefined
+        : { "Set-Cookie": ownerCookieHeader(ownerId) },
+    });
   } catch (error) {
     console.error("Error creating note:", error);
     return json({ error: "Failed to create note" }, { status: 500 });

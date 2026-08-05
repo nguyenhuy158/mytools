@@ -198,7 +198,8 @@
     },
     "dialogs": {
       "confirm_delete": "Delete this note?"
-    }
+    },
+    "privacy_hint": "Notes are visible only in this browser — no account needed, but clearing cookies or switching device starts an empty list."
   },
   "games": {
     "description": "Play fun games directly in your browser.",

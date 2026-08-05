@@ -1,4 +1,10 @@
 import type { LoaderFunctionArgs, ActionFunctionArgs } from "react-router";
+import {
+  listKeyFor,
+  ownsNote,
+  readOwnerId,
+  type OwnerNote,
+} from "../utils/notes-owner";
 
 function json(data: any, init?: ResponseInit) {
   const response = new Response(JSON.stringify(data), {
@@ -11,14 +17,7 @@ function json(data: any, init?: ResponseInit) {
   return response;
 }
 
-interface Note {
-  id: string;
-  title: string;
-  content: string;
-  plainText: string;
-  createdAt: string;
-  updatedAt: string;
-}
+type Note = OwnerNote;
 
 function getKV(context: any): KVNamespace {
   const kv = context?.cloudflare?.env?.NOTES;
@@ -46,7 +45,7 @@ function extractPlainText(html: string): string {
 }
 
 // GET /api/notes/:id - Fetch single note
-export async function loader({ params, context }: LoaderFunctionArgs) {
+export async function loader({ request, params, context }: LoaderFunctionArgs) {
   try {
     const { id } = params;
     if (!id) {
@@ -54,9 +53,11 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
     }
 
     const kv = getKV(context);
-    const note = await kv.get(`notes:${id}`, "json");
+    const ownerId = readOwnerId(request.headers.get("cookie"));
+    const note = (await kv.get(`notes:${id}`, "json")) as Note | null;
 
-    if (!note) {
+    // 404, not 403: a wrong guess must not reveal that the id exists.
+    if (!note || !ownsNote(note, ownerId)) {
       return json({ error: "Note not found" }, { status: 404 });
     }
 
@@ -78,14 +79,16 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
 
     const kv = getKV(context);
     const method = request.method.toUpperCase();
+    const ownerId = readOwnerId(request.headers.get("cookie"));
 
     if (method === "PUT") {
       const formData = await request.formData();
       const title = formData.get("title") as string;
       const content = formData.get("content") as string;
 
-      const existing = await kv.get(`notes:${id}`, "json");
-      if (!existing) {
+      const existing = (await kv.get(`notes:${id}`, "json")) as Note | null;
+      // Same 404 for missing and not-yours, so ids cannot be probed.
+      if (!existing || !ownsNote(existing, ownerId)) {
         return json({ error: "Note not found" }, { status: 404 });
       }
 
@@ -102,10 +105,15 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
     }
 
     if (method === "DELETE") {
+      const existing = (await kv.get(`notes:${id}`, "json")) as Note | null;
+      if (!existing || !ownsNote(existing, ownerId)) {
+        return json({ error: "Note not found" }, { status: 404 });
+      }
+
       await kv.delete(`notes:${id}`);
 
-      // Update list
-      const listKey = "notes:list";
+      // Update this owner's list
+      const listKey = listKeyFor(ownerId!);
       const listValue = await kv.get(listKey, "json");
       const list = (listValue as string[]) || [];
       const updated = list.filter((noteId: string) => noteId !== id);
