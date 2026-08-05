@@ -188,6 +188,30 @@ describe("CLI worker interface", () => {
     });
   });
 
+  describe("shell helper", () => {
+    it.each(["/sh", "/shell"])("serves the tc function at %s", async (path) => {
+      const out = await body(await get(path));
+      expect(out).toContain("tc() {");
+      expect(out).toContain("huyab.click/$_tc_case");
+    });
+
+    it("handles stdin and argument forms", async () => {
+      const out = await body(await get("/sh"));
+      // Argument form and the stdin fallback must both be present.
+      expect(out).toContain('--data-binary "$*"');
+      expect(out).toContain("--data-binary @-");
+    });
+
+    it("routes tc -h to the help endpoint", async () => {
+      const out = await body(await get("/sh"));
+      expect(out).toContain("huyab.click/-h");
+    });
+
+    it("leaves no shell variable behind", async () => {
+      expect(await body(await get("/sh"))).toContain("unset _tc_case");
+    });
+  });
+
   describe("errors", () => {
     it("returns 400 with guidance when there is no input", async () => {
       const res = await post("/upper", "");
@@ -195,6 +219,14 @@ describe("CLI worker interface", () => {
       const out = await res!.text();
       expect(out).toContain("no input");
       expect(out).toContain("curl huyab.click/-h");
+    });
+
+    it("explains the bare-words mistake in the no-input error", async () => {
+      // `curl huyab.click/t xin chao` sends no body; the error must say why.
+      const out = await body(await post("/t", ""));
+      expect(out).toContain("extra URLs");
+      expect(out).toContain("'huyab.click/title/xin chao'");
+      expect(out).toContain("tc title xin chao");
     });
 
     it("returns a 400 JSON error when there is no input", async () => {

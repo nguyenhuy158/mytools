@@ -73,13 +73,25 @@ OPTIONS
                 (or send: Accept: application/json)
   ?text=<text>  pass the text as a query parameter
 
+SHELL HELPER
+  Tired of quoting? Install a 'tc' function once:
+
+    eval "$(curl -s huyab.click/sh)"      # add to ~/.zshrc to keep it
+    tc t xin chao viet nam                # Xin Chao Viet Nam
+    cat notes.txt | tc upper
+
 NOTES
   Vietnamese diacritics are handled correctly — matching is Unicode-aware.
   Trailing newlines in the input are preserved; curl -d strips them for you.
+  Quote the whole URL if the text has spaces — curl treats a bare second
+  word as another URL and tries to resolve it as a hostname:
+    curl huyab.click/t xin chao      ✗  "Could not resolve host: xin"
+    curl 'huyab.click/t/xin chao'    ✓
+    curl huyab.click/t -d 'xin chao' ✓
 
 EXAMPLES
   curl huyab.click/upper -d 'đường phố'
-  curl huyab.click/title/hà nội mùa thu
+  curl 'huyab.click/title/hà nội mùa thu'
   curl 'huyab.click/capitalized?text=ăn ở ưu đãi&json'
   curl -s huyab.click/lower -d 'HÀ NỘI' | tee out.txt
 `;
@@ -90,6 +102,28 @@ const BANNER = `ToolHub — text case converter
   help:  curl huyab.click/-h
 
 The full site (JSON tools, diff, calendar, games) is at https://huyab.click
+`;
+
+/**
+ * Shell function served at /sh, so text with spaces needs no quoting:
+ *   eval "$(curl -s huyab.click/sh)" && tc t xin chao viet nam
+ */
+const SHELL_HELPER = `# ToolHub case converter — eval "$(curl -s huyab.click/sh)"
+tc() {
+  if [ $# -eq 0 ] || [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    curl -s https://huyab.click/-h
+    return 0
+  fi
+  _tc_case="$1"
+  shift
+  if [ $# -eq 0 ]; then
+    # No words given: convert stdin, so \`cat f | tc upper\` works.
+    curl -s --data-binary @- "https://huyab.click/$_tc_case"
+  else
+    curl -s --data-binary "$*" "https://huyab.click/$_tc_case"
+  fi
+  unset _tc_case
+}
 `;
 
 const text = (body: string, status = 200) =>
@@ -182,6 +216,11 @@ export async function handleCliRequest(
       : text(USAGE);
   }
 
+  // Shell helper source, for `eval "$(curl -s huyab.click/sh)"`.
+  if (name === "sh" || name === "shell") {
+    return text(SHELL_HELPER);
+  }
+
   // Bare `/` for a terminal: short banner instead of the HTML app.
   if (head === undefined) {
     return cli ? text(BANNER) : null;
@@ -193,10 +232,17 @@ export async function handleCliRequest(
   const input = await readInput(request, url, rest);
 
   if (!input) {
+    // Spell out the quoting, because `curl host/t xin chao` sends no body at
+    // all — curl treats each extra word as another URL to fetch.
     const message =
       `error: no input for '${mode}'\n\n` +
       `  curl huyab.click/${mode} -d '<text>'\n` +
-      `  curl huyab.click/${mode}/<text>\n\n` +
+      `  curl 'huyab.click/${mode}/<text>'      # quote the whole URL\n\n` +
+      `if you typed the text as bare words, curl read them as extra URLs:\n` +
+      `  curl huyab.click/${mode} xin chao      ✗\n` +
+      `  curl 'huyab.click/${mode}/xin chao'    ✓\n\n` +
+      `no quoting at all:\n` +
+      `  eval "$(curl -s huyab.click/sh)" && tc ${mode} xin chao\n\n` +
       `run 'curl huyab.click/-h' for help\n`;
     return wantsJson(request, url)
       ? json({ error: "no input", mode }, 400)

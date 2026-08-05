@@ -517,9 +517,21 @@ instead of HTML.
 curl huyab.click                          # banner + case list
 curl huyab.click/-h                       # full help
 curl huyab.click/upper -d 'đường phố'     # ĐƯỜNG PHỐ
-curl huyab.click/title/hà nội mùa thu     # Hà Nội Mùa Thu
+curl 'huyab.click/title/hà nội mùa thu'   # Hà Nội Mùa Thu
 cat notes.txt | curl huyab.click/lower --data-binary @-
 curl 'huyab.click/capitalized?text=ăn ở ưu đãi&json'
+```
+
+Quote the whole URL when the text contains spaces — `curl huyab.click/t xin
+chao` makes curl treat `xin` and `chao` as extra URLs and fail DNS. To skip
+quoting entirely, install the `tc` shell function:
+
+```sh
+eval "$(curl -s huyab.click/sh)"   # add to ~/.zshrc to keep it
+tc t xin chao viet nam             # Xin Chao Viet Nam
+tc upper đường phố                 # ĐƯỜNG PHỐ
+cat notes.txt | tc title           # reads stdin when given no words
+tc -h                              # help
 ```
 
 Cases: `upper` `lower` `sentence` `capitalized` `title` `alternating`
