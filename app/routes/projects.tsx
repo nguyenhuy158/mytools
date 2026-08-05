@@ -1,6 +1,17 @@
-import { ArrowUpRight, Clock, Globe, Layers, Radio } from "lucide-react";
-import { useEffect, useState } from "react";
+import {
+  ArrowUpRight,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  Globe,
+  Layers,
+  Radio,
+  Search,
+  X,
+} from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
 import { PageHeader } from "../components/PageHeader";
 import { PROJECTS, type Project } from "../data/projects";
 import {
@@ -11,6 +22,13 @@ import {
   type ProjectStatus,
   type StatusSummary,
 } from "../utils/project-stats";
+import {
+  filterProjects,
+  pageWindow,
+  paginate,
+  statusCounts,
+  type StatusFilter,
+} from "../utils/project-search";
 import type { Route } from "./+types/projects";
 
 export function meta({}: Route.MetaArgs) {
@@ -53,11 +71,49 @@ export default function Projects() {
     };
   }, []);
 
-  const projects = sortForDisplay(PROJECTS);
+  // Search, filter and page live in the URL, so a filtered view can be shared
+  // and the back button steps through it.
+  const [query, setQuery] = useQueryState("q", parseAsString.withDefault(""));
+  const [status, setStatus] = useQueryState(
+    "status",
+    parseAsString.withDefault("all"),
+  );
+  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
+
+  const statusFilter = (
+    ["all", "live", "wip", "archived"].includes(status) ? status : "all"
+  ) as StatusFilter;
+
+  const sorted = useMemo(() => sortForDisplay(PROJECTS), []);
+  const counts = useMemo(() => statusCounts(sorted), [sorted]);
+  const matched = useMemo(
+    () => filterProjects(sorted, query, statusFilter),
+    [sorted, query, statusFilter],
+  );
+  const current = paginate(matched, page);
+
   const byId = new Map((data?.statuses ?? []).map((s) => [s.id, s]));
 
+  /** Any change to the result set sends the reader back to page one. */
+  const applyQuery = (value: string) => {
+    setQuery(value || null);
+    setPage(null);
+  };
+  const applyStatus = (value: StatusFilter) => {
+    setStatus(value === "all" ? null : value);
+    setPage(null);
+  };
+  const goToPage = (value: number) => {
+    setPage(value === 1 ? null : value);
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const filtering = query.trim() !== "" || statusFilter !== "all";
+
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12 space-y-10">
+    <div className="max-w-7xl mx-auto px-4 py-12 space-y-8">
       <PageHeader
         title={t("projects.title")}
         description={t("projects.description")}
@@ -69,22 +125,220 @@ export default function Projects() {
         failed={failed}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {projects.map((project) => (
-          <ProjectCard
-            key={project.id}
-            project={project}
-            status={byId.get(project.id)}
+      <div className="space-y-4">
+        <div className="flex flex-col lg:flex-row gap-3 lg:items-center lg:justify-between">
+          <SearchBox value={query} onChange={applyQuery} />
+          <StatusChips
+            value={statusFilter}
+            counts={counts}
+            onChange={applyStatus}
           />
-        ))}
+        </div>
+
+        <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+          <span>
+            {current.total === 0
+              ? t("projects.results_none")
+              : t("projects.results_range", {
+                  from: current.from,
+                  to: current.to,
+                  total: current.total,
+                })}
+          </span>
+          {filtering && (
+            <button
+              onClick={() => {
+                applyQuery("");
+                applyStatus("all");
+              }}
+              className="text-blue-600 dark:text-blue-400 hover:underline"
+            >
+              {t("projects.clear_filters")}
+            </button>
+          )}
+        </div>
       </div>
 
-      {projects.length === 0 && (
-        <p className="text-center text-gray-500 dark:text-gray-400">
-          {t("projects.empty")}
-        </p>
+      {current.items.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          {current.items.map((project) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              status={byId.get(project.id)}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-16 space-y-3">
+          <p className="text-gray-500 dark:text-gray-400">
+            {filtering
+              ? t("projects.no_match", { query: query.trim() })
+              : t("projects.empty")}
+          </p>
+          {filtering && (
+            <button
+              onClick={() => {
+                applyQuery("");
+                applyStatus("all");
+              }}
+              className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+            >
+              {t("projects.clear_filters")}
+            </button>
+          )}
+        </div>
+      )}
+
+      <Pagination
+        page={current.page}
+        totalPages={current.totalPages}
+        onGo={goToPage}
+      />
+    </div>
+  );
+}
+
+function SearchBox({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const { t } = useTranslation();
+
+  return (
+    <div className="relative flex-1 lg:max-w-md">
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+      <input
+        type="search"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={t("projects.search_placeholder")}
+        aria-label={t("projects.search_placeholder")}
+        className="w-full pl-9 pr-9 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none transition-all"
+      />
+      {value && (
+        <button
+          onClick={() => onChange("")}
+          aria-label={t("projects.clear_search")}
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-md text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+        >
+          <X className="w-4 h-4" />
+        </button>
       )}
     </div>
+  );
+}
+
+function StatusChips({
+  value,
+  counts,
+  onChange,
+}: {
+  value: StatusFilter;
+  counts: Record<StatusFilter, number>;
+  onChange: (value: StatusFilter) => void;
+}) {
+  const { t } = useTranslation();
+  const chips: { key: StatusFilter; label: string }[] = [
+    { key: "all", label: t("projects.filter.all") },
+    { key: "live", label: t("projects.state.online") },
+    { key: "wip", label: t("projects.state.wip") },
+    { key: "archived", label: t("projects.state.archived") },
+  ];
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      {chips.map(({ key, label }) => {
+        const active = value === key;
+        // A filter that would show nothing is not worth offering.
+        const empty = counts[key] === 0 && key !== "all";
+        return (
+          <button
+            key={key}
+            onClick={() => onChange(key)}
+            disabled={empty}
+            aria-pressed={active}
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors ${
+              active
+                ? "bg-blue-600 border-blue-600 text-white"
+                : "bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-blue-400"
+            } ${empty ? "opacity-40 cursor-not-allowed" : ""}`}
+          >
+            {label}
+            <span
+              className={`ml-1.5 tabular-nums ${active ? "text-blue-100" : "text-gray-400"}`}
+            >
+              {counts[key]}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function Pagination({
+  page,
+  totalPages,
+  onGo,
+}: {
+  page: number;
+  totalPages: number;
+  onGo: (page: number) => void;
+}) {
+  const { t } = useTranslation();
+  if (totalPages <= 1) return null;
+
+  const buttonClass =
+    "min-w-9 h-9 px-2 inline-flex items-center justify-center rounded-lg text-sm border transition-colors disabled:opacity-40 disabled:cursor-not-allowed";
+
+  return (
+    <nav
+      aria-label={t("projects.pagination")}
+      className="flex items-center justify-center gap-1.5 pt-2"
+    >
+      <button
+        onClick={() => onGo(page - 1)}
+        disabled={page === 1}
+        aria-label={t("projects.prev_page")}
+        className={`${buttonClass} bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-blue-400`}
+      >
+        <ChevronLeft className="w-4 h-4" />
+      </button>
+
+      {pageWindow(page, totalPages).map((p, i) =>
+        p === null ? (
+          <span key={`gap-${i}`} className="px-1 text-gray-400 select-none">
+            …
+          </span>
+        ) : (
+          <button
+            key={p}
+            onClick={() => onGo(p)}
+            aria-current={p === page ? "page" : undefined}
+            className={`${buttonClass} tabular-nums ${
+              p === page
+                ? "bg-blue-600 border-blue-600 text-white font-semibold"
+                : "bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-blue-400"
+            }`}
+          >
+            {p}
+          </button>
+        ),
+      )}
+
+      <button
+        onClick={() => onGo(page + 1)}
+        disabled={page === totalPages}
+        aria-label={t("projects.next_page")}
+        className={`${buttonClass} bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-blue-400`}
+      >
+        <ChevronRight className="w-4 h-4" />
+      </button>
+    </nav>
   );
 }
 

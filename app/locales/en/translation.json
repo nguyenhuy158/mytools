@@ -620,6 +620,18 @@
       "wip": "In progress",
       "archived": "Archived",
       "unknown": "not checked"
+    },
+    "search_placeholder": "Search by name, description, tech, domain...",
+    "clear_search": "Clear search",
+    "clear_filters": "Clear filters",
+    "results_range": "Showing {{from}}–{{to}} of {{total}} projects",
+    "results_none": "No projects match",
+    "no_match": "No projects found for \"{{query}}\"",
+    "pagination": "Pagination",
+    "prev_page": "Previous page",
+    "next_page": "Next page",
+    "filter": {
+      "all": "All"
     }
   }
 }

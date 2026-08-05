@@ -518,6 +518,12 @@ online/offline, response time and a median. The site serving the request is
 reported up without a fetch, because a Worker cannot reach its own zone (it
 gets a 522).
 
+Search, status filter and page live in the URL (`?q=`, `?status=`, `?page=`) via
+nuqs, so a filtered view is shareable and the back button steps through it.
+Search ignores Vietnamese tones — `cham cong` finds "Chấm công" — and matches
+the name, tagline, description, tech, hostname and year. A `?page=` past the end
+clamps to the last page instead of rendering an empty grid.
+
 Card previews are real screenshots committed under `public/projects/<id>.png`,
 so visitors never wait on a screenshot service. Refresh them after a redesign:
 

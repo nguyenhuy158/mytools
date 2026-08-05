@@ -620,6 +620,18 @@
       "wip": "Đang làm",
       "archived": "Đã dừng",
       "unknown": "chưa kiểm tra được"
+    },
+    "search_placeholder": "Tìm theo tên, mô tả, tech, domain...",
+    "clear_search": "Xóa từ khóa",
+    "clear_filters": "Bỏ lọc",
+    "results_range": "Hiện {{from}}–{{to}} trong {{total}} dự án",
+    "results_none": "Không có dự án nào khớp",
+    "no_match": "Không tìm thấy dự án nào cho \"{{query}}\"",
+    "pagination": "Phân trang",
+    "prev_page": "Trang trước",
+    "next_page": "Trang sau",
+    "filter": {
+      "all": "Tất cả"
     }
   }
 }
