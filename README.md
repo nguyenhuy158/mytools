@@ -545,6 +545,10 @@ cat notes.txt | tc title           # reads stdin when given no words
 tc -h                              # help
 ```
 
+The function is POSIX `sh` (works under sh/bash/zsh) and uses curl when
+present, otherwise wget — buffering stdin into a temp file, since wget cannot
+post from a pipe. With neither installed it prints `tc: needs curl or wget`.
+
 Cases: `upper` `lower` `sentence` `capitalized` `title` `alternating`
 `inverse` — each with short aliases (`u`, `l`, `s`, `cap`, `t`, `alt`, `inv`).
 Add `?json` or `Accept: application/json` for a JSON reply.

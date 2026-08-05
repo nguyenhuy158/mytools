@@ -87,7 +87,9 @@ SHELL HELPER
     eval "$(curl -s huyab.click/sh)"      # add to ~/.zshrc to keep it
     tc t tinh ninh thuan                  # Tinh Ninh Thuan
     tc upper tỉnh ninh thuận              # TỈNH NINH THUẬN
-    cat notes.txt | tc upper
+    cat notes.txt | tc upper              # reads stdin when given no words
+
+  Works under sh, bash and zsh, with curl or wget (whichever you have).
 
 NOTES
   Vietnamese diacritics are handled correctly — matching is Unicode-aware.
@@ -116,22 +118,49 @@ The full site (JSON tools, diff, calendar, games) is at https://huyab.click
 /**
  * Shell function served at /sh, so text with spaces needs no quoting:
  *   eval "$(curl -s huyab.click/sh)" && tc t tinh ninh thuan
+ *
+ * POSIX sh — no arrays, no [[ ]] — so it works under sh, bash and zsh. It
+ * prefers curl and falls back to wget, which cannot post from a pipe and so
+ * needs stdin buffered into a temp file.
  */
 const SHELL_HELPER = `# ToolHub case converter — eval "$(curl -s huyab.click/sh)"
 tc() {
+  _tc_url="https://huyab.click"
   if [ $# -eq 0 ] || [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
-    curl -s https://huyab.click/-h
+    if command -v curl >/dev/null 2>&1; then
+      curl -s "$_tc_url/-h"
+    else
+      wget -qO- "$_tc_url/-h"
+    fi
+    unset _tc_url
     return 0
   fi
   _tc_case="$1"
   shift
-  if [ $# -eq 0 ]; then
-    # No words given: convert stdin, so \`cat f | tc upper\` works.
-    curl -s --data-binary @- "https://huyab.click/$_tc_case"
+  if command -v curl >/dev/null 2>&1; then
+    if [ $# -eq 0 ]; then
+      # No words given: convert stdin, so \`cat f | tc upper\` works.
+      curl -s --data-binary @- "$_tc_url/$_tc_case"
+    else
+      curl -s --data-binary "$*" "$_tc_url/$_tc_case"
+    fi
+  elif command -v wget >/dev/null 2>&1; then
+    if [ $# -eq 0 ]; then
+      # wget's --post-file needs a seekable file, so buffer the pipe.
+      _tc_tmp=$(mktemp) || { echo "tc: mktemp failed" >&2; return 1; }
+      cat > "$_tc_tmp"
+      wget -qO- --post-file="$_tc_tmp" "$_tc_url/$_tc_case"
+      rm -f "$_tc_tmp"
+      unset _tc_tmp
+    else
+      wget -qO- --post-data="$*" "$_tc_url/$_tc_case"
+    fi
   else
-    curl -s --data-binary "$*" "https://huyab.click/$_tc_case"
+    echo "tc: needs curl or wget" >&2
+    unset _tc_case _tc_url
+    return 127
   fi
-  unset _tc_case
+  unset _tc_case _tc_url
 }
 `;
 

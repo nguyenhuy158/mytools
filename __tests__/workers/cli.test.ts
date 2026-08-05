@@ -212,7 +212,7 @@ describe("CLI worker interface", () => {
     it.each(["/sh", "/shell"])("serves the tc function at %s", async (path) => {
       const out = await body(await get(path));
       expect(out).toContain("tc() {");
-      expect(out).toContain("huyab.click/$_tc_case");
+      expect(out).toContain("$_tc_url/$_tc_case");
     });
 
     it("handles stdin and argument forms", async () => {
@@ -224,11 +224,33 @@ describe("CLI worker interface", () => {
 
     it("routes tc -h to the help endpoint", async () => {
       const out = await body(await get("/sh"));
-      expect(out).toContain("huyab.click/-h");
+      expect(out).toContain("$_tc_url/-h");
     });
 
     it("leaves no shell variable behind", async () => {
-      expect(await body(await get("/sh"))).toContain("unset _tc_case");
+      const out = await body(await get("/sh"));
+      expect(out).toContain("unset _tc_case");
+      expect(out).toContain("unset _tc_url");
+    });
+
+    it("falls back to wget when curl is missing", async () => {
+      const out = await body(await get("/sh"));
+      expect(out).toContain("command -v curl");
+      expect(out).toContain("command -v wget");
+      expect(out).toContain("--post-data=");
+      // wget cannot post from a pipe, so stdin must be buffered.
+      expect(out).toContain("mktemp");
+      expect(out).toContain("--post-file=");
+    });
+
+    it("errors clearly when neither curl nor wget exists", async () => {
+      expect(await body(await get("/sh"))).toContain("needs curl or wget");
+    });
+
+    it("uses no bashisms, so it runs under plain sh", async () => {
+      const out = await body(await get("/sh"));
+      expect(out).not.toContain("[[");
+      expect(out).not.toContain("local ");
     });
   });
 
