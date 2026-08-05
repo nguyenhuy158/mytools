@@ -12,8 +12,9 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
+import { useLoaderData } from "react-router";
 import { PageHeader } from "../components/PageHeader";
-import { PROJECTS, type Project } from "../data/projects";
+import { loadProjects, type Project } from "../data/projects";
 import {
   displayHost,
   initials,
@@ -41,6 +42,12 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
+export async function loader({ context }: Route.LoaderArgs) {
+  const { env } = context.cloudflare;
+  const projects = await loadProjects(env.DB);
+  return { projects };
+}
+
 interface StatusPayload {
   checkedAt: string;
   summary: StatusSummary;
@@ -49,6 +56,7 @@ interface StatusPayload {
 
 export default function Projects() {
   const { t } = useTranslation();
+  const { projects } = useLoaderData<typeof loader>();
   // Checked client-side so the page paints immediately instead of waiting on
   // every third-party site to answer.
   const [data, setData] = useState<StatusPayload | null>(null);
@@ -84,7 +92,7 @@ export default function Projects() {
     ["all", "live", "wip", "archived"].includes(status) ? status : "all"
   ) as StatusFilter;
 
-  const sorted = useMemo(() => sortForDisplay(PROJECTS), []);
+  const sorted = useMemo(() => sortForDisplay(projects), [projects]);
   const counts = useMemo(() => statusCounts(sorted), [sorted]);
   const matched = useMemo(
     () => filterProjects(sorted, query, statusFilter),
@@ -123,6 +131,7 @@ export default function Projects() {
         summary={data?.summary}
         checkedAt={data?.checkedAt}
         failed={failed}
+        total={projects.length}
       />
 
       <div className="space-y-4">
@@ -346,17 +355,19 @@ function StatRow({
   summary,
   checkedAt,
   failed,
+  total,
 }: {
   summary?: StatusSummary;
   checkedAt?: string;
   failed: boolean;
+  total: number;
 }) {
   const { t, i18n } = useTranslation();
 
   const stats = [
     {
       icon: Layers,
-      value: String(summary?.total ?? PROJECTS.length),
+      value: String(summary?.total ?? total),
       label: t("projects.stats.projects"),
     },
     {

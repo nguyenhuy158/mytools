@@ -5,9 +5,10 @@
  * and how long it took. The response is cached at the edge so opening the page
  * repeatedly does not hammer the listed sites.
  */
-import { PROJECTS } from "../data/projects";
+import { loadProjects } from "../data/projects";
 import type { ProjectStatus } from "../utils/project-stats";
 import { summarize } from "../utils/project-stats";
+import type { Route } from "./+types/api.projects-status";
 
 /** Give up on a site after this long; a slow site is reported, not fatal. */
 const TIMEOUT_MS = 8000;
@@ -120,9 +121,11 @@ export function reconcileSameZone(
   };
 }
 
-export async function loader({ request }: { request: Request }) {
+export async function loader({ request, context }: Route.LoaderArgs) {
+  const { env } = context.cloudflare;
+  const projects = await loadProjects(env.DB);
   const statuses = await Promise.all(
-    PROJECTS.map((p): Promise<ProjectStatus> => {
+    projects.map((p): Promise<ProjectStatus> => {
       if (p.skipStatusCheck) {
         return Promise.resolve({ id: p.id, online: null, ms: null });
       }

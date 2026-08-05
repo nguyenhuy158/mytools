@@ -8,7 +8,8 @@ import {
   statusCounts,
   PER_PAGE,
 } from "~/utils/project-search";
-import { PROJECTS, type Project } from "~/data/projects";
+import { loadProjects, type Project } from "~/data/projects";
+import { remoteD1 } from "./d1-fixture";
 
 const project = (over: Partial<Project> = {}): Project => ({
   id: "x",
@@ -110,9 +111,10 @@ describe("filterProjects", () => {
     expect(filterProjects(list, "beta", "wip")).toHaveLength(1);
   });
 
-  it("finds the real projects by a partial name", () => {
+  it("finds the real projects by a partial name", async () => {
     // Guards the wiring against the shipped data, not just fixtures.
-    const hits = filterProjects(PROJECTS, "chia keo", "all");
+    const projects = await loadProjects(remoteD1("db"));
+    const hits = filterProjects(projects, "chia keo", "all");
     expect(hits.map((p) => p.id)).toContain("chiakeo");
   });
 });

@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeAll } from "vitest";
 import {
   displayHost,
   initials,
@@ -9,7 +9,8 @@ import {
   summarize,
   type ProjectStatus,
 } from "~/utils/project-stats";
-import { PROJECTS, type Project } from "~/data/projects";
+import { loadProjects, type Project } from "~/data/projects";
+import { remoteD1 } from "./d1-fixture";
 
 const project = (over: Partial<Project> = {}): Project => ({
   id: "x",
@@ -147,7 +148,13 @@ describe("Project stats", () => {
     });
   });
 
-  describe("PROJECTS data", () => {
+  describe("projects table in D1", () => {
+    let PROJECTS: Project[];
+
+    beforeAll(async () => {
+      PROJECTS = await loadProjects(remoteD1("db"));
+    });
+
     it("has unique ids", () => {
       const ids = PROJECTS.map((p) => p.id);
       expect(new Set(ids).size).toBe(ids.length);

@@ -13,9 +13,10 @@
  * GIF and only has the real PNG ready a few seconds later, so each URL is
  * retried until the bytes actually start with the PNG signature.
  */
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { execFileSync } from "node:child_process";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT_DIR = join(root, "public", "projects");
@@ -26,23 +27,28 @@ const RETRY_MS = 6000;
 
 const PNG_MAGIC = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
 
-/** Pull id/url pairs straight out of the data file — no build step needed. */
+/** Pull id/url pairs from the `projects` table in D1 — no build step needed. */
 function readProjects() {
-  const src = readFileSync(join(root, "app", "data", "projects.ts"), "utf8");
-  const body = src.slice(
-    src.indexOf("export const PROJECTS"),
-    src.indexOf("export const PROJECT_TEMPLATE"),
+  const output = execFileSync(
+    "npx",
+    [
+      "wrangler",
+      "d1",
+      "execute",
+      "db",
+      "--remote",
+      "--json",
+      "--command",
+      "SELECT id, url, shot_url FROM projects ORDER BY sort_order",
+    ],
+    { cwd: root, encoding: "utf8" },
   );
-  const projects = [];
-  // Split on entry boundaries so an optional shotUrl is read from the right
-  // project rather than bleeding in from the next one.
-  for (const chunk of body.split(/\n  \{\n/).slice(1)) {
-    const id = chunk.match(/id:\s*"([^"]+)"/)?.[1];
-    const url = chunk.match(/\n\s*url:\s*"([^"]+)"/)?.[1];
-    const shotUrl = chunk.match(/shotUrl:\s*"([^"]+)"/)?.[1];
-    if (id && url) projects.push({ id, url: shotUrl ?? url, linked: url });
-  }
-  return projects;
+  const [{ results }] = JSON.parse(output);
+  return results.map((row) => ({
+    id: row.id,
+    url: row.shot_url ?? row.url,
+    linked: row.url,
+  }));
 }
 
 /**
@@ -105,7 +111,7 @@ if (projects.length === 0) {
   console.error(
     only.length
       ? `No project matches: ${only.join(", ")}`
-      : "No projects found in app/data/projects.ts",
+      : "No projects found in the D1 `projects` table",
   );
   process.exit(1);
 }

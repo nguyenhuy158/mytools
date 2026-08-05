@@ -6,7 +6,10 @@ import {
   loader,
   reconcileSameZone,
 } from "~/routes/api.projects-status";
-import { PROJECTS } from "~/data/projects";
+import { loadProjects } from "~/data/projects";
+import { remoteD1 } from "../utils/d1-fixture";
+
+const context = { cloudflare: { env: { DB: remoteD1("db") } } };
 
 const ok = (status = 200) =>
   (async () => new Response("body", { status })) as unknown as typeof fetch;
@@ -142,6 +145,7 @@ describe("loader", () => {
     try {
       const res = await loader({
         request: new Request("https://huyab.click/api/projects-status"),
+        context,
       });
       const data = (await res.json()) as {
         statuses: { id: string; online: boolean | null; self?: boolean }[];
@@ -152,7 +156,8 @@ describe("loader", () => {
       expect(self.self).toBe(true);
       expect(calls.some((u) => u.includes("//huyab.click"))).toBe(false);
 
-      const others = PROJECTS.filter(
+      const projects = await loadProjects(context.cloudflare.env.DB);
+      const others = projects.filter(
         (p) => p.id !== "toolhub" && !p.skipStatusCheck,
       );
       expect(calls.length).toBe(others.length);
@@ -168,6 +173,7 @@ describe("loader", () => {
     try {
       await loader({
         request: new Request("https://huyab.click/api/projects-status"),
+        context,
       });
       expect(calls.some((u) => u.includes("tc.huyab.click"))).toBe(true);
     } finally {
@@ -181,6 +187,7 @@ describe("loader", () => {
     try {
       const res = await loader({
         request: new Request("https://huyab.click/api/projects-status"),
+        context,
       });
       expect(res.headers.get("cache-control")).toContain("s-maxage=");
       expect(res.headers.get("content-type")).toContain("application/json");
