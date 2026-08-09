@@ -14,6 +14,8 @@ function isActivePath(pathname: string, href: string): boolean {
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  /** Which mobile submenu is expanded. Only one at a time, so the drawer stays short. */
+  const [openSection, setOpenSection] = useState<string | null>(null);
   const { t, i18n } = useTranslation();
   const { pathname } = useLocation();
   const [theme, setTheme] = useState<"light" | "dark">("light");
@@ -231,7 +233,16 @@ export function Navbar() {
               {theme === "dark" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
             </button>
             <button
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={() => {
+                const next = !isOpen;
+                setIsOpen(next);
+                // Opening the drawer reveals the section you're already in, collapses the rest.
+                if (next) {
+                  setOpenSection(
+                    navigation.find((item) => item.children && isActivePath(pathname, item.href))?.href ?? null
+                  );
+                }
+              }}
               className="cursor-pointer inline-flex items-center justify-center p-2 rounded-md text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 focus:outline-none"
             >
               <span className="sr-only">Open main menu</span>
@@ -248,30 +259,48 @@ export function Navbar() {
 
       {isOpen && (
         <div className="sm:hidden bg-gray-50 dark:bg-slate-800/80 dark:backdrop-blur-md border-t border-gray-200 dark:border-white/10">
-          <div className="pt-2 pb-3 px-2 space-y-1">
+          {/* Cap the drawer at the viewport below the 4rem header so a long menu scrolls
+              inside itself instead of running off the bottom of the screen. */}
+          <div className="pt-2 pb-3 px-2 space-y-1 max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain">
             {navigation.map((item) => {
               const active = isActivePath(pathname, item.href);
+              const expanded = openSection === item.href;
               return item.children ? (
                 <div key={item.href} className="space-y-1">
-                  <Link
-                    to={item.href}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-base font-medium transition-colors ${
+                  <div
+                    className={`flex items-center rounded-lg ${
                       active
                         ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10"
-                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white"
+                        : "text-gray-700 dark:text-gray-300"
                     }`}
-                    onClick={() => setIsOpen(false)}
                   >
-                    <span
-                      className={`flex items-center justify-center w-9 h-9 rounded-lg shrink-0 ${
-                        active ? "bg-blue-100 dark:bg-blue-500/20" : "bg-gray-100 dark:bg-white/10"
-                      }`}
+                    <Link
+                      to={item.href}
+                      className="flex flex-1 items-center gap-3 px-3 py-2.5 text-base font-medium"
+                      onClick={() => setIsOpen(false)}
                     >
-                      <item.icon className="h-5 w-5" />
-                    </span>
-                    {item.name}
-                  </Link>
-                  {item.children.map((child) => {
+                      <span
+                        className={`flex items-center justify-center w-9 h-9 rounded-lg shrink-0 ${
+                          active ? "bg-blue-100 dark:bg-blue-500/20" : "bg-gray-100 dark:bg-white/10"
+                        }`}
+                      >
+                        <item.icon className="h-5 w-5" />
+                      </span>
+                      {item.name}
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => setOpenSection(expanded ? null : item.href)}
+                      aria-expanded={expanded}
+                      aria-label={item.name}
+                      className="cursor-pointer p-2.5 mr-1 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10"
+                    >
+                      <ChevronDown
+                        className={`h-5 w-5 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
+                      />
+                    </button>
+                  </div>
+                  {expanded && item.children.map((child) => {
                     const childActive = isActivePath(pathname, child.href);
                     return (
                       <Link
