@@ -33,6 +33,8 @@
     "kbd_navigate": "Navigate",
     "kbd_open": "to open",
     "lifestyle_description": "Tools for a better life.",
+    "collapse_sidebar": "Collapse menu",
+    "expand_sidebar": "Expand menu",
     "toast": {
       "language_changed": "Language changed to English",
       "dark_mode": "Switched to Dark Mode",

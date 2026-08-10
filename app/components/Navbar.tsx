@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router";
-import { Menu, X, Home, Info, Sun, Moon, FileJson, Calendar, FileDiff, Timer, Code, Coffee, Gamepad2, Activity, Bomb, LayoutGrid, Grid3x3, Hash, Lightbulb, Rocket, ChevronDown } from "lucide-react";
+import { Menu, X, Home, Info, Sun, Moon, FileJson, Calendar, FileDiff, Timer, Code, Coffee, Gamepad2, Activity, Bomb, LayoutGrid, Grid3x3, Hash, Lightbulb, Rocket, ChevronDown, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { TetCountdown } from "./TetCountdown";
@@ -19,6 +19,8 @@ export function Navbar() {
   const { t, i18n } = useTranslation();
   const { pathname } = useLocation();
   const [theme, setTheme] = useState<"light" | "dark">("light");
+  /** Desktop sidebar collapsed to an icon-only rail. Irrelevant on mobile — the drawer always shows full labels. */
+  const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
     // Check initial theme from localStorage or system preference
@@ -35,7 +37,17 @@ export function Navbar() {
     } else {
       document.documentElement.classList.remove("dark");
     }
+
+    setCollapsed(localStorage.getItem("sidebarCollapsed") === "1");
   }, []);
+
+  const toggleCollapsed = () => {
+    setCollapsed((prev) => {
+      const next = !prev;
+      localStorage.setItem("sidebarCollapsed", next ? "1" : "0");
+      return next;
+    });
+  };
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
@@ -104,15 +116,16 @@ export function Navbar() {
     setIsOpen(false);
   }, [pathname]);
 
-  function NavList({ onNavigate }: { onNavigate?: () => void }) {
+  function NavList({ onNavigate, collapsed = false }: { onNavigate?: () => void; collapsed?: boolean }) {
     return (
       <nav aria-label="Điều hướng chính" className="flex flex-1 flex-col gap-1 overflow-y-auto p-3">
         {navigation.map((item) => {
           const active = isActivePath(pathname, item.href);
-          const expanded = openSection === item.href;
+          const expanded = !collapsed && openSection === item.href;
           return item.children ? (
             <div key={item.href} className="space-y-1">
               <div
+                title={collapsed ? item.name : undefined}
                 className={`flex items-center rounded-lg transition-colors ${
                   active
                     ? "bg-zinc-900 font-semibold text-zinc-50 dark:bg-zinc-100 dark:text-zinc-900"
@@ -123,23 +136,25 @@ export function Navbar() {
                   to={item.href}
                   onClick={onNavigate}
                   className={`flex flex-1 items-center gap-3 px-3 py-2.5 text-sm ${
-                    !active ? "hover:text-gray-900 dark:hover:text-white" : ""
-                  }`}
+                    collapsed ? "justify-center" : ""
+                  } ${!active ? "hover:text-gray-900 dark:hover:text-white" : ""}`}
                 >
-                  <item.icon className="h-4 w-4" />
-                  {item.name}
+                  <item.icon className="h-4 w-4 shrink-0" />
+                  {!collapsed && item.name}
                 </Link>
-                <button
-                  type="button"
-                  onClick={() => setOpenSection(expanded ? null : item.href)}
-                  aria-expanded={expanded}
-                  aria-label={item.name}
-                  className={`cursor-pointer p-2.5 mr-1 rounded-lg ${
-                    active ? "hover:bg-white/10" : "hover:bg-gray-100 dark:hover:bg-white/10"
-                  }`}
-                >
-                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`} />
-                </button>
+                {!collapsed && (
+                  <button
+                    type="button"
+                    onClick={() => setOpenSection(expanded ? null : item.href)}
+                    aria-expanded={expanded}
+                    aria-label={item.name}
+                    className={`cursor-pointer p-2.5 mr-1 rounded-lg ${
+                      active ? "hover:bg-white/10" : "hover:bg-gray-100 dark:hover:bg-white/10"
+                    }`}
+                  >
+                    <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`} />
+                  </button>
+                )}
               </div>
               {expanded && item.children.map((child) => {
                 const childActive = isActivePath(pathname, child.href);
@@ -165,14 +180,17 @@ export function Navbar() {
               key={item.href}
               to={item.href}
               onClick={onNavigate}
+              title={collapsed ? item.name : undefined}
               className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
+                collapsed ? "justify-center" : ""
+              } ${
                 active
                   ? "bg-zinc-900 font-semibold text-zinc-50 dark:bg-zinc-100 dark:text-zinc-900"
                   : "font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white"
               }`}
             >
-              <item.icon className="h-4 w-4" />
-              {item.name}
+              <item.icon className="h-4 w-4 shrink-0" />
+              {!collapsed && item.name}
             </Link>
           );
         })}
@@ -180,7 +198,23 @@ export function Navbar() {
     );
   }
 
-  function SidebarFooter() {
+  function SidebarFooter({ collapsed = false }: { collapsed?: boolean }) {
+    if (collapsed) {
+      return (
+        <div className="border-t border-gray-200 dark:border-white/10 p-3 flex flex-col items-center gap-2">
+          <OnlineUsers />
+          <button
+            onClick={toggleTheme}
+            className="cursor-pointer p-2 h-9 w-9 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 focus:outline-none rounded-lg border border-gray-300 dark:border-white/20 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+            aria-label="Toggle Dark Mode"
+            title="Dark mode"
+          >
+            {theme === "dark" ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+          </button>
+        </div>
+      );
+    }
+
     return (
       <div className="border-t border-gray-200 dark:border-white/10 p-3 space-y-3">
         <div className="hidden xl:block">
@@ -230,22 +264,54 @@ export function Navbar() {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-gray-200 bg-white sm:flex dark:border-white/10 dark:bg-slate-900">
-        <Link
-          to="/"
-          className="flex items-center gap-2.5 border-b border-gray-200 px-4 py-4 dark:border-white/10 hover:opacity-80 transition-opacity"
-          aria-label="Home"
+      <aside
+        className={`sticky top-0 hidden h-screen shrink-0 flex-col border-r border-gray-200 bg-white transition-[width] duration-200 sm:flex dark:border-white/10 dark:bg-slate-900 ${
+          collapsed ? "w-16" : "w-64"
+        }`}
+      >
+        <div
+          className={`flex items-center gap-2 border-b border-gray-200 px-3 py-4 dark:border-white/10 ${
+            collapsed ? "justify-center" : "justify-between"
+          }`}
         >
-          <img src="/favicon.png" alt="" className="w-8 h-8 object-contain rounded-lg shadow-sm shrink-0" />
-          <div className="min-w-0">
-            <p className="text-base font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
-              {t("app_name")}
-            </p>
-            <p className="truncate text-xs text-gray-500 dark:text-gray-400">{t("slogan")}</p>
-          </div>
-        </Link>
-        <NavList />
-        <SidebarFooter />
+          <Link
+            to="/"
+            className={`flex items-center gap-2.5 hover:opacity-80 transition-opacity min-w-0 ${collapsed ? "justify-center" : ""}`}
+            aria-label="Home"
+          >
+            <img src="/favicon.png" alt="" className="w-8 h-8 object-contain rounded-lg shadow-sm shrink-0" />
+            {!collapsed && (
+              <div className="min-w-0">
+                <p className="text-base font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
+                  {t("app_name")}
+                </p>
+                <p className="truncate text-xs text-gray-500 dark:text-gray-400">{t("slogan")}</p>
+              </div>
+            )}
+          </Link>
+          {!collapsed && (
+            <button
+              onClick={toggleCollapsed}
+              className="cursor-pointer shrink-0 p-1.5 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white"
+              aria-label={t("nav.collapse_sidebar", "Thu gọn menu")}
+              title={t("nav.collapse_sidebar", "Thu gọn menu")}
+            >
+              <PanelLeftClose className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+        {collapsed && (
+          <button
+            onClick={toggleCollapsed}
+            className="cursor-pointer mx-auto mt-2 p-1.5 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white"
+            aria-label={t("nav.expand_sidebar", "Mở rộng menu")}
+            title={t("nav.expand_sidebar", "Mở rộng menu")}
+          >
+            <PanelLeftOpen className="h-4 w-4" />
+          </button>
+        )}
+        <NavList collapsed={collapsed} />
+        <SidebarFooter collapsed={collapsed} />
       </aside>
 
       {/* Mobile top bar — fixed, not a flex-row sibling of the sidebar, so it

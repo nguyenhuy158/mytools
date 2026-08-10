@@ -33,6 +33,8 @@
     "kbd_navigate": "Di chuyển",
     "kbd_open": "để mở",
     "lifestyle_description": "Công cụ cho một cuộc sống tốt hơn.",
+    "collapse_sidebar": "Thu gọn menu",
+    "expand_sidebar": "Mở rộng menu",
     "toast": {
       "language_changed": "Đã chuyển sang Tiếng Việt",
       "dark_mode": "Đã chuyển sang chế độ Tối",
