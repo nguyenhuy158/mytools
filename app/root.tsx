@@ -78,14 +78,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
             fallback={
               <>
                 <div className="hidden sm:block w-64 h-screen shrink-0 bg-white dark:bg-slate-900 border-r border-gray-200 dark:border-white/10" />
-                <div className="sm:hidden h-14 w-full shrink-0 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-white/10" />
+                <div className="fixed inset-x-0 top-0 z-40 h-14 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-white/10 sm:hidden" />
               </>
             }
           >
             <Navbar />
           </Suspense>
           <div className="flex-1 flex flex-col min-w-0">
-            <div className="flex-1 relative">
+            <div className="flex-1 relative pt-14 sm:pt-0">
               {children}
             </div>
             <Footer />
