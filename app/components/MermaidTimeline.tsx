@@ -26,7 +26,7 @@ export function MermaidTimeline({ items }: MermaidTimelineProps) {
       securityLevel: "loose",
       themeVariables: {
         fontSize: "16px",
-        fontFamily: "Inter, sans-serif",
+        fontFamily: "Be Vietnam Pro, sans-serif",
       },
     });
   }, []);
