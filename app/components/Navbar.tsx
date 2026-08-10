@@ -14,7 +14,7 @@ function isActivePath(pathname: string, href: string): boolean {
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  /** Which mobile submenu is expanded. Only one at a time, so the drawer stays short. */
+  /** Which submenu is expanded — desktop sidebar and mobile drawer share this. */
   const [openSection, setOpenSection] = useState<string | null>(null);
   const { t, i18n } = useTranslation();
   const { pathname } = useLocation();
@@ -98,277 +98,183 @@ export function Navbar() {
     { name: t("nav.about"), href: "/about", icon: Info },
   ];
 
-  return (
-    <nav className="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/80 backdrop-blur-md border-b border-gray-200 dark:border-white/10 transition-colors duration-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex">
-            <div className="flex-shrink-0 flex items-center">
-              <Link
-                to="/"
-                className="flex items-center gap-2.5 text-xl font-bold text-gray-900 dark:text-white hover:opacity-80 transition-opacity"
-                aria-label="Home"
+  // Route change closes the mobile drawer, but leaves the expanded section
+  // alone — landing inside "/it/json-tools" should keep IT Tools expanded.
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
+  function NavList({ onNavigate }: { onNavigate?: () => void }) {
+    return (
+      <nav aria-label="Điều hướng chính" className="flex flex-1 flex-col gap-1 overflow-y-auto p-3">
+        {navigation.map((item) => {
+          const active = isActivePath(pathname, item.href);
+          const expanded = openSection === item.href;
+          return item.children ? (
+            <div key={item.href} className="space-y-1">
+              <div
+                className={`flex items-center rounded-lg transition-colors ${
+                  active
+                    ? "bg-zinc-900 font-semibold text-zinc-50 dark:bg-zinc-100 dark:text-zinc-900"
+                    : "font-medium text-gray-600 dark:text-gray-300"
+                }`}
               >
-                <img src="/favicon.png" alt="" className="w-8 h-8 object-contain rounded-lg shadow-sm" />
-                <span className="hidden sm:inline bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
-                  {t("app_name")}
-                </span>
-              </Link>
-            </div>
-            <div className="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-1">
-              {navigation.map((item) => {
-                const active = isActivePath(pathname, item.href);
-                return item.children ? (
-                  <div key={item.href} className="relative group flex items-center">
-                    <Link
-                      to={item.href}
-                      className={`inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
-                        active
-                          ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10"
-                          : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10"
-                      }`}
-                    >
-                      <item.icon className="h-4 w-4" />
-                      {item.name}
-                      <ChevronDown className="h-3.5 w-3.5 text-gray-400 transition-transform duration-200 group-hover:rotate-180 group-hover:text-current" />
-                    </Link>
-                    <div className="absolute left-0 top-full pt-2 w-56 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200 z-50">
-                       <div className="bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-gray-200 dark:border-white/10 overflow-hidden p-1.5">
-                        {item.children.map((child) => {
-                          const childActive = isActivePath(pathname, child.href);
-                          return (
-                            <Link
-                              key={child.href}
-                              to={child.href}
-                              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
-                                childActive
-                                  ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10"
-                                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white"
-                              }`}
-                            >
-                              <span
-                                className={`flex items-center justify-center w-8 h-8 rounded-lg shrink-0 ${
-                                  childActive
-                                    ? "bg-blue-100 dark:bg-blue-500/20"
-                                    : "bg-gray-100 dark:bg-white/10"
-                                }`}
-                              >
-                                <child.icon className="h-4 w-4" />
-                              </span>
-                              {child.name}
-                            </Link>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                ) : (
+                <Link
+                  to={item.href}
+                  onClick={onNavigate}
+                  className={`flex flex-1 items-center gap-3 px-3 py-2.5 text-sm ${
+                    !active ? "hover:text-gray-900 dark:hover:text-white" : ""
+                  }`}
+                >
+                  <item.icon className="h-4 w-4" />
+                  {item.name}
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => setOpenSection(expanded ? null : item.href)}
+                  aria-expanded={expanded}
+                  aria-label={item.name}
+                  className={`cursor-pointer p-2.5 mr-1 rounded-lg ${
+                    active ? "hover:bg-white/10" : "hover:bg-gray-100 dark:hover:bg-white/10"
+                  }`}
+                >
+                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`} />
+                </button>
+              </div>
+              {expanded && item.children.map((child) => {
+                const childActive = isActivePath(pathname, child.href);
+                return (
                   <Link
-                    key={item.href}
-                    to={item.href}
-                    className={`inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
-                      active
-                        ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10"
-                        : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10"
+                    key={child.href}
+                    to={child.href}
+                    onClick={onNavigate}
+                    className={`flex items-center gap-3 ml-4 px-3 py-2 rounded-lg text-sm transition-colors ${
+                      childActive
+                        ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 font-medium"
+                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white"
                     }`}
                   >
-                    <item.icon className="h-4 w-4" />
-                    {item.name}
+                    <child.icon className="h-3.5 w-3.5" />
+                    {child.name}
                   </Link>
                 );
               })}
             </div>
-          </div>
-          <div className="flex items-center gap-2">
-            {/* Mounted once, outside both conditional blocks below, so it
-                shows at every breakpoint without opening a second WebSocket. */}
-            <OnlineUsers />
+          ) : (
+            <Link
+              key={item.href}
+              to={item.href}
+              onClick={onNavigate}
+              className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
+                active
+                  ? "bg-zinc-900 font-semibold text-zinc-50 dark:bg-zinc-100 dark:text-zinc-900"
+                  : "font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white"
+              }`}
+            >
+              <item.icon className="h-4 w-4" />
+              {item.name}
+            </Link>
+          );
+        })}
+      </nav>
+    );
+  }
 
-          <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
-            <div className="hidden xl:block">
-              <TetCountdown variant="compact" />
-            </div>
-
-            {/* Language Switcher */}
+  function SidebarFooter() {
+    return (
+      <div className="border-t border-gray-200 dark:border-white/10 p-3 space-y-3">
+        <div className="hidden xl:block">
+          <TetCountdown variant="compact" />
+        </div>
+        <OnlineUsers />
+        <div className="flex items-center gap-2">
+          {/* Language Switcher */}
+          <div
+            onClick={toggleLanguage}
+            className="bg-gray-100 dark:bg-white/10 dark:backdrop-blur-md p-1 rounded-lg flex items-center relative h-9 flex-1 cursor-pointer border border-gray-300 dark:border-white/20"
+          >
             <div
-              onClick={toggleLanguage}
-              className="bg-gray-100 dark:bg-white/10 dark:backdrop-blur-md p-1 rounded-lg flex items-center relative h-9 w-28 cursor-pointer border border-gray-300 dark:border-white/20"
+              className={`absolute w-[calc(50%-4px)] h-[calc(100%-8px)] top-1 bg-white/30 dark:bg-white/20 rounded-md shadow-lg transition-transform duration-200 ease-in-out ${
+                i18n.language === 'en' ? 'translate-x-[calc(100%+4px)]' : 'translate-x-1'
+              }`}
+            />
+            <div
+              className={`relative z-10 w-1/2 text-xs font-semibold text-center transition-colors duration-200 pointer-events-none flex items-center justify-center gap-1 ${
+                i18n.language === 'vi' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'
+              }`}
             >
-              <div
-                className={`absolute w-[calc(50%-4px)] h-[calc(100%-8px)] top-1 bg-white/30 dark:bg-white/20 rounded-md shadow-lg transition-transform duration-200 ease-in-out ${
-                  i18n.language === 'en' ? 'translate-x-[calc(100%+4px)]' : 'translate-x-1'
-                }`}
-              />
-              <div
-                className={`relative z-10 w-1/2 text-xs font-semibold text-center transition-colors duration-200 pointer-events-none flex items-center justify-center gap-1 ${
-                  i18n.language === 'vi' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'
-                }`}
-              >
-                <span>🇻🇳</span> VI
-              </div>
-              <div
-                className={`relative z-10 w-1/2 text-xs font-semibold text-center transition-colors duration-200 pointer-events-none flex items-center justify-center gap-1 ${
-                  i18n.language === 'en' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'
-                }`}
-              >
-                <span>🇺🇸</span> EN
-              </div>
+              <span>🇻🇳</span> VI
             </div>
-
-            {/* Dark Mode Toggle */}
-            <button
-              onClick={toggleTheme}
-              className="cursor-pointer p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 focus:outline-none rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
-              aria-label="Toggle Dark Mode"
+            <div
+              className={`relative z-10 w-1/2 text-xs font-semibold text-center transition-colors duration-200 pointer-events-none flex items-center justify-center gap-1 ${
+                i18n.language === 'en' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'
+              }`}
             >
-              {theme === "dark" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
-            </button>
+              <span>🇺🇸</span> EN
+            </div>
           </div>
 
-          <div className="-mr-2 flex items-center sm:hidden gap-2">
-            <button
-              onClick={toggleTheme}
-              className="cursor-pointer p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 focus:outline-none"
-            >
-              {theme === "dark" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
-            </button>
-            <button
-              onClick={() => {
-                const next = !isOpen;
-                setIsOpen(next);
-                // Opening the drawer reveals the section you're already in, collapses the rest.
-                if (next) {
-                  setOpenSection(
-                    navigation.find((item) => item.children && isActivePath(pathname, item.href))?.href ?? null
-                  );
-                }
-              }}
-              className="cursor-pointer inline-flex items-center justify-center p-2 rounded-md text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 focus:outline-none"
-            >
-              <span className="sr-only">Open main menu</span>
-              {isOpen ? (
-                <X className="block h-6 w-6" aria-hidden="true" />
-              ) : (
-                <Menu className="block h-6 w-6" aria-hidden="true" />
-              )}
-            </button>
-          </div>
-          </div>
+          {/* Dark Mode Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="cursor-pointer p-2 h-9 w-9 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 focus:outline-none rounded-lg border border-gray-300 dark:border-white/20 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+            aria-label="Toggle Dark Mode"
+          >
+            {theme === "dark" ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+          </button>
         </div>
       </div>
+    );
+  }
 
+  return (
+    <>
+      {/* Desktop sidebar */}
+      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-gray-200 bg-white sm:flex dark:border-white/10 dark:bg-slate-900">
+        <Link
+          to="/"
+          className="flex items-center gap-2.5 border-b border-gray-200 px-4 py-4 dark:border-white/10 hover:opacity-80 transition-opacity"
+          aria-label="Home"
+        >
+          <img src="/favicon.png" alt="" className="w-8 h-8 object-contain rounded-lg shadow-sm shrink-0" />
+          <div className="min-w-0">
+            <p className="text-base font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
+              {t("app_name")}
+            </p>
+            <p className="truncate text-xs text-gray-500 dark:text-gray-400">{t("slogan")}</p>
+          </div>
+        </Link>
+        <NavList />
+        <SidebarFooter />
+      </aside>
+
+      {/* Mobile top bar */}
+      <div className="sticky top-0 z-40 flex h-14 shrink-0 items-center justify-between border-b border-gray-200 bg-white/90 px-4 backdrop-blur-md dark:border-white/10 dark:bg-slate-900/80 sm:hidden">
+        <Link to="/" className="flex items-center gap-2 text-lg font-bold hover:opacity-80 transition-opacity" aria-label="Home">
+          <img src="/favicon.png" alt="" className="w-7 h-7 object-contain rounded-lg shadow-sm" />
+          <span className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
+            {t("app_name")}
+          </span>
+        </Link>
+        <button
+          onClick={() => setIsOpen((prev) => !prev)}
+          className="cursor-pointer inline-flex items-center justify-center p-2 rounded-md text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 focus:outline-none"
+        >
+          <span className="sr-only">Open main menu</span>
+          {isOpen ? <X className="block h-6 w-6" aria-hidden="true" /> : <Menu className="block h-6 w-6" aria-hidden="true" />}
+        </button>
+      </div>
+
+      {/* Mobile drawer */}
       {isOpen && (
-        <div className="sm:hidden bg-gray-50 dark:bg-slate-800/80 dark:backdrop-blur-md border-t border-gray-200 dark:border-white/10">
-          {/* Cap the drawer at the viewport below the 4rem header so a long menu scrolls
-              inside itself instead of running off the bottom of the screen. */}
-          <div className="pt-2 pb-3 px-2 space-y-1 max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain">
-            {navigation.map((item) => {
-              const active = isActivePath(pathname, item.href);
-              const expanded = openSection === item.href;
-              return item.children ? (
-                <div key={item.href} className="space-y-1">
-                  <div
-                    className={`flex items-center rounded-lg ${
-                      active
-                        ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10"
-                        : "text-gray-700 dark:text-gray-300"
-                    }`}
-                  >
-                    <Link
-                      to={item.href}
-                      className="flex flex-1 items-center gap-3 px-3 py-2.5 text-base font-medium"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      <span
-                        className={`flex items-center justify-center w-9 h-9 rounded-lg shrink-0 ${
-                          active ? "bg-blue-100 dark:bg-blue-500/20" : "bg-gray-100 dark:bg-white/10"
-                        }`}
-                      >
-                        <item.icon className="h-5 w-5" />
-                      </span>
-                      {item.name}
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={() => setOpenSection(expanded ? null : item.href)}
-                      aria-expanded={expanded}
-                      aria-label={item.name}
-                      className="cursor-pointer p-2.5 mr-1 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10"
-                    >
-                      <ChevronDown
-                        className={`h-5 w-5 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
-                      />
-                    </button>
-                  </div>
-                  {expanded && item.children.map((child) => {
-                    const childActive = isActivePath(pathname, child.href);
-                    return (
-                      <Link
-                        key={child.href}
-                        to={child.href}
-                        className={`flex items-center gap-3 ml-4 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                          childActive
-                            ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10"
-                            : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white"
-                        }`}
-                        onClick={() => setIsOpen(false)}
-                      >
-                        <span
-                          className={`flex items-center justify-center w-7 h-7 rounded-md shrink-0 ${
-                            childActive ? "bg-blue-100 dark:bg-blue-500/20" : "bg-gray-100 dark:bg-white/10"
-                          }`}
-                        >
-                          <child.icon className="h-3.5 w-3.5" />
-                        </span>
-                        {child.name}
-                      </Link>
-                    );
-                  })}
-                </div>
-              ) : (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-base font-medium transition-colors ${
-                    active
-                      ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10"
-                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white"
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  <span
-                    className={`flex items-center justify-center w-9 h-9 rounded-lg shrink-0 ${
-                      active ? "bg-blue-100 dark:bg-blue-500/20" : "bg-gray-100 dark:bg-white/10"
-                    }`}
-                  >
-                    <item.icon className="h-5 w-5" />
-                  </span>
-                  {item.name}
-                </Link>
-              );
-            })}
-              <div className="pl-3 pr-4 py-2 flex items-center justify-between">
-                <span className="text-gray-700 dark:text-gray-300 text-base font-medium">{t("nav.language")}</span>
-               <div
-                  onClick={toggleLanguage}
-                  className="flex bg-gray-100 dark:bg-white/10 dark:backdrop-blur-md p-1 rounded-lg w-28 relative cursor-pointer border border-gray-300 dark:border-white/20"
-                >
-                   <div
-                     className={`absolute w-[calc(50%-4px)] h-[calc(100%-8px)] top-1 bg-white/30 dark:bg-white/20 rounded-md shadow-lg transition-transform duration-200 ease-in-out ${
-                       i18n.language === 'en' ? 'translate-x-[calc(100%+4px)]' : 'translate-x-1'
-                     }`}
-                   />
-                  <div className={`relative z-10 w-1/2 text-xs font-semibold py-1 text-center pointer-events-none flex items-center justify-center gap-1 ${i18n.language === 'vi' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>
-                    <span>🇻🇳</span> VI
-                  </div>
-                  <div className={`relative z-10 w-1/2 text-xs font-semibold py-1 text-center pointer-events-none flex items-center justify-center gap-1 ${i18n.language === 'en' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>
-                    <span>🇺🇸</span> EN
-                  </div>
-               </div>
-             </div>
+        <div className="fixed inset-0 z-30 sm:hidden" role="dialog" aria-modal="true">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setIsOpen(false)} />
+          <div className="absolute left-0 top-14 bottom-0 flex w-72 max-w-[85vw] flex-col overflow-y-auto border-r border-gray-200 bg-gray-50 dark:border-white/10 dark:bg-slate-800/95">
+            <NavList onNavigate={() => setIsOpen(false)} />
+            <SidebarFooter />
           </div>
         </div>
       )}
-    </nav>
+    </>
   );
 }

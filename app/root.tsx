@@ -72,15 +72,24 @@ export function Layout({ children }: { children: React.ReactNode }) {
           }}
         />
       </head>
-      <body className="flex flex-col min-h-screen overflow-x-hidden bg-white dark:bg-slate-800">
+      <body className="flex min-h-screen overflow-x-hidden bg-white dark:bg-slate-800">
         <CommandMenu>
-          <Suspense fallback={<div className="h-16 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-white/10" />}>
+          <Suspense
+            fallback={
+              <>
+                <div className="hidden sm:block w-64 h-screen shrink-0 bg-white dark:bg-slate-900 border-r border-gray-200 dark:border-white/10" />
+                <div className="sm:hidden h-14 shrink-0 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-white/10" />
+              </>
+            }
+          >
             <Navbar />
           </Suspense>
-          <div className="flex-1 relative">
-            {children}
+          <div className="flex-1 flex flex-col min-w-0">
+            <div className="flex-1 relative">
+              {children}
+            </div>
+            <Footer />
           </div>
-          <Footer />
           <Toaster position="bottom-right" richColors />
           <ScrollRestoration />
           <Scripts />
