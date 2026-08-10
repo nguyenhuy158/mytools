@@ -78,7 +78,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             fallback={
               <>
                 <div className="hidden sm:block w-64 h-screen shrink-0 bg-white dark:bg-slate-900 border-r border-gray-200 dark:border-white/10" />
-                <div className="sm:hidden h-14 shrink-0 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-white/10" />
+                <div className="sm:hidden h-14 w-full shrink-0 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-white/10" />
               </>
             }
           >

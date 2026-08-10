@@ -249,7 +249,7 @@ export function Navbar() {
       </aside>
 
       {/* Mobile top bar */}
-      <div className="sticky top-0 z-40 flex h-14 shrink-0 items-center justify-between border-b border-gray-200 bg-white/90 px-4 backdrop-blur-md dark:border-white/10 dark:bg-slate-900/80 sm:hidden">
+      <div className="sticky top-0 z-40 flex h-14 w-full shrink-0 items-center justify-between border-b border-gray-200 bg-white/90 px-4 backdrop-blur-md dark:border-white/10 dark:bg-slate-900/80 sm:hidden">
         <Link to="/" className="flex items-center gap-2 text-lg font-bold hover:opacity-80 transition-opacity" aria-label="Home">
           <img src="/favicon.png" alt="" className="w-7 h-7 object-contain rounded-lg shadow-sm" />
           <span className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
