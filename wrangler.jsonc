@@ -61,6 +61,7 @@
 			]
 		}
 	],
+	"workers_dev": false,
 	"routes": [
 		{
 			"pattern": "huyab.click",
