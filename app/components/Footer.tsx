@@ -65,6 +65,7 @@ export function Footer() {
                 <div className="relative flex-1">
                   <input
                     type="email"
+                    aria-label={t("newsletter.placeholder")}
                     placeholder={t("newsletter.placeholder")}
                     value={email}
                     onChange={(e) => {

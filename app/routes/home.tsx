@@ -106,6 +106,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 
           <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-6 space-y-6">
             <textarea
+                aria-label={t("home.title")}
                 className="w-full h-80 p-4 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-950 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none resize-y text-lg text-slate-700 dark:text-gray-300 placeholder-gray-400 transition-all"
                 placeholder={t("home.placeholder")}
                 value={text}
