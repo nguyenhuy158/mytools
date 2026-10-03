@@ -46,7 +46,7 @@ How this repo fits with the others:
   `check.yml` CI. ToolHub has no sign-in, so no `@huyab/sso`.
 - Talks to: the shared D1 `db` (`projects` table) and every app listed there,
   which `/projects` pings for uptime (ai-english, chia-keo, notes, monitor,
-  share, cardstat, hooks, picaku-mul, resume); external Odoo instances over
+  share, cardstat, hooks, games, resume); external Odoo instances over
   JSON-RPC from the Odoo inspector. No other repo calls mytools.
 
 ## Build, Test, and Development Commands
