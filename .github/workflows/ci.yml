@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Typecheck, test, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      # Same flag Cloudflare Workers Builds uses: a lockfile that drifts from
+      # package.json fails here on the PR instead of silently in the deploy.
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm check
+
+      # Workers Builds only runs `pnpm run build`, so this is the only place
+      # the unit tests gate anything.
+      - name: Unit tests
+        run: pnpm test:run
+
+      - name: Build
+        run: pnpm build

@@ -136,7 +136,10 @@ the long-dead `huycode.click` for months.
   `GET /accounts/{account_id}/builds/workers/{script_tag}/builds`.
 - **Tests do not gate deploys.** `build_command` is `pnpm run build` only. A
   build error (TypeScript, bad import) blocks the deploy; logic that compiles
-  but is wrong ships straight to production. Run `pnpm test:run` before pushing.
+  but is wrong ships straight to production. GitHub Actions
+  (`.github/workflows/ci.yml`: check, test:run, build) runs on PRs and pushes
+  but runs beside Workers Builds, not before it — so a red CI on `main` does
+  not stop the deploy. Run `pnpm test:run` before pushing.
 
 ## Agent-Specific Instructions
 
