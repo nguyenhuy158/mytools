@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { PDFDocument } from "pdf-lib";
 import { PageHeader } from "../../components/PageHeader";
 import { ButtonGroup } from "../../components/ButtonGroup";
+import { downloadFile } from "../../utils/download";
 
 export function meta() {
     return [
@@ -98,7 +99,7 @@ export default function PDFTools() {
             }
 
             const pdfBytes = await mergedPdf.save();
-            downloadPdf(pdfBytes, "merged-document.pdf");
+            downloadFile(pdfBytes as BlobPart, "application/pdf", "merged-document.pdf");
             toast.success(t("pdf_tools.toast.merged"));
         } catch (error) {
             console.error(error);
@@ -148,22 +149,13 @@ export default function PDFTools() {
             copiedPages.forEach(page => newPdf.addPage(page));
 
             const pdfBytes = await newPdf.save();
-            downloadPdf(pdfBytes, `${splitFile.name.replace(".pdf", "")}-split.pdf`);
+            downloadFile(pdfBytes as BlobPart, "application/pdf", `${splitFile.name.replace(".pdf", "")}-split.pdf`);
             toast.success(t("pdf_tools.toast.split"));
 
         } catch (error) {
             console.error(error);
             toast.error(t("pdf_tools.toast.split_error"));
         }
-    };
-
-    const downloadPdf = (bytes: Uint8Array, filename: string) => {
-        const blob = new Blob([bytes as any], { type: "application/pdf" });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = filename;
-        link.click();
-        URL.revokeObjectURL(link.href);
     };
 
     return (

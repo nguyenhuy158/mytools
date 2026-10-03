@@ -7,6 +7,7 @@ import { ButtonGroup } from "../components/ButtonGroup";
 import { InputSection } from "../components/InputSection";
 import { HistorySection } from "../components/HistorySection";
 import { useLocalStorageHistory } from "../utils/history";
+import { downloadFile } from "../utils/download";
 
 export function meta() {
   return [
@@ -193,16 +194,7 @@ export default function JsonTools() {
   const handleDownload = () => {
     const content = output || input;
     if (!content) return;
-
-    const blob = new Blob([content], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "data.json";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    downloadFile(content, "application/json", "data.json");
   };
 
   const handleRestoreHistory = (item: string) => {

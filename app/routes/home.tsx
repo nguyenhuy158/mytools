@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import type { Route } from "./+types/home";
 import { useLocalStorageHistory } from "../utils/history";
+import { downloadFile } from "../utils/download";
 import * as textCase from "../utils/text-case";
 
 export function meta({}: Route.MetaArgs) {
@@ -55,13 +56,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 
   const handleDownload = () => {
       if (!text) return;
-      const element = document.createElement("a");
-      const file = new Blob([text], {type: 'text/plain'});
-      element.href = URL.createObjectURL(file);
-      element.download = "text.txt";
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);
+      downloadFile(text, "text/plain", "text.txt");
       toast.success(t("home.toast.download_success"));
   };
 

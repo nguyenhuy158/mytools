@@ -8,6 +8,7 @@ import { NotesList } from "../../components/NotesList";
 import type { Note, NoteListItem } from "../../utils/notes";
 import { htmlToMarkdown } from "../../utils/notes";
 import { notesApi } from "../../utils/notesApi";
+import { downloadFile } from "../../utils/download";
 
 export function meta() {
   return [
@@ -168,14 +169,11 @@ export default function NotesPage() {
   // Export note as JSON
   const handleExportJSON = useCallback(() => {
     if (!currentNote) return;
-    const dataStr = JSON.stringify(currentNote, null, 2);
-    const blob = new Blob([dataStr], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${currentNote.title.replace(/[^a-z0-9]/gi, "_")}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadFile(
+      JSON.stringify(currentNote, null, 2),
+      "application/json",
+      `${currentNote.title.replace(/[^a-z0-9]/gi, "_")}.json`,
+    );
     toast.success(t("notes.toast.exported") || "Note exported");
   }, [currentNote, t]);
 
@@ -183,13 +181,7 @@ export default function NotesPage() {
   const handleExportMarkdown = useCallback(() => {
     if (!currentNote) return;
     const markdown = `# ${currentNote.title}\n\n${htmlToMarkdown(currentNote.content)}`;
-    const blob = new Blob([markdown], { type: "text/markdown" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${currentNote.title.replace(/[^a-z0-9]/gi, "_")}.md`;
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadFile(markdown, "text/markdown", `${currentNote.title.replace(/[^a-z0-9]/gi, "_")}.md`);
     toast.success(t("notes.toast.exported") || "Note exported");
   }, [currentNote, t]);
 
