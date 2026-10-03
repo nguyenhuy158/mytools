@@ -238,7 +238,7 @@ Tests run automatically on:
 
 ```bash
 # Local pre-commit check
-pnpm typecheck && pnpm test:run && pnpm build
+pnpm check && pnpm test:run && pnpm build
 ```
 
 ## Troubleshooting

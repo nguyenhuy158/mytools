@@ -630,7 +630,7 @@ Deployment is done using the Wrangler CLI.
 To build and deploy directly to production:
 
 ```sh
-pnpm deploy
+pnpm run deploy
 ```
 
 To deploy a preview URL:

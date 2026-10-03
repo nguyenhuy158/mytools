@@ -39,14 +39,18 @@ Long-form docs: `README.md` (architecture and flows), `ROUTES.md`,
 
 - `pnpm install`: install dependencies (runs `wrangler types` on postinstall).
 - `pnpm dev`: start the React Router dev server with HMR.
-- `pnpm typecheck`: generate Worker and route types, then `tsc -b`.
+- `pnpm check`: generate Worker and route types, then `tsc -b`.
 - `pnpm build`: production build into `build/client` and `build/server`.
 - `pnpm test`: Vitest in watch mode; `pnpm test:run` runs once,
   `pnpm test:coverage` adds coverage, `pnpm test:ui` opens the Vitest UI.
+- `pnpm lint`: Biome lint + format check (`biome check .`); `pnpm format`
+  rewrites files with Biome. Existing code predates Biome, so format only the
+  files you touch rather than the whole tree.
 - `pnpm preview`: build, then serve the production build locally.
 - `pnpm shots`: refresh the project screenshots in `public/projects/`.
 
-Use `pnpm` for all package commands, never `npm`.
+Use `pnpm` for all package commands, never `npm` (pinned via `packageManager`,
+Node version in `.nvmrc`).
 
 ## Coding Style & Naming Conventions
 
@@ -137,7 +141,7 @@ the long-dead `huycode.click` for months.
 ## Agent-Specific Instructions
 
 Keep responses short and focused. If a requirement is unclear, ask before making
-assumptions. Always run `pnpm typecheck` and `pnpm build` after changes.
+assumptions. Always run `pnpm check` and `pnpm build` after changes.
 Design UI/UX to fit inside a single viewport by default. Avoid page-level
 scrolling; use compact layouts, tabs, panes, or contained internal lists when
 content can overflow.

@@ -9,7 +9,7 @@ This document outlines how to execute tests for ToolHub project.
 pnpm install
 
 # Run all type checks and tests
-pnpm typecheck && pnpm test:run
+pnpm check && pnpm test:run
 
 # Watch mode for development
 pnpm test
@@ -26,7 +26,7 @@ pnpm test:ui
 | `pnpm test:run` | Run all tests once | CI/CD |
 | `pnpm test:ui` | Interactive UI dashboard | Development |
 | `pnpm test:coverage` | Generate coverage report | Analysis |
-| `pnpm typecheck` | Type safety check | Required |
+| `pnpm check` | Type safety check | Required |
 | `pnpm build` | Production build | Required |
 
 ## Test Categories
@@ -57,7 +57,7 @@ Tests      50 passed (50)
 
 **Command**:
 ```bash
-pnpm typecheck
+pnpm check
 ```
 
 **Verifies**:
@@ -101,7 +101,7 @@ See [TESTING.md](./TESTING.md) for comprehensive manual test cases:
 
 ```bash
 # 1. Type check
-pnpm typecheck
+pnpm check
 
 # 2. Run automated tests
 pnpm test:run
@@ -140,7 +140,7 @@ jobs:
           cache: "pnpm"
       
       - run: pnpm install
-      - run: pnpm typecheck
+      - run: pnpm check
       - run: pnpm test:run
       - run: pnpm build
 ```
@@ -171,7 +171,7 @@ open coverage/index.html
 
 ### Before Pull Request
 ```bash
-pnpm typecheck
+pnpm check
 pnpm test:run
 pnpm build
 ```
@@ -179,7 +179,7 @@ pnpm build
 ### Before Deployment
 ```bash
 # Full verification
-pnpm typecheck && pnpm test:run && pnpm build
+pnpm check && pnpm test:run && pnpm build
 
 # Manual smoke test
 pnpm preview
@@ -206,7 +206,7 @@ pnpm test:run
 ### Type Errors During Build
 ```bash
 # Generate types
-pnpm typecheck
+pnpm check
 
 # Check tsconfig.json is valid
 cat tsconfig.json | jq .

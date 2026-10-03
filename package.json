@@ -2,18 +2,24 @@
 	"name": "toolhub",
 	"private": true,
 	"type": "module",
+	"packageManager": "pnpm@11.7.0",
+	"engines": {
+		"node": ">=22"
+	},
 	"scripts": {
-		"build": "react-router build",
-		"cf-typegen": "wrangler types",
-		"deploy": "pnpm build && wrangler deploy --config build/server/wrangler.json",
 		"dev": "react-router dev",
-		"postinstall": "pnpm cf-typegen",
+		"build": "react-router build",
 		"preview": "pnpm build && vite preview",
-		"typecheck": "pnpm cf-typegen && react-router typegen && tsc -b",
+		"check": "pnpm cf-typegen && react-router typegen && tsc -b",
+		"lint": "biome check .",
+		"format": "biome format --write .",
 		"test": "vitest",
-		"test:ui": "vitest --ui",
 		"test:run": "vitest run",
+		"test:ui": "vitest --ui",
 		"test:coverage": "vitest run --coverage",
+		"deploy": "pnpm build && wrangler deploy --config build/server/wrangler.json",
+		"cf-typegen": "wrangler types",
+		"postinstall": "pnpm cf-typegen",
 		"shots": "node scripts/refresh-project-shots.mjs"
 	},
 	"dependencies": {
@@ -53,6 +59,7 @@
 		"workbox-window": "^7.4.1"
 	},
 	"devDependencies": {
+		"@biomejs/biome": "^2.5.15",
 		"@cloudflare/vite-plugin": "^1.13.5",
 		"@react-router/dev": "^7.10.0",
 		"@tailwindcss/vite": "^4.1.13",

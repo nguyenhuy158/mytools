@@ -70,7 +70,7 @@ pnpm test:coverage     # Coverage report
 
 ### Type & Build Check
 ```bash
-pnpm typecheck         # TypeScript validation
+pnpm check         # TypeScript validation
 pnpm build             # Production build
 pnpm preview           # Manual testing
 ```
@@ -78,7 +78,7 @@ pnpm preview           # Manual testing
 ### Pre-Deployment
 ```bash
 # All-in-one verification
-pnpm typecheck && pnpm test:run && pnpm build && pnpm preview
+pnpm check && pnpm test:run && pnpm build && pnpm preview
 ```
 
 ---
@@ -127,7 +127,7 @@ pnpm typecheck && pnpm test:run && pnpm build && pnpm preview
 
 ### Before Each Commit
 - [ ] Run `pnpm test:run` - All tests pass
-- [ ] Run `pnpm typecheck` - No type errors
+- [ ] Run `pnpm check` - No type errors
 - [ ] Manually test affected features
 
 ### Before Pull Request
@@ -202,7 +202,7 @@ pnpm test
 
 ### 2. Before Commit
 ```bash
-pnpm typecheck
+pnpm check
 pnpm test:run
 # Verify code quality
 ```
@@ -210,7 +210,7 @@ pnpm test:run
 ### 3. Before Deployment
 ```bash
 # Full verification
-pnpm typecheck && pnpm test:run && pnpm build
+pnpm check && pnpm test:run && pnpm build
 pnpm preview
 # Manual smoke test in browser
 ```

@@ -90,10 +90,10 @@ A comprehensive collection of essential online tools built with modern web techn
 | `pnpm dev` | Start development server with HMR |
 | `pnpm build` | Create production build |
 | `pnpm preview` | Preview production build locally |
-| `pnpm typecheck` | Run TypeScript type checking |
-| `pnpm deploy` | Build and deploy to Cloudflare |
+| `pnpm check` | Run TypeScript type checking |
+| `pnpm run deploy` | Build and deploy to Cloudflare |
 
-1. **Type Checking**: Always run `pnpm typecheck` before committing
+1. **Type Checking**: Always run `pnpm check` before committing
 2. **Build Verification**: Run `pnpm build` to ensure production compatibility
 3. **Code Style**: Follow the established patterns in `STYLE_GUIDE.md`
 4. **Testing**: Manual testing via browser (no automated test suite currently)
@@ -110,7 +110,7 @@ The project uses Cloudflare Workers environment variables:
 
 **Automatic Deployment:**
 ```bash
-pnpm deploy
+pnpm run deploy
 ```
 
 **Manual Deployment Steps:**
@@ -389,7 +389,7 @@ function MyComponent() {
 3. **Make your changes**
 4. **Test thoroughly**
    ```bash
-   pnpm typecheck
+   pnpm check
    pnpm build
    ```
 5. **Commit with clear messages**

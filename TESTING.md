@@ -6,7 +6,7 @@ Since the project uses no test runner, this guide provides **manual testing proc
 
 ```bash
 # Build & verify no TypeScript errors
-pnpm typecheck
+pnpm check
 
 # Production build
 pnpm build
@@ -635,7 +635,7 @@ After manual testing, document findings:
 ## 🚀 Pre-Release Checklist
 
 - [ ] All manual tests passed
-- [ ] TypeScript: `pnpm typecheck` ✅
+- [ ] TypeScript: `pnpm check` ✅
 - [ ] Build: `pnpm build` ✅
 - [ ] No console errors in production
 - [ ] Lighthouse score > 90
