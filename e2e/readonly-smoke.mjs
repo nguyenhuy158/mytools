@@ -34,13 +34,6 @@ const PAGES = [
   ...(LOCAL ? [] : [["/projects", null]]),
   ["/about", null],
   ["/liquid-glass", null],
-  ["/games", null],
-  ["/games/2048", null],
-  ["/games/snake", null],
-  ["/games/minesweeper", null],
-  ["/games/tetris", null],
-  ["/games/sudoku", null],
-  ["/games/loto", null],
 ];
 
 let passed = 0;
@@ -99,6 +92,27 @@ try {
   // 2. Unknown routes are a 404, not a crash.
   await get("/definitely-not-a-route", 404, { "user-agent": "Mozilla/5.0" });
   ok("unknown route returns 404");
+
+  // 2b. The games moved to games.huyab.click: old links redirect there.
+  //     `wrangler dev` rewrites the huyab.click zone in Location headers to
+  //     the local host, so locally the target reads games.127.0.0.1:<port>.
+  const gamesOrigin = LOCAL
+    ? `https://games.${new URL(BASE).host}`
+    : "https://games.huyab.click";
+  for (const [path, target] of [
+    ["/games", "/"],
+    ["/games/2048", "/2048/"],
+    ["/games/tetris", "/tetris/"],
+    ["/games/sudoku", "/sudoku/"],
+    ["/games/loto?room=abc", "/loto/?room=abc"],
+    ["/games/snake", "/nokia/snake/"],
+    ["/games/minesweeper", "/do-min/"],
+  ]) {
+    const location = (await get(path, 301)).headers.get("location");
+    if (location !== `${gamesOrigin}${target}`)
+      throw new Error(`${path} redirects to ${location}`);
+  }
+  ok("/games/* redirects to games.huyab.click");
 
   // 3. Server-backed read endpoint.
   const { holidays } = await (await get("/api/holidays", 200)).json();

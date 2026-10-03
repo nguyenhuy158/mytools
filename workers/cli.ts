@@ -247,7 +247,7 @@ export async function handleCliRequest(
   }
 
   // `-h` as a query param only counts on paths this module owns, so that
-  // /games?h and friends keep rendering their real page.
+  // /calendar?h and friends keep rendering their real page.
   if (helpAsked && (convert || (head === undefined && cli))) {
     return wantsJson(request, url)
       ? json({ cases: Object.keys(MODES), aliases: ALIASES, usage: USAGE })
@@ -264,7 +264,7 @@ export async function handleCliRequest(
     return cli ? text(BANNER) : null;
   }
 
-  // Not a case name: fall through so /about, /games, /api/... keep working.
+  // Not a case name: fall through so /about, /calendar, /api/... keep working.
   if (!convert) return null;
 
   const input = await readInput(request, url, rest);

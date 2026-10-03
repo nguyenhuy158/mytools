@@ -5,8 +5,6 @@ export default [
   // API Routes
   route("api/notes", "routes/api.notes.tsx"),
   route("api/notes/:id", "routes/api.notes_.$id.tsx"),
-  route("api/loto/create-room", "routes/api.loto.create-room.tsx"),
-  route("api/loto/room/:roomId/ws", "routes/api.loto.room.$roomId.ws.tsx"),
   route("api/online-counter/ws", "routes/api.online-counter.ws.tsx"),
   route("api/holidays", "routes/api.holidays.tsx"),
   route("api/projects-status", "routes/api.projects-status.tsx"),
@@ -33,13 +31,4 @@ export default [
   route("projects", "routes/projects.tsx"),
   route("about", "routes/about.tsx"),
   route("liquid-glass", "routes/liquid-glass.tsx"),
-  route("games", "routes/games.tsx", [
-    index("routes/games-home.tsx"),
-    route("2048", "routes/2048.tsx"),
-    route("snake", "routes/snake.tsx"),
-    route("minesweeper", "routes/minesweeper.tsx"),
-    route("tetris", "routes/games/tetris.tsx"),
-    route("sudoku", "routes/games/sudoku.tsx"),
-    route("loto", "routes/games/loto.tsx"),
-  ]),
 ] satisfies RouteConfig;

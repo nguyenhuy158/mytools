@@ -38,15 +38,7 @@ graph TB
             Quotes[💭 Random Quotes]
         end
 
-        subgraph "Games Section"
-            Games[🎮 Games Hub]
-            Game2048[2️⃣0️⃣4️⃣8️⃣ 2048]
-            Snake[🐍 Snake]
-            Minesweeper[💣 Minesweeper]
-            Tetris[🧱 Tetris]
-            Sudoku[🔢 Sudoku]
-            Loto[🎲 Loto]
-        end
+        Games[🎮 Games → games.huyab.click 301]
 
         Calendar[📅 Calendar]
         About[ℹ️ About]
@@ -54,8 +46,6 @@ graph TB
 
     subgraph "API Layer"
         NotesAPI[📝 Notes API]
-        LotoAPI[🎲 Loto API]
-        WSLoto[🔌 WebSocket Loto]
     end
 
     subgraph "Data Layer"
@@ -100,19 +90,8 @@ graph TB
     Lifestyle --> Pomodoro
     Lifestyle --> Quotes
 
-    Games --> Game2048
-    Games --> Snake
-    Games --> Minesweeper
-    Games --> Tetris
-    Games --> Sudoku
-    Games --> Loto
-
     Notes -.->|CRUD| NotesAPI
     NotesAPI -.->|Store| LocalStorage
-
-    Loto -.->|Create Room| LotoAPI
-    Loto -.->|Real-time| WSLoto
-    WSLoto -.->|Persist| CloudflareKV
 
     JSON -.->|History| LocalStorage
     Pomodoro -.->|State| SessionState
@@ -300,130 +279,6 @@ graph TB
     style QuotesDisplay fill:#fff9c4
 ```
 
-### 🎮 Games Section Flow
-
-```mermaid
-graph TB
-    subgraph "Games Hub"
-        GamesHome[🏠 Games Home]
-    end
-
-    subgraph "2048 Game"
-        G2048Init[🎬 Initialize Grid]
-        G2048Input[⌨️ Keyboard/Swipe]
-        G2048Move[➡️ Move Tiles]
-        G2048Merge[🔗 Merge Tiles]
-        G2048Score[🏆 Update Score]
-        G2048Check[❓ Check Win/Lose]
-    end
-
-    subgraph "Snake Game"
-        SnakeInit[🐍 Initialize Snake]
-        SnakeMove[➡️ Auto Movement]
-        SnakeInput[⌨️ Direction Control]
-        SnakeFood[🍎 Generate Food]
-        SnakeCollision[💥 Collision Check]
-        SnakeGrow[📈 Grow Snake]
-        SnakeScore[🏆 Update Score]
-    end
-
-    subgraph "Minesweeper"
-        MineInit[💣 Generate Mines]
-        MineGrid[📊 Create Grid]
-        MineClick[🖱️ Cell Click]
-        MineReveal[👁️ Reveal Cell]
-        MineFlag[🚩 Flag Cell]
-        MineCheck[✅ Check Win]
-    end
-
-    subgraph "Tetris"
-        TetrisInit[🧱 Initialize Board]
-        TetrisSpawn[📦 Spawn Tetromino]
-        TetrisMove[⬇️ Auto Fall]
-        TetrisRotate[🔄 Rotate]
-        TetrisPlace[📍 Place Piece]
-        TetrisClear[💥 Clear Lines]
-        TetrisScore[🏆 Update Score]
-        TetrisLevel[⬆️ Increase Level]
-    end
-
-    subgraph "Sudoku"
-        SudokuInit[🔢 Generate Puzzle]
-        SudokuInput[✏️ Number Input]
-        SudokuValidate[✅ Validate Move]
-        SudokuHint[💡 Show Hint]
-        SudokuCheck[🎯 Check Solution]
-    end
-
-    subgraph "Loto (Multiplayer)"
-        LotoCreate[🎲 Create Room]
-        LotoJoin[👥 Join Room]
-        LotoWS[🔌 WebSocket Connect]
-        LotoCall[📢 Call Number]
-        LotoMark[✓ Mark Card]
-        LotoWin[🏆 Check Bingo]
-        LotoBroadcast[📡 Broadcast State]
-    end
-
-    GamesHome --> G2048Init
-    GamesHome --> SnakeInit
-    GamesHome --> MineInit
-    GamesHome --> TetrisInit
-    GamesHome --> SudokuInit
-    GamesHome --> LotoCreate
-
-    G2048Init --> G2048Input
-    G2048Input --> G2048Move
-    G2048Move --> G2048Merge
-    G2048Merge --> G2048Score
-    G2048Score --> G2048Check
-
-    SnakeInit --> SnakeMove
-    SnakeMove --> SnakeInput
-    SnakeInput --> SnakeCollision
-    SnakeCollision -->|No| SnakeFood
-    SnakeFood --> SnakeGrow
-    SnakeGrow --> SnakeScore
-
-    MineInit --> MineGrid
-    MineGrid --> MineClick
-    MineClick --> MineReveal
-    MineClick --> MineFlag
-    MineReveal --> MineCheck
-
-    TetrisInit --> TetrisSpawn
-    TetrisSpawn --> TetrisMove
-    TetrisMove --> TetrisRotate
-    TetrisRotate --> TetrisPlace
-    TetrisPlace --> TetrisClear
-    TetrisClear --> TetrisScore
-    TetrisScore --> TetrisLevel
-    TetrisLevel --> TetrisSpawn
-
-    SudokuInit --> SudokuInput
-    SudokuInput --> SudokuValidate
-    SudokuValidate --> SudokuCheck
-    SudokuInput --> SudokuHint
-
-    LotoCreate --> LotoWS
-    LotoJoin --> LotoWS
-    LotoWS --> LotoCall
-    LotoCall --> LotoBroadcast
-    LotoBroadcast --> LotoMark
-    LotoMark --> LotoWin
-
-    LotoWS -.->|Persist| CloudflareKV[(☁️ Cloudflare KV)]
-    G2048Score -.->|Save| LocalStorage[(💾 Local Storage)]
-    SnakeScore -.->|Save| LocalStorage
-    TetrisScore -.->|Save| LocalStorage
-
-    style G2048Check fill:#ffeb3b
-    style SnakeCollision fill:#ff5252
-    style MineReveal fill:#4caf50
-    style TetrisClear fill:#2196f3
-    style LotoBroadcast fill:#9c27b0
-```
-
 ### 🔌 API & Infrastructure
 
 ```mermaid
@@ -438,19 +293,17 @@ graph TB
         NotesPOST[POST /api/notes]
         NotesPUT[PUT /api/notes/:id]
         NotesDELETE[DELETE /api/notes/:id]
-        LotoCreate[POST /api/loto/create-room]
-        LotoWS[WS /api/loto/room/:id/ws]
     end
 
     subgraph "Data Storage"
-        LocalStorage[💾 Local Storage<br/>- Notes<br/>- JSON History<br/>- Game Scores<br/>- Calendar Data]
+        LocalStorage[💾 Local Storage<br/>- Notes<br/>- JSON History<br/>- Calendar Data]
         SessionStorage[🔐 Session Storage<br/>- Pomodoro State<br/>- Temp Data]
-        CloudflareKV[☁️ Cloudflare KV<br/>- Loto Rooms<br/>- Game State]
+        CloudflareKV[☁️ Cloudflare KV<br/>- Notes]
     end
 
     subgraph "Cloudflare Workers"
         Worker[⚡ Main Worker]
-        DurableObjects[🎲 Durable Objects<br/>Loto Rooms]
+        DurableObjects[👥 Durable Objects<br/>Online Counter]
         Edge[🌍 Edge Network]
     end
 
@@ -465,17 +318,13 @@ graph TB
     Routes --> NotesPOST
     Routes --> NotesPUT
     Routes --> NotesDELETE
-    Routes --> LotoCreate
-    Routes --> LotoWS
 
     NotesGET -.->|Read| LocalStorage
     NotesPOST -.->|Write| LocalStorage
     NotesPUT -.->|Update| LocalStorage
     NotesDELETE -.->|Delete| LocalStorage
 
-    LotoCreate --> Worker
-    LotoWS --> DurableObjects
-    DurableObjects -.->|Persist| CloudflareKV
+    Worker --> DurableObjects
 
     Components -.->|Use| SessionStorage
 

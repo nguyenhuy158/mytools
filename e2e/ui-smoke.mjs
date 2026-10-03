@@ -133,15 +133,7 @@ try {
   }
   ok("JSON tools formats and downloads data.json");
 
-  // 4. Sudoku timer renders as m:ss.
-  await page.goto(`${BASE}/games/sudoku`);
-  await page
-    .getByText(/^\d+:\d{2}$/)
-    .first()
-    .waitFor(WAIT);
-  ok("sudoku timer renders as m:ss");
-
-  // 5. Notes round-trip through the local NOTES KV: create, rename, reload,
+  // 4. Notes round-trip through the local NOTES KV: create, rename, reload,
   //    export, delete.
   await page.goto(`${BASE}/it/notes`);
   await page.getByRole("button", { name: "New Note" }).click();

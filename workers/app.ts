@@ -1,8 +1,8 @@
 import { createRequestHandler } from "react-router";
 import { handleCliRequest } from "./cli";
+import { gamesRedirect } from "./games-redirect";
 
 // Export Durable Object classes
-export { LotoGameRoom } from "./loto-room";
 export { OnlineCounter } from "./online-counter";
 
 declare module "react-router" {
@@ -21,6 +21,9 @@ const requestHandler = createRequestHandler(
 
 export default {
   async fetch(request, env, ctx) {
+    const redirect = gamesRedirect(request);
+    if (redirect) return redirect;
+
     // Terminal clients (curl/wget) get plain text; returns null for everything
     // else so the app, /api routes and WebSocket upgrades are unaffected.
     const cliResponse = await handleCliRequest(request);

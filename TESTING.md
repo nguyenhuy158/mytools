@@ -29,7 +29,7 @@ pnpm preview
 - [ ] Footer displays correctly
 - [ ] Dark mode toggle works
 - [ ] Language switcher (EN/VI) works and persists
-- [ ] All main routes accessible: IT, Lifestyle, Games, Calendar, About
+- [ ] All main routes accessible: IT, Lifestyle, Calendar, About; Navbar "Games" opens games.huyab.click
 - [ ] Mobile responsiveness (test at 375px, 768px, 1024px)
 
 **Test Steps:**
@@ -265,147 +265,20 @@ POST https://jsonplaceholder.typicode.com/posts with JSON body
 
 ---
 
-### 12. **Games - 2048**
+### 12. **Games redirect**
 
-**Path:** `/games/2048`
+The games live at https://games.huyab.click (`games` repo); only the old
+URLs are tested here.
 
-- [ ] Grid renders (4x4 cells)
-- [ ] Tiles spawn (2 or 4)
-- [ ] Arrow keys move tiles correctly
-- [ ] Merging works (2+2=4)
-- [ ] Score calculates correctly
-- [ ] Win at 2048 detected
-- [ ] Game over when no moves detected
-- [ ] Swipe controls work on mobile
-
-**Test Moves:**
-```
-Start: 2 left, 2 left, 2 up, 2 up
-Verify tiles merge and score increases
-```
+- [ ] `curl -sI <host>/games` → `301`, `location: https://games.huyab.click/`
+- [ ] `/games/2048`, `/games/tetris`, `/games/sudoku`, `/games/loto` → `/2048/`, `/tetris/`, `/sudoku/`, `/loto/`
+- [ ] `/games/snake` → `/nokia/snake/`, `/games/minesweeper` → `/do-min/`
+- [ ] Query string survives (`/games/loto?room=abc` → `/loto/?room=abc`)
+- [ ] Command menu (`Cmd+K`) "Games" entries open games.huyab.click
 
 ---
 
-### 13. **Games - Snake**
-
-**Path:** `/games/snake`
-
-- [ ] Snake spawns at center
-- [ ] Arrow keys control direction
-- [ ] Food spawns randomly
-- [ ] Eating food grows snake
-- [ ] Collision with walls ends game
-- [ ] Collision with self ends game
-- [ ] Score increments per food
-- [ ] Speed increases with score
-- [ ] Restart works
-
-**Test Gameplay:**
-```
-1. Start game → move with arrow keys
-2. Eat food 5 times → verify size increases
-3. Hit wall → verify game over
-4. Restart → verify reset
-```
-
----
-
-### 14. **Games - Minesweeper**
-
-**Path:** `/games/minesweeper`
-
-- [ ] Grid renders (8x8 or customizable)
-- [ ] Left-click reveals cells
-- [ ] Right-click flags cells
-- [ ] Numbers show adjacent mines
-- [ ] Clicking mine ends game
-- [ ] Win when all non-mines revealed
-- [ ] Restart works
-- [ ] Difficulty settings change mine count
-
-**Test Gameplay:**
-```
-1. Click safe cell → verify it opens
-2. Open cells → numbers appear → click adjacent cells
-3. Right-click → place flag
-4. Click mine → game over screen
-```
-
----
-
-### 15. **Games - Tetris**
-
-**Path:** `/games/tetris`
-
-- [ ] Tetrominoes spawn correctly
-- [ ] Rotation works (arrow up)
-- [ ] Horizontal movement works (arrow left/right)
-- [ ] Auto-fall works
-- [ ] Line clearing works (4 cells filled = 1 clear)
-- [ ] Score increments
-- [ ] Level increases with score
-- [ ] Game over when stack reaches top
-
-**Test Gameplay:**
-```
-1. Start → pieces fall
-2. Arrange pieces to fill row → row clears
-3. Rotate piece → verify rotation
-4. Play until game over → verify end screen
-```
-
----
-
-### 16. **Games - Sudoku**
-
-**Path:** `/games/sudoku`
-
-- [ ] Puzzle generates (valid 9x9 grid)
-- [ ] Can't edit filled cells
-- [ ] Validation prevents duplicate numbers (same row/col/box)
-- [ ] Hint button shows one valid number
-- [ ] Check solution verifies completion
-- [ ] Clear button resets entered numbers
-- [ ] Difficulty affects clue count
-- [ ] Timer (optional)
-
-**Test Gameplay:**
-```
-1. Fill a valid row → verify
-2. Try to enter duplicate in row → blocked
-3. Click hint → cell fills with valid number
-4. Complete puzzle → check solution → verify win
-```
-
----
-
-### 17. **Games - Loto (Multiplayer)**
-
-**Path:** `/games/loto`
-
-Requires WebSocket connection via Cloudflare Worker.
-
-- [ ] Create room generates unique room ID
-- [ ] Join room with room ID works
-- [ ] WebSocket connects successfully
-- [ ] Random number called updates all players
-- [ ] Mark card works (click cells)
-- [ ] Bingo detected when pattern complete
-- [ ] Broadcast updates other players
-- [ ] Disconnect handled gracefully
-
-**Test with 2 Browsers:**
-```
-Browser 1: Create room → shows ID
-Browser 2: Join with ID → both connected
-Browser 1: Call number → appears in both
-Browser 2: Mark card → marks appear
-Either: Complete pattern → Bingo! shows
-```
-
----
-
-### 18. **Calendar**
+### 13. **Calendar**
 
 **Path:** `/calendar`
 
@@ -425,7 +298,7 @@ Either: Complete pattern → Bingo! shows
 
 ---
 
-### 19. **About Page**
+### 14. **About Page**
 
 **Path:** `/about`
 
@@ -436,7 +309,7 @@ Either: Complete pattern → Bingo! shows
 
 ---
 
-### 20. **Internationalization (i18n)**
+### 15. **Internationalization (i18n)**
 
 **All Pages:**
 
@@ -454,7 +327,7 @@ Either: Complete pattern → Bingo! shows
 
 ---
 
-### 21. **Dark Mode**
+### 16. **Dark Mode**
 
 **All Pages:**
 
@@ -471,7 +344,7 @@ Either: Complete pattern → Bingo! shows
 
 ---
 
-### 22. **Performance & Browser**
+### 17. **Performance & Browser**
 
 - [ ] Production build < 500KB
 - [ ] Page load < 3 seconds (fast 3G)
@@ -491,7 +364,7 @@ Either: Complete pattern → Bingo! shows
 
 ---
 
-### 23. **API Endpoints (Backend)**
+### 18. **API Endpoints (Backend)**
 
 **Notes API:**
 - [ ] `GET /api/notes` returns all notes
@@ -518,15 +391,9 @@ curl -X PUT http://localhost:3000/api/notes/1 \
 curl -X DELETE http://localhost:3000/api/notes/1
 ```
 
-**Loto WebSocket:**
-- [ ] `WS /api/loto/room/:id/ws` connects
-- [ ] Messages broadcast to all clients
-- [ ] Room persists in Cloudflare KV
-- [ ] Reconnection works
-
 ---
 
-### 24. **Local Storage**
+### 19. **Local Storage**
 
 - [ ] Notes saved persist
 - [ ] JSON history persists
@@ -543,7 +410,7 @@ curl -X DELETE http://localhost:3000/api/notes/1
 
 ---
 
-### 25. **Error Handling**
+### 20. **Error Handling**
 
 - [ ] Network error shows toast notification
 - [ ] Invalid input shows validation message
@@ -579,7 +446,6 @@ See `vitest.config.ts` and `__tests__/` directory for test examples.
 | Text Diff | ✅ | — | Diff algorithm testable |
 | Markdown | ✅ | — | React Markdown library tested |
 | Image Tools | ✅ | — | File handling tested manually |
-| Games Logic | ✅ | — | Game loops tested via gameplay |
 | API Endpoints | ✅ | — | cURL/Postman testing |
 | Localization | ✅ | — | UI verification |
 | Dark Mode | ✅ | — | CSS class verification |
@@ -622,7 +488,6 @@ After manual testing, document findings:
 ### Results
 - [✅] All navigation tests passed
 - [✅] JSON tools functional
-- [⚠️] Loto multiplayer: WebSocket timeout at 2min idle
 - [❌] Safari: Dark mode toggle not persisting
 
 ### Action Items

@@ -1,10 +1,11 @@
 import { Link, useLocation } from "react-router";
-import { Menu, X, Home, Info, Sun, Moon, FileJson, Calendar, FileDiff, Timer, Code, Coffee, Gamepad2, Activity, Bomb, LayoutGrid, Grid3x3, Hash, Lightbulb, Rocket, ChevronDown, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { Menu, X, Home, Info, Sun, Moon, FileJson, Calendar, FileDiff, Timer, Code, Coffee, Gamepad2, Hash, Lightbulb, Rocket, ChevronDown, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { TetCountdown } from "./TetCountdown";
 import { OnlineUsers } from "./OnlineUsers";
 import { useTheme } from "../utils/theme";
+import { GAMES_URL } from "../utils/games";
 
 import { toast } from "sonner";
 
@@ -68,18 +69,7 @@ export function Navbar() {
         { name: t("nav.quotes"), href: "/lifestyle/quotes", icon: Lightbulb },
       ]
     },
-    {
-      name: t("nav.games"),
-      href: "/games",
-      icon: Gamepad2,
-      children: [
-        { name: "2048", href: "/games/2048", icon: Gamepad2 },
-        { name: "Sudoku", href: "/games/sudoku", icon: Grid3x3 },
-        { name: "Snake", href: "/games/snake", icon: Activity },
-        { name: "Minesweeper", href: "/games/minesweeper", icon: Bomb },
-        { name: "Tetris", href: "/games/tetris", icon: LayoutGrid },
-      ]
-    },
+    { name: t("nav.games"), href: GAMES_URL, icon: Gamepad2 },
     { name: t("nav.calendar"), href: "/calendar", icon: Calendar },
     { name: t("nav.projects"), href: "/projects", icon: Rocket },
     { name: t("nav.about"), href: "/about", icon: Info },

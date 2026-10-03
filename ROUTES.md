@@ -6,12 +6,15 @@ update this file in the same change; `__tests__/routes/meta.test.ts` already
 enforces that every page route has a `<title>`, but nothing enforces this
 doc staying in sync.
 
-Two request-routing layers exist:
+Three request-routing layers exist, in this order:
 
-1. **`workers/cli.ts`** runs first, inside the Worker `fetch` handler. It
+1. **`workers/games-redirect.ts`** answers every `/games` and `/games/*` path
+   with a `301` to [games.huyab.click](https://games.huyab.click), where the
+   games now live — see [Games redirects](#games-redirects).
+2. **`workers/cli.ts`** runs next, inside the Worker `fetch` handler. It
    answers curl/wget-style clients with plain text and returns `null` for
    everything else, so it never shadows the routes below for a browser.
-2. **`app/routes.ts`** (React Router) handles everything else: every page and
+3. **`app/routes.ts`** (React Router) handles everything else: every page and
    every `/api/*` endpoint.
 
 ---
@@ -39,13 +42,6 @@ Two request-routing layers exist:
 | `/lifestyle` | `routes/lifestyle.tsx` → index `routes/lifestyle-home.tsx` | Lifestyle - ToolHub | Layout route. |
 | `/lifestyle/pomodoro` | `routes/pomodoro.tsx` | Pomodoro Timer - MyTools | |
 | `/lifestyle/quotes` | `routes/quotes.tsx` | Random Quotes - ToolHub | |
-| `/games` | `routes/games.tsx` → index `routes/games-home.tsx` | Games - ToolHub | Layout route. |
-| `/games/2048` | `routes/2048.tsx` | 2048 - Play Online \| ToolHub | |
-| `/games/snake` | `routes/snake.tsx` | Snake - Play Online \| ToolHub | |
-| `/games/minesweeper` | `routes/minesweeper.tsx` | Minesweeper - Play Online \| ToolHub | |
-| `/games/tetris` | `routes/games/tetris.tsx` | Tetris - Play Online \| ToolHub | |
-| `/games/sudoku` | `routes/games/sudoku.tsx` | Sudoku - Play Online | |
-| `/games/loto` | `routes/games/loto.tsx` | Loto - Play With Friends \| ToolHub | Realtime multiplayer via [`/api/loto/*`](#apilotocreate-room) and a WebSocket Durable Object room. |
 
 ---
 
@@ -102,21 +98,31 @@ zone** (e.g. a sibling subdomain) is reported as `online: null` with an
 `error` explaining the loopback, not as offline — see `app/routes/api.projects-status.tsx`
 (`isSameHost`, `isSameZone`, `reconcileSameZone`).
 
-### `/api/loto/create-room`
-
-`POST`, no body. Creates a Durable Object room (`env.LOTO_ROOMS`) with a
-random UUID and returns `{ success, roomId, wsUrl }`.
-
-### `/api/loto/room/:roomId/ws`
-
-WebSocket upgrade only — a plain HTTP request gets `400 Expected WebSocket`.
-Forwards the upgrade to the named `LOTO_ROOMS` Durable Object instance.
-
 ### `/api/online-counter/ws`
 
-WebSocket upgrade only, same `400` behavior for a plain request. Forwards to
-a single global-named `ONLINE_COUNTER` Durable Object instance that tracks
+WebSocket upgrade only — a plain HTTP request gets `400 Expected WebSocket`.
+Forwards to a single global-named `ONLINE_COUNTER` Durable Object instance that tracks
 how many browsers currently have the site open.
+
+---
+
+## Games redirects
+
+The games moved to their own app at `https://games.huyab.click`
+(the `games` repo). `workers/games-redirect.ts` sends a `301` for every old
+URL, keeping the query string (shared loto room links). The slug map lives in
+`app/utils/games.ts`, shared with the Navbar and command menu links.
+
+| Old URL | Redirects to |
+| --- | --- |
+| `/games` | `https://games.huyab.click/` |
+| `/games/2048` | `https://games.huyab.click/2048/` |
+| `/games/tetris` | `https://games.huyab.click/tetris/` |
+| `/games/sudoku` | `https://games.huyab.click/sudoku/` |
+| `/games/loto` | `https://games.huyab.click/loto/` |
+| `/games/snake` | `https://games.huyab.click/nokia/snake/` |
+| `/games/minesweeper` | `https://games.huyab.click/do-min/` |
+| any other `/games/*` | `https://games.huyab.click/` |
 
 ---
 

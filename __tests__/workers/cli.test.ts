@@ -284,8 +284,8 @@ describe("CLI worker interface", () => {
   describe("must not hijack the real app", () => {
     it.each([
       "/about",
-      "/games",
-      "/games/sudoku",
+      "/calendar",
+      "/lifestyle/quotes",
       "/it/json-tools",
       "/lifestyle/pomodoro",
       "/api/holidays",
@@ -300,8 +300,8 @@ describe("CLI worker interface", () => {
     });
 
     it("does not treat ?h on an app route as a help request", async () => {
-      expect(await get("/games?h", CURL)).toBeNull();
-      expect(await get("/games?--help", BROWSER)).toBeNull();
+      expect(await get("/calendar?h", CURL)).toBeNull();
+      expect(await get("/calendar?--help", BROWSER)).toBeNull();
     });
 
     it("serves the HTML app at / for a browser", async () => {

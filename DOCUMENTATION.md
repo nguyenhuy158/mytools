@@ -33,7 +33,7 @@ A comprehensive collection of essential online tools built with modern web techn
 
 ### Deployment & Infrastructure
 - **Cloudflare Workers** - Edge computing platform
-- **Cloudflare KV** - Key-value storage for games data
+- **Cloudflare KV** - Key-value storage for notes
 - **Wrangler** - Cloudflare deployment CLI
 
 ### Internationalization
@@ -102,7 +102,7 @@ A comprehensive collection of essential online tools built with modern web techn
 
 The project uses Cloudflare Workers environment variables:
 - `VALUE_FROM_CLOUDFLARE` - Example environment variable
-- KV namespace bindings for games data storage
+- KV namespace binding for notes storage
 
 ## 🌐 Deployment
 
@@ -150,7 +150,6 @@ toolhub/
 │   ├── routes/                 # Route components
 │   │   ├── home.tsx           # Homepage
 │   │   ├── it.tsx             # IT tools section
-│   │   ├── games.tsx          # Games section
 │   │   └── ...                # Other routes
 │   ├── utils/                  # Utility functions
 │   │   ├── history.ts         # History management
@@ -211,12 +210,9 @@ toolhub/
   - Customizable durations
   - Auto-start options
 
-### Games Section (`/games`)
-- **2048** - Number puzzle game
-- **Snake** - Classic Nokia game
-- **Minesweeper** - Mine detection game
-- **Tetris** - Block stacking game
-- **Sudoku** - Number puzzle game
+### Games
+The games (2048, Snake, Minesweeper, Tetris, Sudoku, Lô tô) live in their own
+app at https://games.huyab.click. Old `/games/*` URLs redirect there with a 301.
 
 ### Additional Features
 - **Calendar** (`/calendar`) - Solar and Lunar calendar
@@ -289,7 +285,7 @@ toolhub/
   "slogan": "Your Hub for Essential Tools",
   "nav": { /* Navigation translations */ },
   "it_tools": { /* IT tools translations */ },
-  "games": { /* Games translations */ },
+  "pomodoro": { /* Pomodoro translations */ },
   // ... other sections
 }
 ```
@@ -327,7 +323,7 @@ function MyComponent() {
 
 ### Current Status
 - ✅ Core IT tools (JSON, Text Diff, Image Tools, API Tester)
-- ✅ Games collection (2048, Snake, Minesweeper, Tetris, Sudoku)
+- ✅ Games moved to https://games.huyab.click (`/games/*` redirects there)
 - ✅ Lifestyle tools (Pomodoro Timer)
 - ✅ Full internationalization (EN/VI)
 - ✅ Dark mode support
@@ -336,7 +332,6 @@ function MyComponent() {
 
 ### Planned Features
 - 🔄 Additional IT tools (URL encoder/decoder, Base64 converter, etc.)
-- 🔄 More games and entertainment tools
 - 🔄 Enhanced accessibility features
 - 🔄 Performance optimizations
 - 🔄 Additional language support

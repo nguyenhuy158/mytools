@@ -3,27 +3,28 @@
 ## Project Structure & Module Organization
 
 ToolHub (`huyab.click`, `case.huyab.click`) is a collection of online tools
-(JSON, Text Diff, Pomodoro, Notes, games, ...) built with React Router v7 in
+(JSON, Text Diff, Pomodoro, Notes, ...) built with React Router v7 in
 SSR mode, Tailwind CSS v4 and TypeScript, served by one Cloudflare Worker.
 Fully internationalized (English/Vietnamese); slogan "Your Hub for Essential
-Tools" / "Trung tâm công cụ thiết yếu của bạn".
+Tools" / "Trung tâm công cụ thiết yếu của bạn". The games live in the `games`
+repo at `games.huyab.click`; old `/games/*` URLs 301 there.
 
 ```text
 app/                           # React Router app (SSR)
   root.tsx                     #   HTML shell, theme bootstrap (.dark on <html>), providers
   routes.ts                    #   Route table: UI sections + /api/* resource routes
-  routes/                      #   Route modules; it/ and games/ hold nested tools
-    api.*.tsx                  #   Server resource routes (notes, loto, holidays, ...)
+  routes/                      #   Route modules; it/ holds nested tools
+    api.*.tsx                  #   Server resource routes (notes, holidays, ...)
   components/                  #   Shared UI components (PascalCase)
-  utils/                       #   Pure helpers, hooks + small clients (text-case, notes, theme, download, ...)
+  utils/                       #   Pure helpers, hooks + small clients (text-case, notes, theme, games links, ...)
   workers/                     #   Web Workers (sentiment.worker.ts)
   locales/{en,vi}/             #   i18next translation.json files
   data/                        #   Static data (projects showcase)
   app.css                      #   Tailwind entry + shared component classes
 workers/                       # Cloudflare Worker entry
-  app.ts                       #   fetch handler: CLI responder, then React Router
+  app.ts                       #   fetch handler: games redirect, CLI responder, then React Router
   cli.ts                       #   Plain-text interface for curl/wget clients
-  loto-room.ts                 #   Durable Object LotoGameRoom (LOTO_ROOMS)
+  games-redirect.ts            #   301s /games/* to games.huyab.click (runs first)
   online-counter.ts            #   Durable Object OnlineCounter (ONLINE_COUNTER)
 __tests__/                     # Vitest suites (components, routes, utils, workers)
 e2e/                           # E2E smoke (playwright-core): run.mjs, readonly-smoke.mjs, ui-smoke.mjs
@@ -47,7 +48,8 @@ How this repo fits with the others:
 - Talks to: the shared D1 `db` (`projects` table) and every app listed there,
   which `/projects` pings for uptime (ai-english, chia-keo, notes, monitor,
   share, cardstat, hooks, games, resume); external Odoo instances over
-  JSON-RPC from the Odoo inspector. No other repo calls mytools.
+  JSON-RPC from the Odoo inspector. Navbar, command menu and `/games/*`
+  redirects point at `games.huyab.click`. No other repo calls mytools.
 
 ## Build, Test, and Development Commands
 
@@ -89,7 +91,7 @@ Node version in `.nvmrc`).
 - Async work uses try/catch with toast notifications (`sonner`) for user
   feedback.
 - Privacy-first: tools process data in the browser; do not send user input to
-  the server unless the feature is explicitly server-backed (Notes, Loto).
+  the server unless the feature is explicitly server-backed (Notes).
 
 ## Testing Guidelines
 
@@ -111,19 +113,19 @@ the Playwright cache or a system Chrome):
   `wrangler dev --local` (remote bindings off, so the `remote: true` NOTES KV
   and every other write stay in `.wrangler/state`), then runs
   `readonly-smoke.mjs` and `ui-smoke.mjs` (case converter + download, theme via
-  Navbar and command menu, JSON tools, sudoku timer, notes CRUD/export).
+  Navbar and command menu, JSON tools, notes CRUD/export).
   `E2E_SKIP_BUILD=1` reuses `build/`, `E2E_PORT` changes the port. CI runs it
   as the `e2e` job. `/projects` is skipped locally: its D1 table is remote-only.
 - `pnpm e2e:prod` runs only `readonly-smoke.mjs` against production: GETs of
-  every UI route (render + no uncaught page errors), a 404 path,
-  `/api/holidays`, the PWA manifest and `sw.js`, and the curl text interface
-  (`/`, `/upper/<text>`). Keep it GET-only; never add clicks, form submits or
-  API writes to it.
+  every UI route (render + no uncaught page errors), a 404 path, the
+  `/games/*` → `games.huyab.click` 301s, `/api/holidays`, the PWA manifest
+  and `sw.js`, and the curl text interface (`/`, `/upper/<text>`). Keep it
+  GET-only; never add clicks, form submits or API writes to it.
 
 ## Commit & Pull Request Guidelines
 
 Use Conventional Commits with an emoji prefix, for example
-`✨ feat: add pdf merge tool` or `🐛 fix: keep sudoku notes on undo`. Pull
+`✨ feat: add pdf merge tool` or `🐛 fix: keep notes on reload`. Pull
 requests should include a short summary, typecheck/test/build results, a linked
 issue if available, and screenshots (light and dark) for visible UI changes.
 
@@ -139,7 +141,8 @@ run `wrangler deploy` by hand unless CI is broken and you have said so out loud.
   `npx wrangler deploy --config build/server/wrangler.json`
 - **Worker name is `case-converter`** — a legacy name from when this was only a
   case converter. Do **not** rename it. Renaming creates a *new* Worker and
-  orphans the Durable Object state in `LOTO_ROOMS` and `ONLINE_COUNTER`.
+  orphans the Durable Object state in `ONLINE_COUNTER`. (`LotoGameRoom` was
+  deleted on purpose by migration `v3` when loto moved to the games repo.)
 - **Rollback**: `npx wrangler rollback --name case-converter`. Cloudflare
   retains every version, so rollback never needs a local checkout.
 

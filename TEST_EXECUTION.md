@@ -90,7 +90,7 @@ See [TESTING.md](./TESTING.md) for comprehensive manual test cases:
 - **Core Navigation** - Routes, navbar, dark mode, i18n
 - **IT Tools** - JSON, Diff, Markdown, Images, API Tester, Notes
 - **Lifestyle** - Pomodoro, Quotes
-- **Games** - 2048, Snake, Minesweeper, Tetris, Sudoku, Loto
+- **Games redirect** - `/games/*` 301s to games.huyab.click
 - **Calendar** - Solar/Lunar dates, holidays
 - **Performance** - Load times, memory, PWA
 - **Browser Compatibility** - Chrome, Firefox, Safari, Edge
@@ -219,8 +219,7 @@ NODE_OPTIONS=--max-old-space-size=4096 pnpm test
 ```
 
 ### Failed WebSocket Tests
-- These must be tested manually in browser
-- See TESTING.md → Games - Loto section
+- `/api/online-counter/ws` must be tested manually in a browser
 
 ## Test Reports
 

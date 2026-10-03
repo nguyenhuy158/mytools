@@ -240,7 +240,6 @@ Still open:
 - No `env(safe-area-inset-*)` handling, so the footer sits under the iPhone
   home indicator.
 - `calendar` has a 7-column grid with no `overflow-x-auto`; `calendar` and
-  `json-tools` use a fixed `h-[600px]`; `tetris` has `min-w-[300px]`, which
-  crowds a 320px screen.
+  `json-tools` use a fixed `h-[600px]`, which crowds a 320px screen.
 - `/projects` uses `text-xs` in 11 places and a fixed `grid-cols-3` stat row,
   both tight at 320px.

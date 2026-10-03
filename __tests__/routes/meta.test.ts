@@ -81,8 +81,8 @@ describe("route meta", () => {
     (_file, route) => {
       // Only an index route may inherit: it renders at the layout's own URL,
       // so the layout's title is the right one. A leaf page that inherits
-      // would share one generic title with every sibling — /games/snake and
-      // /games/tetris both reading "Games - ToolHub" is not a fixed bug.
+      // would share one generic title with every sibling — /it/json-tools and
+      // /it/text-diff both reading the "IT Tools" title is not a fixed bug.
       const covered = route.isIndex
         ? hasMeta(route.file) ||
           (route.parentFile !== undefined && hasMeta(route.parentFile))

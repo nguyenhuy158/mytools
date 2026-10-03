@@ -18,11 +18,6 @@
 	},
 	"kv_namespaces": [
 		{
-			"binding": "KV_GAMES",
-			"id": "1b07ec19871e4abd986100f6283bbe0b",
-			"preview_id": "dec7d834ccf848f09e2181572544ef2e"
-		},
-		{
 			"binding": "NOTES",
 			"id": "3de055e116b14527bb68bcd4a31ea6d6",
 			"remote": true
@@ -37,10 +32,6 @@
 	],
 	"durable_objects": {
 		"bindings": [
-			{
-				"name": "LOTO_ROOMS",
-				"class_name": "LotoGameRoom"
-			},
 			{
 				"name": "ONLINE_COUNTER",
 				"class_name": "OnlineCounter"
@@ -58,6 +49,13 @@
 			"tag": "v2",
 			"new_sqlite_classes": [
 				"OnlineCounter"
+			]
+		},
+		{
+			// Loto moved to games.huyab.click with its own room Durable Object.
+			"tag": "v3",
+			"deleted_classes": [
+				"LotoGameRoom"
 			]
 		}
 	],

@@ -31,6 +31,7 @@ import {
     Settings,
     Activity,
     LayoutGrid,
+    Ticket,
     Hash,
     Lightbulb,
 } from "lucide-react";
@@ -38,6 +39,7 @@ import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
 import { toast } from "sonner";
 import { useTheme } from "../utils/theme";
+import { GAMES_URL, GAME_PATHS } from "../utils/games";
 
 export function CommandMenu({ children }: { children: React.ReactNode }) {
     const navigate = useNavigate();
@@ -102,50 +104,25 @@ export function CommandMenu({ children }: { children: React.ReactNode }) {
             id: "games",
             name: t("nav.games"),
             keywords: "games play fun",
-            perform: () => navigate("/games"),
+            perform: () => window.location.assign(GAMES_URL),
             icon: <Gamepad2 className="w-4 h-4" />,
             section: t("nav.games"),
         },
-        {
-            id: "2048",
-            name: "2048",
+        ...[
+            { id: "2048", name: "2048", keywords: "2048 puzzle number", icon: Grid3X3 },
+            { id: "sudoku", name: "Sudoku", keywords: "sudoku puzzle number", icon: Grid3X3 },
+            { id: "minesweeper", name: "Minesweeper", keywords: "minesweeper bomb mine do min", icon: Bomb },
+            { id: "snake", name: "Snake", keywords: "snake classic nokia game", icon: Activity },
+            { id: "tetris", name: "Tetris", keywords: "tetris block game", icon: LayoutGrid },
+            { id: "loto", name: "Lô tô", keywords: "loto lo to bingo multiplayer", icon: Ticket },
+        ].map(({ id, name, keywords, icon: Icon }) => ({
+            id,
+            name,
             parent: "games",
-            keywords: "2048 puzzle number",
-            perform: () => navigate("/games/2048"),
-            icon: <Grid3X3 className="w-4 h-4" />,
-        },
-        {
-            id: "sudoku",
-            name: "Sudoku",
-            parent: "games",
-            keywords: "sudoku puzzle number",
-            perform: () => navigate("/games/sudoku"),
-            icon: <Grid3X3 className="w-4 h-4" />,
-        },
-        {
-            id: "minesweeper",
-            name: "Minesweeper",
-            parent: "games",
-            keywords: "minesweeper bomb mine",
-            perform: () => navigate("/games/minesweeper"),
-            icon: <Bomb className="w-4 h-4" />,
-        },
-        {
-            id: "snake",
-            name: "Snake",
-            parent: "games",
-            keywords: "snake classic game",
-            perform: () => navigate("/games/snake"),
-            icon: <Activity className="w-4 h-4" />,
-        },
-        {
-            id: "tetris",
-            name: "Tetris",
-            parent: "games",
-            keywords: "tetris block game",
-            perform: () => navigate("/games/tetris"),
-            icon: <LayoutGrid className="w-4 h-4" />,
-        },
+            keywords,
+            perform: () => window.location.assign(`${GAMES_URL}${GAME_PATHS[id]}`),
+            icon: <Icon className="w-4 h-4" />,
+        })),
         // Lifestyle
         {
             id: "lifestyle",

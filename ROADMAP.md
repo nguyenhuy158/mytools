@@ -9,7 +9,7 @@ Bản lộ trình nâng cấp và tích hợp các công cụ mới vào hệ si
 | Công cụ | Mô tả | Độ ưu tiên | Trạng thái |
 | :--- | :--- | :--- | :--- |
 | **Vite PWA Plugin** | Biến ToolHub thành ứng dụng cài đặt được, hỗ trợ chạy **Offline**. Đây là tính năng sống còn cho một bộ công cụ tiện ích. | ⭐⭐⭐ | ✅ Đã hoàn thành |
-| **kBar (Command Palette)** | Thanh lệnh `Cmd + K` giúp tìm kiếm và chuyển đổi giữa các công cụ (JSON, 2048, Snake) ngay lập tức. | ⭐⭐⭐ | ✅ Đã hoàn thành |
+| **kBar (Command Palette)** | Thanh lệnh `Cmd + K` giúp tìm kiếm và chuyển đổi giữa các công cụ (JSON, Notes, Pomodoro) ngay lập tức. | ⭐⭐⭐ | ✅ Đã hoàn thành |
 | **Biome** | Thay thế ESLint/Prettier bằng Rust tool cực nhanh, giúp giữ code sạch và nhất quán. | ⭐⭐ | 📋 Chờ thực hiện |
 | **Nuqs** | Quản lý state của công cụ qua URL một cách an toàn (Type-safe), giúp chia sẻ link cấu hình công cụ dễ dàng. | ⭐⭐ | ✅ Đã hoàn thành |
 | **Global Search** | Tìm kiếm toàn cục nội dung trong các tools (ví dụ: tìm note, tìm key json) thông qua `Cmd + K`. | ⭐ | 📋 Chờ thực hiện |
@@ -20,7 +20,7 @@ Bản lộ trình nâng cấp và tích hợp các công cụ mới vào hệ si
 
 | Công cụ | Mô tả | Độ ưu tiên | Trạng thái |
 | :--- | :--- | :--- | :--- |
-| **Framer Motion** | Thêm các hiệu ứng chuyển trang mượt mà và animation cho các mini-games (Snake, 2048). | ⭐⭐ | 📋 Chờ thực hiện |
+| **Framer Motion** | Thêm các hiệu ứng chuyển trang mượt mà và animation cho các công cụ. | ⭐⭐ | 📋 Chờ thực hiện |
 | **Rough.js** | Tạo "Sketchy Mode" (giao diện vẽ tay) cho các công cụ, mang tới sự thú vị và khác biệt so với các web tool phổ thông. | ⭐ | 📋 Chờ thực hiện |
 | **Sonner (Updated)** | Thay thế toast cũ bằng **Sonner**: Hỗ trợ stacking (xếp chồng), vuốt để đóng, rich colors và promise API. Mang lại cảm giác mượt mà ("Premium feel") vượt trội so với các thư viện toast truyền thống. | ⭐ | ✅ Đã hoàn thành (Done) |
 

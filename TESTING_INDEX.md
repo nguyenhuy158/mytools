@@ -103,9 +103,8 @@ pnpm check && pnpm test:run && pnpm build && pnpm preview
 - Notes utility functions (parsing, creation, conversion)
 
 📋 **Needs Development**:
-- React components (Pomodoro, Games, etc.)
-- API endpoints (Notes, Loto)
-- Game logic (2048, Snake, Tetris, etc.)
+- React components (Pomodoro, etc.)
+- API endpoints (Notes)
 
 ### Manual Tests
 ✅ **Procedures Available** (See TESTING.md):
@@ -116,7 +115,7 @@ pnpm check && pnpm test:run && pnpm build && pnpm preview
 - Image tools
 - API tester
 - Pomodoro timer
-- All games (2048, Snake, Minesweeper, Tetris, Sudoku, Loto)
+- Games redirect to games.huyab.click
 - Calendar
 - Dark mode & i18n
 - Performance & browser compatibility
