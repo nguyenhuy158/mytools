@@ -32,9 +32,14 @@ jobs:
         run: pnpm check
 
       # Workers Builds only runs `pnpm run build`, so this is the only place
-      # the unit tests gate anything.
+      # the unit tests gate anything. The project suites read the real
+      # `projects` table with `wrangler d1 execute --remote` (SELECT only), so
+      # they need these repo secrets (token with D1 read on the account).
       - name: Unit tests
         run: pnpm test:run
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
       - name: Build
         run: pnpm build
