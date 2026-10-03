@@ -61,8 +61,13 @@ Node version in `.nvmrc`).
   variables. ES imports, relative paths for internals (`~/` aliases `app/`).
 - Styling is Tailwind CSS only; no new CSS files. Mobile-first
   (`block md:flex`). Dark mode is mandatory and class-based (`.dark` on
-  `<html>`): every color needs its `dark:` counterpart. Avoid arbitrary values.
-  See `STYLE_GUIDE.md`.
+  `<html>`). Avoid arbitrary values. See `STYLE_GUIDE.md`.
+- Colors come from the design tokens in `app/styles/tokens.css` (same names
+  and structure as the shared ui-kit: `--ui-*` vars, `@theme inline`). Prefer
+  token utilities (`bg-surface`, `text-fg`, `text-fg-muted`, `border-border`,
+  `bg-primary`, `text-danger`, ...) which switch with `.dark` on their own;
+  raw palette classes (`bg-white dark:bg-gray-950`) still need a `dark:` pair.
+  Change the palette in `tokens.css`, never by hardcoding hex values.
 - Localization: use the `useTranslation` hook and add keys to both
   `app/locales/en/translation.json` and `app/locales/vi/translation.json`.
 - Async work uses try/catch with toast notifications (`sonner`) for user
