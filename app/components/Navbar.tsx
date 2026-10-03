@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { TetCountdown } from "./TetCountdown";
 import { OnlineUsers } from "./OnlineUsers";
+import { useTheme } from "../utils/theme";
 
 import { toast } from "sonner";
 
@@ -18,26 +19,11 @@ export function Navbar() {
   const [openSection, setOpenSection] = useState<string | null>(null);
   const { t, i18n } = useTranslation();
   const { pathname } = useLocation();
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, changeTheme] = useTheme();
   /** Desktop sidebar collapsed to an icon-only rail. Irrelevant on mobile — the drawer always shows full labels. */
   const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
-    // Check initial theme from localStorage or system preference
-    const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
-    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light";
-    const currentTheme = savedTheme || systemTheme;
-    setTheme(currentTheme);
-
-    // Apply theme class
-    if (currentTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-
     setCollapsed(localStorage.getItem("sidebarCollapsed") === "1");
   }, []);
 
@@ -49,18 +35,7 @@ export function Navbar() {
     });
   };
 
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-    if (newTheme === "dark") {
-      document.documentElement.classList.add("dark");
-      toast.success(t("nav.toast.dark_mode"));
-    } else {
-      document.documentElement.classList.remove("dark");
-      toast.success(t("nav.toast.light_mode"));
-    }
-  };
+  const toggleTheme = () => changeTheme(theme === "light" ? "dark" : "light");
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);

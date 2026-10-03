@@ -35,34 +35,14 @@ import {
     Lightbulb,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState, useMemo } from "react";
+import { useMemo } from "react";
 import { toast } from "sonner";
+import { useTheme } from "../utils/theme";
 
 export function CommandMenu({ children }: { children: React.ReactNode }) {
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
-    const [theme, setTheme] = useState<"light" | "dark">("light");
-
-    useEffect(() => {
-        const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
-        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light";
-        const currentTheme = savedTheme || systemTheme;
-        setTheme(currentTheme);
-    }, []);
-
-    const updateTheme = (newTheme: "light" | "dark") => {
-        setTheme(newTheme);
-        localStorage.setItem("theme", newTheme);
-        if (newTheme === "dark") {
-            document.documentElement.classList.add("dark");
-            toast.success(t("nav.toast.dark_mode"));
-        } else {
-            document.documentElement.classList.remove("dark");
-            toast.success(t("nav.toast.light_mode"));
-        }
-    };
+    const [theme, updateTheme] = useTheme();
 
     const actions: Action[] = useMemo(() => [
         // Navigation
