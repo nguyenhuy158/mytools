@@ -1,22 +1,35 @@
-.DS_Store
-.env
-/node_modules/
-*.tsbuildinfo
+# Dependencies
+node_modules/
+.pnpm-store/
 
-# React Router
+# Build output
+dist/
+build/
 /.react-router/
-/build/
+*.tsbuildinfo
+coverage/
 
-# Cloudflare
-.mf
-.wrangler
-.dev.vars*
-worker-configuration.d.ts
-
-
-!.dev.vars.example
+# Environment files
+.env*
 !.env.example
 
-openspec/changes/archive
+# Cloudflare local dev
+.mf
+.wrangler/
+.dev.vars*
+!.dev.vars.example
+worker-configuration.d.ts
 
-dist
+# Logs
+*.log
+
+# OS and editor files
+.DS_Store
+.idea/
+.vscode/
+
+# Stray template dirs created by misconfigured tools
+{{pkgetc}}/
+{{HOMEBREW_PREFIX}}/
+
+openspec/changes/archive
