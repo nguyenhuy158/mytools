@@ -1,5 +1,5 @@
 import { RefreshCw, RotateCcw, Lightbulb, Pause, Play } from "lucide-react";
-import { type Difficulty } from "../utils/sudoku";
+import { type Difficulty, formatTime } from "../utils/sudoku";
 
 interface SudokuControlsProps {
   difficulty: Difficulty;
@@ -24,13 +24,6 @@ export function SudokuControls({
   isPaused,
   onTogglePause
 }: SudokuControlsProps) {
-  
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-
   return (
     <div className="flex flex-col gap-4 w-full max-w-md mx-auto mb-6">
       {/* Top Bar: Difficulty & Timer */}

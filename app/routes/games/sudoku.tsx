@@ -9,6 +9,7 @@ import { SudokuNumberPad } from "../../components/SudokuNumberPad";
 import {
   generatePuzzle,
   checkConflicts,
+  formatTime,
   type Board,
   type Difficulty
 } from "../../utils/sudoku";
@@ -221,13 +222,6 @@ export default function Sudoku() {
         onClick: () => { }
       }
     });
-  };
-
-  // Helper for formatTime
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
   // Compute display board with isRelated

@@ -17,6 +17,13 @@ export type Board = Cell[][];
 export const BOARD_SIZE = 9;
 export const BOX_SIZE = 3;
 
+/** Elapsed game time as m:ss (minutes unpadded), e.g. 75 -> "1:15". */
+export function formatTime(seconds: number): string {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins}:${secs.toString().padStart(2, "0")}`;
+}
+
 // Helper to check if a number is valid in a position
 export function isValid(board: number[][], row: number, col: number, num: number): boolean {
   // Check row

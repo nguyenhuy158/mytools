@@ -8,16 +8,10 @@ import type { LoaderFunctionArgs, ActionFunctionArgs } from "react-router";
 import { GameScore } from "../components/GameScore";
 import { GameOverlay } from "../components/GameOverlay";
 import { GameGrid } from "../components/GameGrid";
-import { Leaderboard } from "../components/Leaderboard";
+import { Leaderboard, type Score } from "../components/Leaderboard";
 import { SwipeDetector } from "../components/SwipeDetector";
 import { DirectionalControls } from "../components/DirectionalControls";
 import type { SwipeDirection } from "../utils/touch";
-
-interface Score {
-  name: string;
-  score: number;
-  date: string;
-}
 
 export async function loader({ context }: LoaderFunctionArgs) {
   const kv = context.cloudflare.env.KV_GAMES;

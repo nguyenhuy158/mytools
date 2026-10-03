@@ -1,6 +1,6 @@
 import { Trophy } from "lucide-react";
 
-interface Score {
+export interface Score {
   name: string;
   score: number;
   date: string;
