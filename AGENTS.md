@@ -15,7 +15,7 @@ app/                           # React Router app (SSR)
   routes/                      #   Route modules; it/ and games/ hold nested tools
     api.*.tsx                  #   Server resource routes (notes, loto, holidays, ...)
   components/                  #   Shared UI components (PascalCase)
-  utils/                       #   Pure helpers + small clients (text-case, notes, sudoku, ...)
+  utils/                       #   Pure helpers, hooks + small clients (text-case, notes, theme, download, ...)
   workers/                     #   Web Workers (sentiment.worker.ts)
   locales/{en,vi}/             #   i18next translation.json files
   data/                        #   Static data (projects showcase)
@@ -26,6 +26,7 @@ workers/                       # Cloudflare Worker entry
   loto-room.ts                 #   Durable Object LotoGameRoom (LOTO_ROOMS)
   online-counter.ts            #   Durable Object OnlineCounter (ONLINE_COUNTER)
 __tests__/                     # Vitest suites (components, routes, utils, workers)
+e2e/                           # E2E smoke (playwright-core): run.mjs, readonly-smoke.mjs, ui-smoke.mjs
 public/                        # Static assets, PWA icons, project screenshots
 scripts/refresh-project-shots.mjs  # Regenerate public/projects/*.png
 wrangler.jsonc                 # Worker config: KV, D1, Durable Objects, routes
@@ -48,6 +49,8 @@ Long-form docs: `README.md` (architecture and flows), `ROUTES.md`,
   files you touch rather than the whole tree.
 - `pnpm preview`: build, then serve the production build locally.
 - `pnpm shots`: refresh the project screenshots in `public/projects/`.
+- `pnpm e2e`: build, serve with `wrangler dev --local`, run the E2E smoke;
+  `pnpm e2e:prod`: the read-only part against `https://huyab.click`.
 
 Use `pnpm` for all package commands, never `npm` (pinned via `packageManager`,
 Node version in `.nvmrc`).
@@ -82,6 +85,26 @@ Tests use Vitest with `happy-dom` and Testing Library, configured in
 mirroring the source folder (`__tests__/utils/text-case.test.ts` covers
 `app/utils/text-case.ts`). D1-backed routes use `__tests__/utils/d1-fixture.ts`.
 Run `pnpm test:run` before pushing; manual UI checks are listed in `TESTING.md`.
+The project suites (`project-search`, `project-stats`, `projects-status`) read
+the real `projects` table through `wrangler d1 execute --remote`, so they need
+a logged-in wrangler locally and `CLOUDFLARE_API_TOKEN`/`CLOUDFLARE_ACCOUNT_ID`
+secrets in CI.
+
+E2E lives in `e2e/` (playwright-core; Chromium from `PLAYWRIGHT_CHROMIUM_PATH`,
+the Playwright cache or a system Chrome, see `e2e/chromium.mjs`):
+
+- `pnpm e2e` (`e2e/run.mjs`) builds, serves `build/` with
+  `wrangler dev --local` (remote bindings off, so the `remote: true` NOTES KV
+  and every other write stay in `.wrangler/state`), then runs
+  `readonly-smoke.mjs` and `ui-smoke.mjs` (case converter + download, theme via
+  Navbar and command menu, JSON tools, sudoku timer, notes CRUD/export).
+  `E2E_SKIP_BUILD=1` reuses `build/`, `E2E_PORT` changes the port. CI runs it
+  as the `e2e` job. `/projects` is skipped locally: its D1 table is remote-only.
+- `pnpm e2e:prod` runs only `readonly-smoke.mjs` against production: GETs of
+  every UI route (render + no uncaught page errors), a 404 path,
+  `/api/holidays`, the PWA manifest and `sw.js`, and the curl text interface
+  (`/`, `/upper/<text>`). Keep it GET-only; never add clicks, form submits or
+  API writes to it.
 
 ## Commit & Pull Request Guidelines
 
@@ -142,7 +165,7 @@ the long-dead `huycode.click` for months.
 - **Tests do not gate deploys.** `build_command` is `pnpm run build` only. A
   build error (TypeScript, bad import) blocks the deploy; logic that compiles
   but is wrong ships straight to production. GitHub Actions
-  (`.github/workflows/ci.yml`: check, test:run, build) runs on PRs and pushes
+  (`.github/workflows/ci.yml`: check, test:run, build, plus an `e2e` job) runs on PRs and pushes
   but runs beside Workers Builds, not before it — so a red CI on `main` does
   not stop the deploy. Run `pnpm test:run` before pushing.
 

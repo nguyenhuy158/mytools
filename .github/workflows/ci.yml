@@ -43,3 +43,38 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+  e2e:
+    name: E2E smoke
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # playwright-core downloads no browser; install the matching Chromium into
+      # ~/.cache/ms-playwright, where e2e/chromium.mjs looks for it.
+      - name: Install Chromium
+        run: pnpm exec playwright-core install --with-deps chromium
+
+      # `pnpm e2e` builds, serves build/ with `wrangler dev --local` (remote
+      # bindings off, so writes stay in .wrangler/state), runs both smoke
+      # suites and stops the server. No Cloudflare credentials needed.
+      - name: E2E
+        run: pnpm e2e
+
+      - name: Upload failure screenshot
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-failure
+          path: e2e-failure.png
+          if-no-files-found: ignore
