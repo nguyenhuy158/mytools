@@ -36,6 +36,19 @@ pnpm-workspace.yaml            # pnpm 10/11 compatibility (see Deploy & CI)
 Long-form docs: `README.md` (architecture and flows), `ROUTES.md`,
 `STYLE_GUIDE.md`, `TESTING.md` (manual checklist), `BUGS.md`, `ROADMAP.md`.
 
+## Ecosystem
+
+How this repo fits with the others:
+[kit/docs/ECOSYSTEM.md](https://github.com/nguyenhuy158/kit/blob/main/docs/ECOSYSTEM.md).
+
+- Kit packages used: `@huyab/config` (Biome, tsconfig base), `@huyab/e2e`
+  (E2E server lifecycle, Chromium lookup, local-only guard) and the reusable
+  `check.yml` CI. ToolHub has no sign-in, so no `@huyab/sso`.
+- Talks to: the shared D1 `db` (`projects` table) and every app listed there,
+  which `/projects` pings for uptime (ai-english, chia-keo, notes, monitor,
+  share, cardstat, hooks, picaku-mul, resume); external Odoo instances over
+  JSON-RPC from the Odoo inspector. No other repo calls mytools.
+
 ## Build, Test, and Development Commands
 
 - `pnpm install`: install dependencies (runs `wrangler types` on postinstall).
