@@ -5,14 +5,10 @@
 //
 // Environment:
 // - E2E_BASE_URL: default http://127.0.0.1:8787
-// - PLAYWRIGHT_CHROMIUM_PATH: see e2e/chromium.mjs
+// - PLAYWRIGHT_CHROMIUM_PATH: see findChromium in @huyab/e2e
+import { BASE, findChromium } from "@huyab/e2e";
 import { chromium } from "playwright-core";
-import { findChromium } from "./chromium.mjs";
 
-const BASE = (process.env.E2E_BASE_URL || "http://127.0.0.1:8787").replace(
-  /\/$/,
-  "",
-);
 const WAIT = { timeout: 15000 };
 const LOCAL = ["127.0.0.1", "localhost"].includes(new URL(BASE).hostname);
 

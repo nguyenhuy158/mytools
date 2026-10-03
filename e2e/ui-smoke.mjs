@@ -4,22 +4,15 @@
 //
 // Environment:
 // - E2E_BASE_URL: default http://127.0.0.1:8787
-// - PLAYWRIGHT_CHROMIUM_PATH: see e2e/chromium.mjs
+// - PLAYWRIGHT_CHROMIUM_PATH: see findChromium in @huyab/e2e
 import { readFile } from "node:fs/promises";
+import { assertLocalOnly, BASE, findChromium } from "@huyab/e2e";
 import { chromium } from "playwright-core";
-import { findChromium } from "./chromium.mjs";
 
-const BASE = (process.env.E2E_BASE_URL || "http://127.0.0.1:8787").replace(
-  /\/$/,
-  "",
-);
 const WAIT = { timeout: 15000 };
 const NOTE_TITLE = "E2E note";
 
-if (!["127.0.0.1", "localhost"].includes(new URL(BASE).hostname)) {
-  console.error(`ui-smoke writes data; refusing to run against ${BASE}`);
-  process.exit(1);
-}
+assertLocalOnly();
 
 let passed = 0;
 let failed = 0;

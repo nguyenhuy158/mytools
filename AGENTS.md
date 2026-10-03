@@ -90,8 +90,9 @@ the real `projects` table through `wrangler d1 execute --remote`, so they need
 a logged-in wrangler locally and `CLOUDFLARE_API_TOKEN`/`CLOUDFLARE_ACCOUNT_ID`
 secrets in CI.
 
-E2E lives in `e2e/` (playwright-core; Chromium from `PLAYWRIGHT_CHROMIUM_PATH`,
-the Playwright cache or a system Chrome, see `e2e/chromium.mjs`):
+E2E lives in `e2e/` (playwright-core; server lifecycle, Chromium lookup and the
+local-only guard from `@huyab/e2e`, Chromium from `PLAYWRIGHT_CHROMIUM_PATH`,
+the Playwright cache or a system Chrome):
 
 - `pnpm e2e` (`e2e/run.mjs`) builds, serves `build/` with
   `wrangler dev --local` (remote bindings off, so the `remote: true` NOTES KV

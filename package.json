@@ -63,6 +63,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.15",
 		"@cloudflare/vite-plugin": "^1.13.5",
+		"@huyab/e2e": "github:nguyenhuy158/kit#v0.1.0&path:packages/e2e",
 		"@react-router/dev": "^7.10.0",
 		"@tailwindcss/vite": "^4.1.13",
 		"@testing-library/jest-dom": "^6.1.5",
