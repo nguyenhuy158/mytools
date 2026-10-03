@@ -31,40 +31,48 @@ export function MermaidTimeline({ items }: MermaidTimelineProps) {
     });
   }, []);
 
+  // Keyed on the definition text, not the `items` array: the parent rebuilds
+  // that array on every render (e.g. when the About page's map finishes
+  // loading), and re-rendering mid-layout detached the diagram mermaid was
+  // still measuring, rejecting run() with "reading 'getBBox'".
+  const mermaidDef = `timeline
+    ${items
+      .map((item) => {
+        const itemsList = item.items.map((i) => `${i.name}: ${i.desc}`).join(" : ");
+        return `${item.phase} : ${item.title} : ${itemsList}`;
+      })
+      .join("\n    ")}`;
+
   useEffect(() => {
-    if (containerRef.current) {
-      const timelineEvents = items
-        .map((item) => {
-          const itemsList = item.items
-            .map((i) => `${i.name}: ${i.desc}`)
-            .join(" : ");
-          return `${item.phase} : ${item.title} : ${itemsList}`;
-        })
-        .join("\n    ");
+    const container = containerRef.current;
+    if (!container) return;
 
-      const mermaidDef = `timeline
-    ${timelineEvents}`;
+    container.textContent = "";
 
-      containerRef.current.textContent = "";
-      
-      // Inject style to override Tailwind's max-width: 100% on SVGs within this container
-      const style = document.createElement("style");
-      style.textContent = `
+    // Inject style to override Tailwind's max-width: 100% on SVGs within this container
+    const style = document.createElement("style");
+    style.textContent = `
         .mermaid-wrapper svg {
           max-width: none !important;
           width: auto !important;
         }
       `;
-      containerRef.current.appendChild(style);
+    container.appendChild(style);
 
-      const pre = document.createElement("pre");
-      pre.className = "mermaid";
-      pre.textContent = mermaidDef;
-      containerRef.current.appendChild(pre);
+    const pre = document.createElement("pre");
+    pre.className = "mermaid";
+    pre.textContent = mermaidDef;
+    container.appendChild(pre);
 
-      mermaid.run();
-    }
-  }, [items]);
+    let replaced = false;
+    mermaid.run({ nodes: [pre] }).catch((error) => {
+      // A newer definition replaced this diagram mid-render; only report live failures.
+      if (!replaced) console.error("Mermaid timeline failed to render", error);
+    });
+    return () => {
+      replaced = true;
+    };
+  }, [mermaidDef]);
 
   return (
     <div
