@@ -71,6 +71,10 @@
 		{
 			"pattern": "case.huyab.cfd",
 			"custom_domain": true
+		},
+		{
+			"pattern": "www.huyab.cfd",
+			"custom_domain": true
 		}
 	]
 	/**
