@@ -55,7 +55,7 @@
 			]
 		},
 		{
-			// Loto moved to games.huyab.click with its own room Durable Object.
+			// Loto moved to games.huyab.cfd with its own room Durable Object.
 			"tag": "v3",
 			"deleted_classes": [
 				"LotoGameRoom"
@@ -65,11 +65,11 @@
 	"workers_dev": false,
 	"routes": [
 		{
-			"pattern": "huyab.click",
+			"pattern": "huyab.cfd",
 			"custom_domain": true
 		},
 		{
-			"pattern": "case.huyab.click",
+			"pattern": "case.huyab.cfd",
 			"custom_domain": true
 		}
 	]

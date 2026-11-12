@@ -9,7 +9,7 @@ doc staying in sync.
 Three request-routing layers exist, in this order:
 
 1. **`workers/games-redirect.ts`** answers every `/games` and `/games/*` path
-   with a `301` to [games.huyab.click](https://games.huyab.click), where the
+   with a `301` to [games.huyab.cfd](https://games.huyab.cfd), where the
    games now live — see [Games redirects](#games-redirects).
 2. **`workers/cli.ts`** runs next, inside the Worker `fetch` handler. It
    answers curl/wget-style clients with plain text and returns `null` for
@@ -108,21 +108,21 @@ how many browsers currently have the site open.
 
 ## Games redirects
 
-The games moved to their own app at `https://games.huyab.click`
+The games moved to their own app at `https://games.huyab.cfd`
 (the `games` repo). `workers/games-redirect.ts` sends a `301` for every old
 URL, keeping the query string (shared loto room links). The slug map lives in
 `app/utils/games.ts`, shared with the Navbar and command menu links.
 
 | Old URL | Redirects to |
 | --- | --- |
-| `/games` | `https://games.huyab.click/` |
-| `/games/2048` | `https://games.huyab.click/2048/` |
-| `/games/tetris` | `https://games.huyab.click/tetris/` |
-| `/games/sudoku` | `https://games.huyab.click/sudoku/` |
-| `/games/loto` | `https://games.huyab.click/loto/` |
-| `/games/snake` | `https://games.huyab.click/nokia/snake/` |
-| `/games/minesweeper` | `https://games.huyab.click/do-min/` |
-| any other `/games/*` | `https://games.huyab.click/` |
+| `/games` | `https://games.huyab.cfd/` |
+| `/games/2048` | `https://games.huyab.cfd/2048/` |
+| `/games/tetris` | `https://games.huyab.cfd/tetris/` |
+| `/games/sudoku` | `https://games.huyab.cfd/sudoku/` |
+| `/games/loto` | `https://games.huyab.cfd/loto/` |
+| `/games/snake` | `https://games.huyab.cfd/nokia/snake/` |
+| `/games/minesweeper` | `https://games.huyab.cfd/do-min/` |
+| any other `/games/*` | `https://games.huyab.cfd/` |
 
 ---
 
@@ -139,7 +139,7 @@ browser `User-Agent` still gets the normal HTML site at every path below.
 | `/-h`, `/--help`, `/help`, `/h`, `/usage` | Full usage text, any client. |
 | `/sh`, `/shell` | A POSIX `sh` `tc` function to `eval`, so text needs no quoting. Prefers `curl`, falls back to `wget`. |
 
-Full usage: `curl huyab.click/-h`. Implementation and the fall-through rule
+Full usage: `curl huyab.cfd/-h`. Implementation and the fall-through rule
 that keeps every route above intact are covered by
 `__tests__/workers/cli.test.ts`.
 

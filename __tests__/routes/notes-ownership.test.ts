@@ -67,7 +67,7 @@ const req = (
     body,
   }: { owner?: string; method?: string; body?: FormData } = {},
 ) => {
-  const real = new Request(`https://huyab.click${url}`, { method, body });
+  const real = new Request(`https://huyab.cfd${url}`, { method, body });
   const cookie = owner ? `${OWNER_COOKIE}=${owner}` : null;
 
   return {

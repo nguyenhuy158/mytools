@@ -115,7 +115,7 @@ pnpm check && pnpm test:run && pnpm build && pnpm preview
 - Image tools
 - API tester
 - Pomodoro timer
-- Games redirect to games.huyab.click
+- Games redirect to games.huyab.cfd
 - Calendar
 - Dark mode & i18n
 - Performance & browser compatibility

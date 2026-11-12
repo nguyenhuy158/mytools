@@ -107,26 +107,26 @@ describe("project status check", () => {
 
 describe("isSameHost", () => {
   it("matches the host serving the request", () => {
-    expect(isSameHost("https://huyab.click", "https://huyab.click/api/x")).toBe(
+    expect(isSameHost("https://huyab.cfd", "https://huyab.cfd/api/x")).toBe(
       true,
     );
   });
 
   it("does not match a different subdomain", () => {
-    // tc.huyab.click is a separate origin and must still be pinged.
+    // tc.huyab.cfd is a separate origin and must still be pinged.
     expect(
-      isSameHost("https://tc.huyab.click", "https://huyab.click/api/x"),
+      isSameHost("https://tc.huyab.cfd", "https://huyab.cfd/api/x"),
     ).toBe(false);
   });
 
   it("ignores path differences in the request URL", () => {
     expect(
-      isSameHost("https://huyab.click", "https://huyab.click/a/b?c=1"),
+      isSameHost("https://huyab.cfd", "https://huyab.cfd/a/b?c=1"),
     ).toBe(true);
   });
 
   it("returns false for a malformed URL instead of throwing", () => {
-    expect(isSameHost("not a url", "https://huyab.click")).toBe(false);
+    expect(isSameHost("not a url", "https://huyab.cfd")).toBe(false);
   });
 });
 
@@ -144,7 +144,7 @@ describe("loader", () => {
     globalThis.fetch = stubFetch(calls);
     try {
       const res = await loader({
-        request: new Request("https://huyab.click/api/projects-status"),
+        request: new Request("https://huyab.cfd/api/projects-status"),
         context,
       });
       const data = (await res.json()) as {
@@ -154,7 +154,7 @@ describe("loader", () => {
       const self = data.statuses.find((s) => s.id === "toolhub")!;
       expect(self.online).toBe(true);
       expect(self.self).toBe(true);
-      expect(calls.some((u) => u.includes("//huyab.click"))).toBe(false);
+      expect(calls.some((u) => u.includes("//huyab.cfd"))).toBe(false);
 
       const projects = await loadProjects(context.cloudflare.env.DB);
       const others = projects.filter(
@@ -172,10 +172,10 @@ describe("loader", () => {
     globalThis.fetch = stubFetch(calls);
     try {
       await loader({
-        request: new Request("https://huyab.click/api/projects-status"),
+        request: new Request("https://huyab.cfd/api/projects-status"),
         context,
       });
-      expect(calls.some((u) => u.includes("tc.huyab.click"))).toBe(true);
+      expect(calls.some((u) => u.includes("tc.huyab.cfd"))).toBe(true);
     } finally {
       globalThis.fetch = original;
     }
@@ -186,7 +186,7 @@ describe("loader", () => {
     globalThis.fetch = stubFetch([]);
     try {
       const res = await loader({
-        request: new Request("https://huyab.click/api/projects-status"),
+        request: new Request("https://huyab.cfd/api/projects-status"),
         context,
       });
       expect(res.headers.get("cache-control")).toContain("s-maxage=");
@@ -200,35 +200,35 @@ describe("loader", () => {
 describe("isSameZone", () => {
   it("matches a sibling subdomain on the same apex", () => {
     expect(
-      isSameZone("https://chat.huyab.click", "https://huyab.click/api/x"),
+      isSameZone("https://chat.huyab.cfd", "https://huyab.cfd/api/x"),
     ).toBe(true);
   });
 
   it("matches the apex itself", () => {
-    expect(isSameZone("https://huyab.click", "https://huyab.click/api/x")).toBe(
+    expect(isSameZone("https://huyab.cfd", "https://huyab.cfd/api/x")).toBe(
       true,
     );
   });
 
   it("does not match another domain", () => {
     expect(
-      isSameZone("https://example.com", "https://huyab.click/api/x"),
+      isSameZone("https://example.com", "https://huyab.cfd/api/x"),
     ).toBe(false);
   });
 
   it("returns false for a malformed URL", () => {
-    expect(isSameZone("nope", "https://huyab.click")).toBe(false);
+    expect(isSameZone("nope", "https://huyab.cfd")).toBe(false);
   });
 });
 
 describe("reconcileSameZone", () => {
-  const req = "https://huyab.click/api/projects-status";
+  const req = "https://huyab.cfd/api/projects-status";
 
   it("turns a same-zone 522 into unknown rather than offline", () => {
-    // chat.huyab.click answers 200 outside but 522 to a Worker on its zone.
+    // chat.huyab.cfd answers 200 outside but 522 to a Worker on its zone.
     const out = reconcileSameZone(
       { id: "chatroom", online: false, ms: 256, httpStatus: 522 },
-      "https://chat.huyab.click",
+      "https://chat.huyab.cfd",
       req,
     );
     expect(out.online).toBe(null);
@@ -241,7 +241,7 @@ describe("reconcileSameZone", () => {
     (code) => {
       const out = reconcileSameZone(
         { id: "x", online: false, ms: 1, httpStatus: code },
-        "https://chat.huyab.click",
+        "https://chat.huyab.cfd",
         req,
       );
       expect(out.online).toBe(null);
@@ -252,7 +252,7 @@ describe("reconcileSameZone", () => {
     // 5xx from the site itself is the site's own answer, not a loopback.
     const out = reconcileSameZone(
       { id: "x", online: false, ms: 10, httpStatus: 500 },
-      "https://chat.huyab.click",
+      "https://chat.huyab.cfd",
       req,
     );
     expect(out.online).toBe(false);
@@ -270,13 +270,13 @@ describe("reconcileSameZone", () => {
 
   it("leaves a healthy status untouched", () => {
     const ok = { id: "x", online: true, ms: 100, httpStatus: 200 };
-    expect(reconcileSameZone(ok, "https://chat.huyab.click", req)).toEqual(ok);
+    expect(reconcileSameZone(ok, "https://chat.huyab.cfd", req)).toEqual(ok);
   });
 
   it("leaves a thrown-error status untouched", () => {
     const errored = { id: "x", online: false, ms: null, error: "TypeError: x" };
     expect(
-      reconcileSameZone(errored, "https://chat.huyab.click", req),
+      reconcileSameZone(errored, "https://chat.huyab.cfd", req),
     ).toEqual(errored);
   });
 });

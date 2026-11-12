@@ -22,7 +22,7 @@
 		"postinstall": "pnpm cf-typegen",
 		"shots": "node scripts/refresh-project-shots.mjs",
 		"e2e": "node e2e/run.mjs",
-		"e2e:prod": "E2E_BASE_URL=https://huyab.click node e2e/readonly-smoke.mjs"
+		"e2e:prod": "E2E_BASE_URL=https://huyab.cfd node e2e/readonly-smoke.mjs"
 	},
 	"dependencies": {
 		"@tailwindcss/typography": "^0.5.19",
@@ -63,8 +63,8 @@
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.15",
 		"@cloudflare/vite-plugin": "^1.13.5",
-		"@huyab/config": "github:nguyenhuy158/kit#v0.1.0&path:packages/config",
-		"@huyab/e2e": "github:nguyenhuy158/kit#v0.1.0&path:packages/e2e",
+		"@huyab/config": "github:nguyenhuy158/kit#v0.2.0&path:packages/config",
+		"@huyab/e2e": "github:nguyenhuy158/kit#v0.2.0&path:packages/e2e",
 		"@react-router/dev": "^7.10.0",
 		"@tailwindcss/vite": "^4.1.13",
 		"@testing-library/jest-dom": "^6.1.5",

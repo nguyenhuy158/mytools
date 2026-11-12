@@ -2,12 +2,12 @@
 
 ## Project Structure & Module Organization
 
-ToolHub (`huyab.click`, `case.huyab.click`) is a collection of online tools
+ToolHub (`huyab.cfd`, `case.huyab.cfd`) is a collection of online tools
 (JSON, Text Diff, Pomodoro, Notes, ...) built with React Router v7 in
 SSR mode, Tailwind CSS v4 and TypeScript, served by one Cloudflare Worker.
 Fully internationalized (English/Vietnamese); slogan "Your Hub for Essential
 Tools" / "Trung tâm công cụ thiết yếu của bạn". The games live in the `games`
-repo at `games.huyab.click`; old `/games/*` URLs 301 there.
+repo at `games.huyab.cfd`; old `/games/*` URLs 301 there.
 
 ```text
 app/                           # React Router app (SSR)
@@ -24,7 +24,7 @@ app/                           # React Router app (SSR)
 workers/                       # Cloudflare Worker entry
   app.ts                       #   fetch handler: games redirect, CLI responder, then React Router
   cli.ts                       #   Plain-text interface for curl/wget clients
-  games-redirect.ts            #   301s /games/* to games.huyab.click (runs first)
+  games-redirect.ts            #   301s /games/* to games.huyab.cfd (runs first)
   online-counter.ts            #   Durable Object OnlineCounter (ONLINE_COUNTER)
 __tests__/                     # Vitest suites (components, routes, utils, workers)
 e2e/                           # E2E smoke (playwright-core): run.mjs, readonly-smoke.mjs, ui-smoke.mjs
@@ -49,7 +49,7 @@ How this repo fits with the others:
   which `/projects` pings for uptime (ai-english, chia-keo, notes, monitor,
   share, cardstat, hooks, games, resume); external Odoo instances over
   JSON-RPC from the Odoo inspector. Navbar, command menu and `/games/*`
-  redirects point at `games.huyab.click`. No other repo calls mytools.
+  redirects point at `games.huyab.cfd`. No other repo calls mytools.
 
 ## Build, Test, and Development Commands
 
@@ -65,7 +65,7 @@ How this repo fits with the others:
 - `pnpm preview`: build, then serve the production build locally.
 - `pnpm shots`: refresh the project screenshots in `public/projects/`.
 - `pnpm e2e`: build, serve with `wrangler dev --local`, run the E2E smoke;
-  `pnpm e2e:prod`: the read-only part against `https://huyab.click`.
+  `pnpm e2e:prod`: the read-only part against `https://huyab.cfd`.
 
 Use `pnpm` for all package commands, never `npm` (pinned via `packageManager`,
 Node version in `.nvmrc`).
@@ -118,7 +118,7 @@ the Playwright cache or a system Chrome):
   as the `e2e` job. `/projects` is skipped locally: its D1 table is remote-only.
 - `pnpm e2e:prod` runs only `readonly-smoke.mjs` against production: GETs of
   every UI route (render + no uncaught page errors), a 404 path, the
-  `/games/*` → `games.huyab.click` 301s, `/api/holidays`, the PWA manifest
+  `/games/*` → `games.huyab.cfd` 301s, `/api/holidays`, the PWA manifest
   and `sw.js`, and the curl text interface (`/`, `/upper/<text>`). Keep it
   GET-only; never add clicks, form submits or API writes to it.
 
@@ -165,7 +165,7 @@ deleting it looks harmless and breaks only CI.
 and without them `pnpm build` dies on `ERR_PNPM_IGNORED_BUILDS`.
 
 **Keep `routes` in `wrangler.jsonc` matching the real custom domains**,
-currently `huyab.click` (apex) and `case.huyab.click`. A route pointing at a
+currently `huyab.cfd` (apex) and `case.huyab.cfd`. A route pointing at a
 zone outside the `nguyenhuy158` account fails the deploy. The config referenced
 the long-dead `huycode.click` for months.
 
