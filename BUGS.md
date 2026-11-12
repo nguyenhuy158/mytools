@@ -1,6 +1,6 @@
 # Known Bugs
 
-Findings from a production audit on 2026-08-05 (`huyab.click`). Each entry
+Findings from a production audit on 2026-08-05 (`huyab.cfd`). Each entry
 records how it was verified, so nothing here is a guess. Tick a box only after
 the fix is verified **on prod**, not just locally — this project deploys on
 push to `main` and tests do not gate the deploy.
@@ -18,7 +18,7 @@ authentication anywhere.
 **Verified on prod**
 
 ```sh
-$ curl https://huyab.click/api/notes
+$ curl https://huyab.cfd/api/notes
 [{"id":"de2282bd…","title":"Untitled Note","plainText":"2kfa;sjldkfajslkd",…},
  {"id":…,"title":"what  the help??",…}]
 ```
@@ -66,9 +66,9 @@ deleting someone's note — and assert the note survives.
 **Verified on prod**
 
 ```sh
-$ curl -o /dev/null -w '%{http_code}' https://huyab.click/sw.js
+$ curl -o /dev/null -w '%{http_code}' https://huyab.cfd/sw.js
 404
-$ curl https://huyab.click/registerSW.js
+$ curl https://huyab.cfd/registerSW.js
 if('serviceWorker' in navigator) { … navigator.serviceWorker.register('/sw.js', …) }
 ```
 
@@ -199,7 +199,7 @@ through. The util is exported though, and `toEnglish` returning the string
 
 - `GET /sitemap.xml` → 404, while `/robots.txt` → 200.
 - No `<link rel="canonical">` and no `og:` tags on any page.
-- `huyab.click` and `case.huyab.click` both serve the identical site with the
+- `huyab.cfd` and `case.huyab.cfd` both serve the identical site with the
   same `<title>`, so search engines see duplicate content. (`www` already
   301s correctly.)
 

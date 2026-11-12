@@ -38,7 +38,7 @@ graph TB
             Quotes[💭 Random Quotes]
         end
 
-        Games[🎮 Games → games.huyab.click 301]
+        Games[🎮 Games → games.huyab.cfd 301]
 
         Calendar[📅 Calendar]
         About[ℹ️ About]
@@ -353,7 +353,7 @@ graph TB
 - 🛠️ JSON Tools (Format, Validate, Minify, Fix, History, Clipboard, File Operations, Tab Size)
 - 🗓️ Solar & Lunar Calendar
 - 📱 PWA Support (Offline ready & Installable)
-- 🖥️ CLI-friendly (`curl huyab.click/upper -d 'đường phố'`)
+- 🖥️ CLI-friendly (`curl huyab.cfd/upper -d 'đường phố'`)
 - 📖 [React Router docs](https://reactrouter.com/)
 
 See [ROUTES.md](./ROUTES.md) for the full list of pages and API endpoints.
@@ -393,31 +393,31 @@ from curl/wget (or any client without a browser `User-Agent`) get plain text
 instead of HTML.
 
 ```sh
-curl huyab.click                          # banner + case list
-curl huyab.click/-h                       # full help
-curl huyab.click/upper -d 'đường phố'     # ĐƯỜNG PHỐ
-curl 'huyab.click/title/tỉnh ninh thuận'  # Tỉnh Ninh Thuận
-cat notes.txt | curl huyab.click/lower --data-binary @-
-curl 'huyab.click/capitalized?text=ăn ở ưu đãi&json'
+curl huyab.cfd                          # banner + case list
+curl huyab.cfd/-h                       # full help
+curl huyab.cfd/upper -d 'đường phố'     # ĐƯỜNG PHỐ
+curl 'huyab.cfd/title/tỉnh ninh thuận'  # Tỉnh Ninh Thuận
+cat notes.txt | curl huyab.cfd/lower --data-binary @-
+curl 'huyab.cfd/capitalized?text=ăn ở ưu đãi&json'
 ```
 
 `wget` works the same way:
 
 ```sh
-wget -qO- huyab.click/-h
-wget -qO- --post-data='tỉnh ninh thuận' huyab.click/upper
-wget -qO- 'huyab.click/title/tỉnh ninh thuận'
+wget -qO- huyab.cfd/-h
+wget -qO- --post-data='tỉnh ninh thuận' huyab.cfd/upper
+wget -qO- 'huyab.cfd/title/tỉnh ninh thuận'
 ```
 
 One wget limitation: it cannot take the body from a pipe (`--post-file` needs
 a seekable file, so `-` and `/dev/stdin` both fail). Use a temp file, or curl.
 
-Quote the whole URL when the text contains spaces — `curl huyab.click/t xin
+Quote the whole URL when the text contains spaces — `curl huyab.cfd/t xin
 chao` makes curl treat `xin` and `chao` as extra URLs and fail DNS. To skip
 quoting entirely, install the `tc` shell function:
 
 ```sh
-eval "$(curl -s huyab.click/sh)"   # add to ~/.zshrc to keep it
+eval "$(curl -s huyab.cfd/sh)"   # add to ~/.zshrc to keep it
 tc t tinh ninh thuan              # Tinh Ninh Thuan
 tc upper đường phố                 # ĐƯỜNG PHỐ
 cat notes.txt | tc title           # reads stdin when given no words

@@ -37,7 +37,7 @@ export async function check(
       signal: controller.signal,
       headers: {
         // Identify the pinger so site owners can see what this traffic is.
-        "user-agent": "ToolHub-status-check (+https://huyab.click/projects)",
+        "user-agent": "ToolHub-status-check (+https://huyab.cfd/projects)",
       },
     });
     // The body is never read — status and timing are all that is needed.
@@ -77,7 +77,7 @@ export function isSameHost(target: string, requestUrl: string): boolean {
   }
 }
 
-/** Last two labels of a hostname: huyab.click for tc.huyab.click. */
+/** Last two labels of a hostname: huyab.cfd for tc.huyab.cfd. */
 function apexOf(hostname: string): string {
   return hostname.split(".").slice(-2).join(".");
 }
@@ -101,7 +101,7 @@ export function isSameZone(target: string, requestUrl: string): boolean {
 const LOOPBACK_CODES = new Set([520, 521, 522, 523, 524, 525, 526, 527]);
 
 /**
- * chat.huyab.click answers 200 to the outside world but 522 to a fetch from
+ * chat.huyab.cfd answers 200 to the outside world but 522 to a fetch from
  * this Worker. Reporting that as "Offline" would be a lie about someone's
  * site, so a Cloudflare 52x from a same-zone host is recorded as unknown.
  */

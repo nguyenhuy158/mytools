@@ -29,7 +29,7 @@ pnpm preview
 - [ ] Footer displays correctly
 - [ ] Dark mode toggle works
 - [ ] Language switcher (EN/VI) works and persists
-- [ ] All main routes accessible: IT, Lifestyle, Calendar, About; Navbar "Games" opens games.huyab.click
+- [ ] All main routes accessible: IT, Lifestyle, Calendar, About; Navbar "Games" opens games.huyab.cfd
 - [ ] Mobile responsiveness (test at 375px, 768px, 1024px)
 
 **Test Steps:**
@@ -267,14 +267,14 @@ POST https://jsonplaceholder.typicode.com/posts with JSON body
 
 ### 12. **Games redirect**
 
-The games live at https://games.huyab.click (`games` repo); only the old
+The games live at https://games.huyab.cfd (`games` repo); only the old
 URLs are tested here.
 
-- [ ] `curl -sI <host>/games` → `301`, `location: https://games.huyab.click/`
+- [ ] `curl -sI <host>/games` → `301`, `location: https://games.huyab.cfd/`
 - [ ] `/games/2048`, `/games/tetris`, `/games/sudoku`, `/games/loto` → `/2048/`, `/tetris/`, `/sudoku/`, `/loto/`
 - [ ] `/games/snake` → `/nokia/snake/`, `/games/minesweeper` → `/do-min/`
 - [ ] Query string survives (`/games/loto?room=abc` → `/loto/?room=abc`)
-- [ ] Command menu (`Cmd+K`) "Games" entries open games.huyab.click
+- [ ] Command menu (`Cmd+K`) "Games" entries open games.huyab.cfd
 
 ---
 

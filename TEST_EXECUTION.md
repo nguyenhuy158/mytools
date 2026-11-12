@@ -90,7 +90,7 @@ See [TESTING.md](./TESTING.md) for comprehensive manual test cases:
 - **Core Navigation** - Routes, navbar, dark mode, i18n
 - **IT Tools** - JSON, Diff, Markdown, Images, API Tester, Notes
 - **Lifestyle** - Pomodoro, Quotes
-- **Games redirect** - `/games/*` 301s to games.huyab.click
+- **Games redirect** - `/games/*` 301s to games.huyab.cfd
 - **Calendar** - Solar/Lunar dates, holidays
 - **Performance** - Load times, memory, PWA
 - **Browser Compatibility** - Chrome, Firefox, Safari, Edge

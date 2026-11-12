@@ -1,6 +1,6 @@
 // Read-only smoke: only GETs pages and public endpoints and checks they render.
 // No clicks, no form submits, no POST/PUT/DELETE. Safe against production:
-// `pnpm e2e:prod` (huyab.click). `pnpm e2e` runs it first against local
+// `pnpm e2e:prod` (huyab.cfd). `pnpm e2e` runs it first against local
 // `wrangler dev`, so dev and prod share these checks.
 //
 // Environment:
@@ -93,12 +93,12 @@ try {
   await get("/definitely-not-a-route", 404, { "user-agent": "Mozilla/5.0" });
   ok("unknown route returns 404");
 
-  // 2b. The games moved to games.huyab.click: old links redirect there.
-  //     `wrangler dev` rewrites the huyab.click zone in Location headers to
+  // 2b. The games moved to games.huyab.cfd: old links redirect there.
+  //     `wrangler dev` rewrites the huyab.cfd zone in Location headers to
   //     the local host, so locally the target reads games.127.0.0.1:<port>.
   const gamesOrigin = LOCAL
     ? `https://games.${new URL(BASE).host}`
-    : "https://games.huyab.click";
+    : "https://games.huyab.cfd";
   for (const [path, target] of [
     ["/games", "/"],
     ["/games/2048", "/2048/"],
@@ -112,7 +112,7 @@ try {
     if (location !== `${gamesOrigin}${target}`)
       throw new Error(`${path} redirects to ${location}`);
   }
-  ok("/games/* redirects to games.huyab.click");
+  ok("/games/* redirects to games.huyab.cfd");
 
   // 3. Server-backed read endpoint.
   const { holidays } = await (await get("/api/holidays", 200)).json();

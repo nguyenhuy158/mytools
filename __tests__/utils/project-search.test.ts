@@ -48,7 +48,7 @@ describe("matchesQuery", () => {
     name: "Chấm công & Tạo danh sách đơn",
     tagline: "Chấm công, tính lương",
     description: "Bảng chấm công theo buổi",
-    url: "https://tdtu.huyab.click",
+    url: "https://tdtu.huyab.cfd",
     tech: ["Cloudflare Pages", "JWT"],
     highlights: ["Tính lương"],
     since: "2026",

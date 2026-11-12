@@ -8,7 +8,7 @@ const BROWSER = {
 };
 
 const get = (path: string, headers: Record<string, string> = CURL) =>
-  handleCliRequest(new Request(`https://huyab.click${path}`, { headers }));
+  handleCliRequest(new Request(`https://huyab.cfd${path}`, { headers }));
 
 const post = (
   path: string,
@@ -16,7 +16,7 @@ const post = (
   headers: Record<string, string> = CURL,
 ) =>
   handleCliRequest(
-    new Request(`https://huyab.click${path}`, {
+    new Request(`https://huyab.cfd${path}`, {
       method: "POST",
       body,
       headers,
@@ -95,7 +95,7 @@ describe("CLI worker interface", () => {
       async (path) => {
         const out = await body(await get(path));
         expect(out).toContain("USAGE");
-        expect(out).toContain("curl huyab.click/<case>");
+        expect(out).toContain("curl huyab.cfd/<case>");
       },
     );
 
@@ -171,7 +171,7 @@ describe("CLI worker interface", () => {
     it("serves a banner at / for curl", async () => {
       const out = await body(await get("/"));
       expect(out).toContain("ToolHub");
-      expect(out).toContain("curl huyab.click/-h");
+      expect(out).toContain("curl huyab.cfd/-h");
     });
 
     it("serves the banner when there is no User-Agent", async () => {
@@ -260,14 +260,14 @@ describe("CLI worker interface", () => {
       expect(res!.status).toBe(400);
       const out = await res!.text();
       expect(out).toContain("no input");
-      expect(out).toContain("curl huyab.click/-h");
+      expect(out).toContain("curl huyab.cfd/-h");
     });
 
     it("explains the bare-words mistake in the no-input error", async () => {
-      // `curl huyab.click/t ninh thuan` sends no body; the error must say why.
+      // `curl huyab.cfd/t ninh thuan` sends no body; the error must say why.
       const out = await body(await post("/t", ""));
       expect(out).toContain("extra URLs");
-      expect(out).toContain("'huyab.click/title/ninh thuan'");
+      expect(out).toContain("'huyab.cfd/title/ninh thuan'");
       expect(out).toContain("tc title ninh thuan");
     });
 
@@ -311,7 +311,7 @@ describe("CLI worker interface", () => {
     it("ignores methods other than GET and POST", async () => {
       for (const method of ["PUT", "DELETE", "PATCH", "OPTIONS"]) {
         const res = await handleCliRequest(
-          new Request("https://huyab.click/upper", { method, headers: CURL }),
+          new Request("https://huyab.cfd/upper", { method, headers: CURL }),
         );
         expect(res).toBeNull();
       }

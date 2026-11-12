@@ -83,7 +83,7 @@ describe("Project stats", () => {
       expect(displayHost("https://www.example.com/a/b?c=1")).toBe(
         "example.com",
       );
-      expect(displayHost("https://huyab.click")).toBe("huyab.click");
+      expect(displayHost("https://huyab.cfd")).toBe("huyab.cfd");
     });
 
     it("returns the input unchanged when it is not a URL", () => {

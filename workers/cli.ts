@@ -5,10 +5,10 @@
  * anything it does not own so normal browser traffic, the /api routes and the
  * WebSocket upgrades fall through untouched.
  *
- *   curl huyab.click                       banner + usage
- *   curl huyab.click/upper -d 'ninh thuận'  convert stdin/body
- *   curl huyab.click/title/ninh thuận          convert a path argument
- *   curl huyab.click/-h                    usage
+ *   curl huyab.cfd                       banner + usage
+ *   curl huyab.cfd/upper -d 'ninh thuận'  convert stdin/body
+ *   curl huyab.cfd/title/ninh thuận          convert a path argument
+ *   curl huyab.cfd/-h                    usage
  */
 import * as textCase from "../app/utils/text-case";
 
@@ -47,13 +47,13 @@ const HELP_PARAMS = ["h", "-h", "help", "--help"];
 const CLI_AGENT = /\b(curl|wget|httpie|http|libcurl|powershell|wsl|fetch)\b/i;
 
 const USAGE = `ToolHub — text case converter over HTTP
-https://huyab.click
+https://huyab.cfd
 
 USAGE
-  curl huyab.click/<case> -d '<text>'
-  curl huyab.click/<case>/<text>
-  echo '<text>' | curl huyab.click/<case> --data-binary @-
-  cat file.txt | curl huyab.click/<case> --data-binary @-
+  curl huyab.cfd/<case> -d '<text>'
+  curl huyab.cfd/<case>/<text>
+  echo '<text>' | curl huyab.cfd/<case> --data-binary @-
+  cat file.txt | curl huyab.cfd/<case> --data-binary @-
 
 CASES  — shown as applied to: tỉnh ninh thuận
   upper         TỈNH NINH THUẬN       (aliases: u, uc)
@@ -74,9 +74,9 @@ OPTIONS
   ?text=<text>  pass the text as a query parameter
 
 WGET
-  wget -qO- huyab.click/-h
-  wget -qO- --post-data='tỉnh ninh thuận' huyab.click/upper
-  wget -qO- 'huyab.click/title/tỉnh ninh thuận'
+  wget -qO- huyab.cfd/-h
+  wget -qO- --post-data='tỉnh ninh thuận' huyab.cfd/upper
+  wget -qO- 'huyab.cfd/title/tỉnh ninh thuận'
 
   wget cannot read the body from a pipe: --post-file needs a seekable file,
   so both '-' and /dev/stdin fail. Write a temp file, or use curl for pipes.
@@ -84,7 +84,7 @@ WGET
 SHELL HELPER
   Tired of quoting? Install a 'tc' function once:
 
-    eval "$(curl -s huyab.click/sh)"      # add to ~/.zshrc to keep it
+    eval "$(curl -s huyab.cfd/sh)"      # add to ~/.zshrc to keep it
     tc t tinh ninh thuan                  # Tinh Ninh Thuan
     tc upper tỉnh ninh thuận              # TỈNH NINH THUẬN
     cat notes.txt | tc upper              # reads stdin when given no words
@@ -96,36 +96,36 @@ NOTES
   Trailing newlines in the input are preserved; curl -d strips them for you.
   Quote the whole URL if the text has spaces — curl treats a bare second
   word as another URL and tries to resolve it as a hostname:
-    curl huyab.click/t ninh thuan      ✗  "Could not resolve host: ninh"
-    curl 'huyab.click/t/ninh thuan'    ✓
-    curl huyab.click/t -d 'ninh thuan' ✓
+    curl huyab.cfd/t ninh thuan      ✗  "Could not resolve host: ninh"
+    curl 'huyab.cfd/t/ninh thuan'    ✓
+    curl huyab.cfd/t -d 'ninh thuan' ✓
 
 EXAMPLES
-  curl huyab.click/upper -d 'tỉnh ninh thuận'
-  curl 'huyab.click/title/tỉnh ninh thuận'
-  curl 'huyab.click/capitalized?text=phan rang tháp chàm&json'
-  curl -s huyab.click/lower -d 'NINH THUẬN' | tee out.txt
+  curl huyab.cfd/upper -d 'tỉnh ninh thuận'
+  curl 'huyab.cfd/title/tỉnh ninh thuận'
+  curl 'huyab.cfd/capitalized?text=phan rang tháp chàm&json'
+  curl -s huyab.cfd/lower -d 'NINH THUẬN' | tee out.txt
 `;
 
 const BANNER = `ToolHub — text case converter
   cases: ${Object.keys(MODES).join(" ")}
-  usage: curl huyab.click/<case> -d '<text>'
-  help:  curl huyab.click/-h
+  usage: curl huyab.cfd/<case> -d '<text>'
+  help:  curl huyab.cfd/-h
 
-The full site (JSON tools, diff, calendar, games) is at https://huyab.click
+The full site (JSON tools, diff, calendar, games) is at https://huyab.cfd
 `;
 
 /**
  * Shell function served at /sh, so text with spaces needs no quoting:
- *   eval "$(curl -s huyab.click/sh)" && tc t tinh ninh thuan
+ *   eval "$(curl -s huyab.cfd/sh)" && tc t tinh ninh thuan
  *
  * POSIX sh — no arrays, no [[ ]] — so it works under sh, bash and zsh. It
  * prefers curl and falls back to wget, which cannot post from a pipe and so
  * needs stdin buffered into a temp file.
  */
-const SHELL_HELPER = `# ToolHub case converter — eval "$(curl -s huyab.click/sh)"
+const SHELL_HELPER = `# ToolHub case converter — eval "$(curl -s huyab.cfd/sh)"
 tc() {
-  _tc_url="https://huyab.click"
+  _tc_url="https://huyab.cfd"
   if [ $# -eq 0 ] || [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
     if command -v curl >/dev/null 2>&1; then
       curl -s "$_tc_url/-h"
@@ -254,7 +254,7 @@ export async function handleCliRequest(
       : text(USAGE);
   }
 
-  // Shell helper source, for `eval "$(curl -s huyab.click/sh)"`.
+  // Shell helper source, for `eval "$(curl -s huyab.cfd/sh)"`.
   if (name === "sh" || name === "shell") {
     return text(SHELL_HELPER);
   }
@@ -274,14 +274,14 @@ export async function handleCliRequest(
     // all — curl treats each extra word as another URL to fetch.
     const message =
       `error: no input for '${mode}'\n\n` +
-      `  curl huyab.click/${mode} -d '<text>'\n` +
-      `  curl 'huyab.click/${mode}/<text>'      # quote the whole URL\n\n` +
+      `  curl huyab.cfd/${mode} -d '<text>'\n` +
+      `  curl 'huyab.cfd/${mode}/<text>'      # quote the whole URL\n\n` +
       `if you typed the text as bare words, curl read them as extra URLs:\n` +
-      `  curl huyab.click/${mode} ninh thuan      ✗\n` +
-      `  curl 'huyab.click/${mode}/ninh thuan'    ✓\n\n` +
+      `  curl huyab.cfd/${mode} ninh thuan      ✗\n` +
+      `  curl 'huyab.cfd/${mode}/ninh thuan'    ✓\n\n` +
       `no quoting at all:\n` +
-      `  eval "$(curl -s huyab.click/sh)" && tc ${mode} ninh thuan\n\n` +
-      `run 'curl huyab.click/-h' for help\n`;
+      `  eval "$(curl -s huyab.cfd/sh)" && tc ${mode} ninh thuan\n\n` +
+      `run 'curl huyab.cfd/-h' for help\n`;
     return wantsJson(request, url)
       ? json({ error: "no input", mode }, 400)
       : text(message, 400);

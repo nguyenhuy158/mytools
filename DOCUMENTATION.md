@@ -130,7 +130,7 @@ npx wrangler versions deploy
 ```
 
 ### Custom Domain
-The project is configured to deploy to `huyab.click` (apex) and `case.huyab.click` via Cloudflare routes.
+The project is configured to deploy to `huyab.cfd` (apex) and `case.huyab.cfd` via Cloudflare routes.
 
 ## 📁 Project Structure
 
@@ -212,7 +212,7 @@ toolhub/
 
 ### Games
 The games (2048, Snake, Minesweeper, Tetris, Sudoku, Lô tô) live in their own
-app at https://games.huyab.click. Old `/games/*` URLs redirect there with a 301.
+app at https://games.huyab.cfd. Old `/games/*` URLs redirect there with a 301.
 
 ### Additional Features
 - **Calendar** (`/calendar`) - Solar and Lunar calendar
@@ -323,7 +323,7 @@ function MyComponent() {
 
 ### Current Status
 - ✅ Core IT tools (JSON, Text Diff, Image Tools, API Tester)
-- ✅ Games moved to https://games.huyab.click (`/games/*` redirects there)
+- ✅ Games moved to https://games.huyab.cfd (`/games/*` redirects there)
 - ✅ Lifestyle tools (Pomodoro Timer)
 - ✅ Full internationalization (EN/VI)
 - ✅ Dark mode support
