@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Installs bws (Bitwarden Secrets Manager CLI), cf (Cloudflare CLI, beta) and Tailscale.
+# Installs bws (Bitwarden Secrets Manager CLI), cf (Cloudflare CLI, beta), wrangler,
+# cloudflared and Tailscale.
 # Linux x86_64 / arm64 and macOS. Idempotent: skips tools already installed.
 #
 # Auth model:
@@ -18,8 +19,8 @@ NODE_MIN_MAJOR=22
 NODE_MIN_MINOR=18
 
 case "$(uname -s)-$(uname -m)" in
-  Linux-x86_64)  BWS_TARGET="x86_64-unknown-linux-gnu" ;;
-  Linux-aarch64) BWS_TARGET="aarch64-unknown-linux-gnu" ;;
+  Linux-x86_64)  BWS_TARGET="x86_64-unknown-linux-gnu"; CLOUDFLARED_ASSET="cloudflared-linux-amd64" ;;
+  Linux-aarch64) BWS_TARGET="aarch64-unknown-linux-gnu"; CLOUDFLARED_ASSET="cloudflared-linux-arm64" ;;
   Darwin-arm64)  BWS_TARGET="aarch64-apple-darwin" ;;
   Darwin-x86_64) BWS_TARGET="x86_64-apple-darwin" ;;
   *) echo "Unsupported platform: $(uname -s)-$(uname -m)" >&2; exit 1 ;;
@@ -77,6 +78,38 @@ install_cf() {
   npm install --global cf
   echo "cf installed: $(cf --version)"
   echo "Tip: if another 'cf' (Cloud Foundry) is on PATH, use 'cloudflare' instead."
+}
+
+install_wrangler() {
+  if command -v wrangler >/dev/null 2>&1; then
+    echo "wrangler already installed: $(wrangler --version | head -1)"
+    return
+  fi
+  command -v npm >/dev/null 2>&1 || { echo "npm not found; install Node >= ${NODE_MIN_MAJOR}.${NODE_MIN_MINOR}" >&2; exit 1; }
+  npm install --global wrangler
+  echo "wrangler installed: $(wrangler --version | head -1)"
+}
+
+install_cloudflared() {
+  if command -v cloudflared >/dev/null 2>&1; then
+    echo "cloudflared already installed: $(cloudflared --version | head -1)"
+    return
+  fi
+  case "$(uname -s)" in
+    Linux)
+      local workdir
+      workdir="$(mktemp -d)"
+      trap 'rm -rf "$workdir"' RETURN
+      curl -fsSL -o "$workdir/cloudflared" \
+        "https://github.com/cloudflare/cloudflared/releases/latest/download/${CLOUDFLARED_ASSET}"
+      $SUDO install -m 755 "$workdir/cloudflared" "$INSTALL_DIR/cloudflared"
+      ;;
+    Darwin)
+      command -v brew >/dev/null 2>&1 || { echo "Homebrew not found; install it first (https://brew.sh)" >&2; exit 1; }
+      brew install cloudflared
+      ;;
+  esac
+  echo "cloudflared installed: $(cloudflared --version | head -1)"
 }
 
 install_tailscale() {
@@ -231,6 +264,8 @@ Set up by \`install-tools.sh\` on $(date -u +"%Y-%m-%d %H:%M UTC") (host: $(host
 |---|---|---|
 | bws (Bitwarden Secrets Manager) | $(tool_version bws) | token in env: $bws_auth |
 | cf (Cloudflare CLI, beta) | $(tool_version cf) | uses \`CLOUDFLARE_API_TOKEN\` from bws |
+| wrangler | $(tool_version wrangler) | uses \`CLOUDFLARE_API_TOKEN\` from bws |
+| cloudflared | $(tool_version cloudflared) | tunnels; login or token needed to run one |
 | tailscale | $(tool_version tailscale) | $(tailscale_state) |
 
 ## Where the tokens come from
@@ -271,6 +306,8 @@ README
 
 install_bws
 install_cf
+install_wrangler
+install_cloudflared
 install_tailscale
 verify_cf_token
 login_tailscale
