@@ -7,6 +7,8 @@
 #   cf         uses CLOUDFLARE_API_TOKEN, read from the bws secret of that name.
 #   tailscale  logs in with the TS_AUTH_KEY bws secret.
 # Without BWS_ACCESS_TOKEN the tools are installed but not authenticated.
+# In containers without TUN/systemd tailscaled runs in userspace mode and ~/.ssh/config
+# routes tailnet hosts through `tailscale nc`.
 # Set SKIP_AUTH=1 to install only.
 # Finishes by writing a README.md for this machine (README_PATH, default ~/README.md).
 set -euo pipefail
@@ -108,9 +110,41 @@ verify_cf_token() {
   fi
 }
 
+TS_STATE_DIR="${TS_STATE_DIR:-$HOME/.local/share/tailscale}"
+TS_SOCKET="$TS_STATE_DIR/tailscaled.sock"
+
+use_userspace_tailscale() {
+  [ "$(uname -s)" = "Linux" ] || return 1
+  [ -e /dev/net/tun ] && [ -d /run/systemd/system ] && return 1
+  return 0
+}
+
+start_userspace_tailscaled() {
+  mkdir -p "$TS_STATE_DIR"
+  if [ -S "$TS_SOCKET" ] && tailscale --socket="$TS_SOCKET" version >/dev/null 2>&1; then
+    return
+  fi
+  nohup tailscaled --tun=userspace-networking \
+    --state="$TS_STATE_DIR/tailscaled.state" --socket="$TS_SOCKET" \
+    >"$TS_STATE_DIR/tailscaled.log" 2>&1 &
+  local waited=0
+  until [ -S "$TS_SOCKET" ] || [ "$waited" -ge 10 ]; do
+    sleep 1
+    waited=$((waited + 1))
+  done
+  [ -S "$TS_SOCKET" ] || { echo "tailscaled did not start; see $TS_STATE_DIR/tailscaled.log" >&2; return 1; }
+}
+
 login_tailscale() {
   can_authenticate || { echo "tailscale: skipped login (no BWS_ACCESS_TOKEN or SKIP_AUTH=1)"; return; }
-  if tailscale status >/dev/null 2>&1; then
+  local ts_cmd=(tailscale) up_cmd=(sudo tailscale)
+  if use_userspace_tailscale; then
+    start_userspace_tailscaled
+    ts_cmd=(tailscale --socket="$TS_SOCKET")
+    up_cmd=("${ts_cmd[@]}")
+    echo "tailscale: userspace mode (no TUN or systemd); socket $TS_SOCKET"
+  fi
+  if "${ts_cmd[@]}" status >/dev/null 2>&1; then
     echo "tailscale already connected"
     return
   fi
@@ -122,8 +156,44 @@ login_tailscale() {
   chmod 600 "$keyfile"
   trap 'rm -f "$keyfile"' RETURN
   bws_secret TS_AUTH_KEY > "$keyfile"
-  sudo tailscale up --auth-key="file:$keyfile"
+  "${up_cmd[@]}" up --auth-key="file:$keyfile"
   echo "tailscale connected"
+}
+
+setup_tailnet_ssh() {
+  use_userspace_tailscale || return 0
+  [ -S "$TS_SOCKET" ] || return 0
+  local hosts
+  hosts="$(tailscale --socket="$TS_SOCKET" status --json | python3 -I -c '
+import json, re, sys
+status = json.load(sys.stdin)
+names = []
+for peer in status.get("Peer", {}).values():
+    for name in (peer["HostName"], peer["DNSName"].rstrip(".")):
+        if re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9.-]*", name) and name != "localhost":
+            names.append(name)
+print(" ".join(sorted(set(names))), "100.*")
+')"
+  mkdir -p "$HOME/.ssh"
+  chmod 700 "$HOME/.ssh"
+  local config="$HOME/.ssh/config" marker_begin="# BEGIN install-tools tailnet" marker_end="# END install-tools tailnet"
+  touch "$config"
+  chmod 600 "$config"
+  python3 -I - "$config" "$marker_begin" "$marker_end" <<PY
+import sys
+config, begin, end = sys.argv[1:4]
+text = open(config).read()
+if begin in text:
+    head, rest = text.split(begin, 1)
+    text = head + rest.split(end, 1)[1].lstrip("\n")
+block = """$marker_begin
+Host $hosts
+  ProxyCommand tailscale --socket=$TS_SOCKET nc %h %p
+$marker_end
+"""
+open(config, "w").write(text.rstrip("\n") + ("\n\n" if text.strip() else "") + block)
+PY
+  echo "ssh: tailnet hosts routed through tailscale nc ($config)"
 }
 
 tool_version() {
@@ -204,4 +274,5 @@ install_cf
 install_tailscale
 verify_cf_token
 login_tailscale
+setup_tailnet_ssh
 write_readme
