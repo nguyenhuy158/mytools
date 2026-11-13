@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 # Installs bws (Bitwarden Secrets Manager CLI), cf (Cloudflare CLI, beta) and Tailscale.
 # Linux x86_64 / arm64 and macOS. Idempotent: skips tools already installed.
+#
+# Auth model:
+#   bws        reads its token from the BWS_ACCESS_TOKEN env var.
+#   cf         uses CLOUDFLARE_API_TOKEN, read from the bws secret of that name.
+#   tailscale  logs in with the TS_AUTH_KEY bws secret.
+# Without BWS_ACCESS_TOKEN the tools are installed but not authenticated.
+# Set SKIP_AUTH=1 to install only.
 set -euo pipefail
 
 INSTALL_DIR="${INSTALL_DIR:-/usr/local/bin}"
@@ -17,6 +24,21 @@ esac
 
 SUDO=""
 [ -w "$INSTALL_DIR" ] || SUDO="sudo"
+
+bws_secret() {
+  bws secret list | python3 -I -c '
+import json, sys
+secrets = {item["key"]: item["value"] for item in json.load(sys.stdin)}
+value = secrets.get(sys.argv[1])
+if not value:
+    sys.exit("bws secret " + sys.argv[1] + " not found")
+sys.stdout.write(value)
+' "$1"
+}
+
+can_authenticate() {
+  [ "${SKIP_AUTH:-0}" != "1" ] && [ -n "${BWS_ACCESS_TOKEN:-}" ] && command -v bws >/dev/null 2>&1
+}
 
 install_bws() {
   if command -v bws >/dev/null 2>&1; then
@@ -69,9 +91,42 @@ install_tailscale() {
       ;;
   esac
   echo "tailscale installed: $(tailscale version | head -1)"
-  echo "Next: sudo tailscale up"
+}
+
+verify_cf_token() {
+  can_authenticate || { echo "cf: skipped token check (no BWS_ACCESS_TOKEN or SKIP_AUTH=1)"; return; }
+  local token
+  token="$(bws_secret CLOUDFLARE_API_TOKEN)"
+  if CLOUDFLARE_API_TOKEN="$token" cf zones list >/dev/null 2>&1; then
+    echo "cf: CLOUDFLARE_API_TOKEN from bws works"
+    echo "Use it in your shell with:"
+    echo "  export CLOUDFLARE_API_TOKEN=\"\$(bws secret list | python3 -I -c 'import json,sys;print({i[\"key\"]:i[\"value\"] for i in json.load(sys.stdin)}[\"CLOUDFLARE_API_TOKEN\"])')\""
+  else
+    echo "cf: CLOUDFLARE_API_TOKEN from bws was rejected" >&2
+    return 1
+  fi
+}
+
+login_tailscale() {
+  can_authenticate || { echo "tailscale: skipped login (no BWS_ACCESS_TOKEN or SKIP_AUTH=1)"; return; }
+  if tailscale status >/dev/null 2>&1; then
+    echo "tailscale already connected"
+    return
+  fi
+  if [ "$(uname -s)" = "Darwin" ]; then
+    sudo brew services start tailscale
+  fi
+  local keyfile
+  keyfile="$(mktemp)"
+  chmod 600 "$keyfile"
+  trap 'rm -f "$keyfile"' RETURN
+  bws_secret TS_AUTH_KEY > "$keyfile"
+  sudo tailscale up --auth-key="file:$keyfile"
+  echo "tailscale connected"
 }
 
 install_bws
 install_cf
 install_tailscale
+verify_cf_token
+login_tailscale
