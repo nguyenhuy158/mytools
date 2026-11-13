@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Installs bws (Bitwarden Secrets Manager CLI) and cf (Cloudflare CLI, beta).
+# Installs bws (Bitwarden Secrets Manager CLI), cf (Cloudflare CLI, beta) and Tailscale.
 # Linux x86_64 / arm64 and macOS. Idempotent: skips tools already installed.
 set -euo pipefail
 
@@ -54,5 +54,24 @@ install_cf() {
   echo "Tip: if another 'cf' (Cloud Foundry) is on PATH, use 'cloudflare' instead."
 }
 
+install_tailscale() {
+  if command -v tailscale >/dev/null 2>&1; then
+    echo "tailscale already installed: $(tailscale version | head -1)"
+    return
+  fi
+  case "$(uname -s)" in
+    Linux)
+      curl -fsSL https://tailscale.com/install.sh | sh
+      ;;
+    Darwin)
+      command -v brew >/dev/null 2>&1 || { echo "Homebrew not found; install it first (https://brew.sh)" >&2; exit 1; }
+      brew install tailscale
+      ;;
+  esac
+  echo "tailscale installed: $(tailscale version | head -1)"
+  echo "Next: sudo tailscale up"
+}
+
 install_bws
 install_cf
+install_tailscale
