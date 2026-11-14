@@ -86,6 +86,10 @@ Node version in `.nvmrc`).
   `bg-primary`, `text-danger`, ...) which switch with `.dark` on their own;
   raw palette classes (`bg-white dark:bg-gray-950`) still need a `dark:` pair.
   Change the palette in `tokens.css`, never by hardcoding hex values.
+- UI primitives come only from [ui-kit](https://github.com/nguyenhuy158/ui-kit)
+  (gallery: https://uikit.huyab.cfd). Copy them here and keep them in sync; do
+  not hand-roll or fork a primitive in this repo. If ui-kit lacks one, add it
+  to ui-kit first (with a Gallery demo), then copy it here.
 - Localization: use the `useTranslation` hook and add keys to both
   `app/locales/en/translation.json` and `app/locales/vi/translation.json`.
 - Async work uses try/catch with toast notifications (`sonner`) for user
