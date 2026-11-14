@@ -6,8 +6,8 @@
 # Auth model:
 #   bws        reads its token from the BWS_ACCESS_TOKEN env var.
 #   cf         uses CLOUDFLARE_API_TOKEN, read from the bws secret of that name.
-#   tailscale  logs in with the TS_AUTH_KEY bws secret.
-# Without BWS_ACCESS_TOKEN the tools are installed but not authenticated.
+#   tailscale  logs in with the TS_AUTH_KEY env var, else the TS_AUTH_KEY bws secret.
+# Without BWS_ACCESS_TOKEN (or TS_AUTH_KEY for tailscale) the tools are installed but not authenticated.
 # In containers without TUN/systemd tailscaled runs in userspace mode and ~/.ssh/config
 # routes tailnet hosts through `tailscale nc`.
 # Set SKIP_AUTH=1 to install only.
@@ -168,8 +168,19 @@ start_userspace_tailscaled() {
   [ -S "$TS_SOCKET" ] || { echo "tailscaled did not start; see $TS_STATE_DIR/tailscaled.log" >&2; return 1; }
 }
 
+tailscale_running() {
+  "$@" status --json 2>/dev/null | python3 -I -c '
+import json, sys
+sys.exit(0 if json.load(sys.stdin).get("BackendState") == "Running" else 1)
+' 2>/dev/null
+}
+
 login_tailscale() {
-  can_authenticate || { echo "tailscale: skipped login (no BWS_ACCESS_TOKEN or SKIP_AUTH=1)"; return; }
+  [ "${SKIP_AUTH:-0}" != "1" ] || { echo "tailscale: skipped login (SKIP_AUTH=1)"; return; }
+  if [ -z "${TS_AUTH_KEY:-}" ] && ! can_authenticate; then
+    echo "tailscale: skipped login (no TS_AUTH_KEY or BWS_ACCESS_TOKEN)"
+    return
+  fi
   local ts_cmd=(tailscale) up_cmd=(sudo tailscale)
   if use_userspace_tailscale; then
     start_userspace_tailscaled
@@ -177,7 +188,7 @@ login_tailscale() {
     up_cmd=("${ts_cmd[@]}")
     echo "tailscale: userspace mode (no TUN or systemd); socket $TS_SOCKET"
   fi
-  if "${ts_cmd[@]}" status >/dev/null 2>&1; then
+  if tailscale_running "${ts_cmd[@]}"; then
     echo "tailscale already connected"
     return
   fi
@@ -188,7 +199,11 @@ login_tailscale() {
   keyfile="$(mktemp)"
   chmod 600 "$keyfile"
   trap 'rm -f "$keyfile"' RETURN
-  bws_secret TS_AUTH_KEY > "$keyfile"
+  if [ -n "${TS_AUTH_KEY:-}" ]; then
+    printf '%s' "$TS_AUTH_KEY" > "$keyfile"
+  else
+    bws_secret TS_AUTH_KEY > "$keyfile"
+  fi
   "${up_cmd[@]}" up --auth-key="file:$keyfile"
   echo "tailscale connected"
 }
@@ -240,7 +255,7 @@ tool_version() {
 
 tailscale_state() {
   command -v tailscale >/dev/null 2>&1 || { echo "not installed"; return; }
-  if tailscale status >/dev/null 2>&1; then echo "connected"; else echo "not connected"; fi
+  if tailscale_running tailscale || tailscale_running tailscale --socket="$TS_SOCKET"; then echo "connected"; else echo "not connected"; fi
 }
 
 write_readme() {
@@ -274,7 +289,7 @@ Set up by \`install-tools.sh\` on $(date -u +"%Y-%m-%d %H:%M UTC") (host: $(host
 |---|---|---|
 | bws | \`BWS_ACCESS_TOKEN\` | environment variable (set it yourself) |
 | cf | \`CLOUDFLARE_API_TOKEN\` | bws secret with the same name |
-| tailscale | \`TS_AUTH_KEY\` | bws secret, used by \`tailscale up\` |
+| tailscale | \`TS_AUTH_KEY\` | environment variable, else bws secret; used by \`tailscale up\` |
 
 No secret is stored in this file or in the script.
 
