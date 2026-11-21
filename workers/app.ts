@@ -1,9 +1,8 @@
 import { createRequestHandler } from "react-router";
-import { handleCliRequest } from "./cli";
-import { gamesRedirect } from "./games-redirect";
+import { edgeHandlers } from "../app/server/compose";
 
-// Export Durable Object classes
-export { OnlineCounter } from "./online-counter";
+// Cloudflare needs the Durable Object class exported from the entry file.
+export { OnlineCounter } from "../app/server/adapters/durable-object/online-counter";
 
 declare module "react-router" {
   export interface AppLoadContext {
@@ -21,12 +20,14 @@ const requestHandler = createRequestHandler(
 
 export default {
   async fetch(request, env, ctx) {
-    const redirect = gamesRedirect(request);
+    const edge = edgeHandlers();
+
+    const redirect = edge.gamesRedirect(request);
     if (redirect) return redirect;
 
     // Terminal clients (curl/wget) get plain text; returns null for everything
     // else so the app, /api routes and WebSocket upgrades are unaffected.
-    const cliResponse = await handleCliRequest(request);
+    const cliResponse = await edge.cli(request);
     if (cliResponse) return cliResponse;
 
     return requestHandler(request, {

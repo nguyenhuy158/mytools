@@ -432,7 +432,7 @@ Cases: `upper` `lower` `sentence` `capitalized` `title` `alternating`
 `inverse` — each with short aliases (`u`, `l`, `s`, `cap`, `t`, `alt`, `inv`).
 Add `?json` or `Accept: application/json` for a JSON reply.
 
-Implemented in `workers/cli.ts`, which runs ahead of the React Router handler
+Implemented in `app/server/adapters/http/cli-http.ts`, which runs ahead of the React Router handler
 in `workers/app.ts` and returns `null` for anything it does not own, so the
 site, the `/api` routes and the WebSocket upgrades are unaffected.
 

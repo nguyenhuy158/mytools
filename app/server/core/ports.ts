@@ -33,3 +33,7 @@ export interface ProjectCatalog {
 export interface HolidaySource {
   load(): Promise<Holiday[]>;
 }
+
+export interface CounterGateway {
+  connect(request: Request): Promise<Response>;
+}

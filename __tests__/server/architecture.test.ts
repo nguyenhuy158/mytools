@@ -7,15 +7,28 @@ const SERVER = join(APP, "server");
 const CORE = join(SERVER, "core");
 const ADAPTERS = join(SERVER, "adapters");
 const COMPOSE = join(SERVER, "compose.ts");
+const WORKERS = join(APP, "..", "workers");
+const COMPOSE_MODULE = COMPOSE.replace(/\.ts$/, "");
+const COUNTER_CLASS = join(ADAPTERS, "durable-object", "online-counter");
+const SERVER_BUILD = "virtual:react-router/server-build";
 const CORE_DOMAIN = join(CORE, "domain");
-const ADAPTER_KINDS = ["kv", "http", "system", "d1", "web", "static"];
+const ADAPTER_KINDS = [
+  "kv",
+  "http",
+  "system",
+  "d1",
+  "web",
+  "static",
+  "durable-object",
+];
 const MIGRATED_ROUTES = [
   "api.notes.tsx",
   "api.notes_.$id.tsx",
   "api.projects-status.tsx",
   "api.holidays.tsx",
+  "api.online-counter.ws.tsx",
 ];
-const ALLOWED_ROUTE_IMPORTS = ["react-router", COMPOSE.replace(/\.ts$/, "")];
+const ALLOWED_ROUTE_IMPORTS = ["react-router", COMPOSE_MODULE];
 const GENERATED_ROUTE_TYPES = "/+types/";
 const BUNDLED_ASSET = "?raw";
 const IMPORT = /\bfrom\s+"([^"]+)"|\bimport\("([^"]+)"\)/g;
@@ -31,6 +44,8 @@ const IO = new RegExp(
     String.raw`\bD1Database\b`,
     String.raw`\bnew (Request|Response)\b`,
     String.raw`\bFormData\b`,
+    String.raw`\bWebSocket(Pair)?\b`,
+    String.raw`\bDurableObject\b`,
   ].join("|"),
 );
 
@@ -108,12 +123,24 @@ describe("server hexagon boundaries", () => {
           .filter((target) => inside(SERVER, target))
           .filter(
             (target) =>
-              target !== COMPOSE.replace(/\.ts$/, "") &&
-              !inside(CORE_DOMAIN, target),
+              target !== COMPOSE_MODULE && !inside(CORE_DOMAIN, target),
           )
           .map((target) => show(file, target)),
       );
     expect(importers).toEqual([]);
+  });
+
+  it("the worker entry only wires: react-router, compose and the Durable Object class it must export", () => {
+    const allowed = [
+      "react-router",
+      COMPOSE_MODULE,
+      COUNTER_CLASS,
+      SERVER_BUILD,
+    ];
+    expect(files(WORKERS).length).toBeGreaterThan(0);
+    expect(offenders(WORKERS, (target) => allowed.includes(target))).toEqual(
+      [],
+    );
   });
 
   it("the migrated routes import only react-router and compose", () => {

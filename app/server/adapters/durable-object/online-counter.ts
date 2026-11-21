@@ -1,4 +1,5 @@
 import { DurableObject } from "cloudflare:workers";
+import { countMessage, replyTo } from "../../core/domain/online-counter";
 
 export class OnlineCounter extends DurableObject {
   async fetch(request: Request): Promise<Response> {
@@ -24,18 +25,24 @@ export class OnlineCounter extends DurableObject {
     });
   }
 
-  async webSocketMessage(ws: WebSocket, message: string | ArrayBuffer): Promise<void> {
+  async webSocketMessage(
+    ws: WebSocket,
+    message: string | ArrayBuffer,
+  ): Promise<void> {
     try {
-      const data = JSON.parse(message as string);
-      if (data.type === "ping") {
-        ws.send(JSON.stringify({ type: "pong" }));
-      }
+      const reply = replyTo(message);
+      if (reply) ws.send(reply);
     } catch {
       // Ignore invalid messages
     }
   }
 
-  async webSocketClose(ws: WebSocket, code: number, reason: string, wasClean: boolean): Promise<void> {
+  async webSocketClose(
+    ws: WebSocket,
+    code: number,
+    reason: string,
+    wasClean: boolean,
+  ): Promise<void> {
     this.broadcastCount(ws);
   }
 
@@ -47,7 +54,7 @@ export class OnlineCounter extends DurableObject {
   // ctx.getWebSockets() still includes it for the duration of this handler.
   private broadcastCount(closing?: WebSocket): void {
     const sockets = this.ctx.getWebSockets().filter((ws) => ws !== closing);
-    const message = JSON.stringify({ type: "count", count: sockets.length });
+    const message = countMessage(sockets.length);
 
     for (const ws of sockets) {
       try {

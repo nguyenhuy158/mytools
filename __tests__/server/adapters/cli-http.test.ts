@@ -1,5 +1,8 @@
-import { describe, it, expect } from "vitest";
-import { handleCliRequest } from "../../workers/cli";
+import { describe, expect, it } from "vitest";
+import { createCliHttp } from "~/server/adapters/http/cli-http";
+import { createCaseService } from "~/server/core/application/case-service";
+
+const handleCliRequest = createCliHttp(createCaseService()).handle;
 
 const CURL = { "user-agent": "curl/8.5.0" };
 const BROWSER = {
@@ -31,9 +34,7 @@ const body = async (res: Response | null) => {
 describe("CLI worker interface", () => {
   describe("conversion", () => {
     it("converts a POST body", async () => {
-      expect(await body(await post("/upper", "đường phố"))).toBe(
-        "ĐƯỜNG PHỐ\n",
-      );
+      expect(await body(await post("/upper", "đường phố"))).toBe("ĐƯỜNG PHỐ\n");
     });
 
     it("converts Vietnamese text for every case", async () => {
